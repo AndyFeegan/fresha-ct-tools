@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CT007 — EARN Closing Planner</title>
+    <style>
+        :root {
+            --fresha-dark: #1a1a2e;
+            --fresha-accent: #6c5ce7;
+            --fresha-accent-light: #a29bfe;
+            --fresha-bg: #f4f3f8;
+            --color-blue: #3498db;
+            --color-teal: #1abc9c;
+            --color-orange: #e67e22;
+            --color-green: #27ae60;
+            --color-gray: #95a5a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--fresha-bg);
+            color: var(--fresha-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--fresha-dark) 0%, var(--fresha-accent) 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0.5rem 0 0.25rem 0;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.95;
+            font-style: italic;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 2px solid var(--fresha-accent-light);
+            padding: 1rem 1.5rem;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .progress-dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--fresha-bg);
+            border: 3px solid var(--color-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .progress-dot.active {
+            border-color: var(--fresha-accent);
+            background: var(--fresha-accent);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-dot.completed {
+            background: var(--color-green);
+            border-color: var(--color-green);
+            color: white;
+        }
+
+        .progress-dot:hover {
+            transform: scale(1.05);
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--fresha-dark);
+            margin-top: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--fresha-accent-light);
+        }
+
+        .section-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--fresha-dark);
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--color-gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--fresha-dark);
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--fresha-accent-light);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--fresha-accent);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        ::placeholder {
+            color: var(--color-gray);
+            opacity: 0.7;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .checkbox-subgroup {
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-subgroup-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--fresha-accent);
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin-right: 0.75rem;
+            accent-color: var(--fresha-accent);
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        /* Readiness rating */
+        .rating-scale {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rating-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--fresha-accent);
+        }
+
+        .rating-option label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        /* Readiness hint */
+        .readiness-hint {
+            display: none;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
+        .readiness-hint.show {
+            display: block;
+        }
+
+        /* Navigation buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--fresha-accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--fresha-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--fresha-accent-light);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--fresha-accent);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--fresha-accent);
+            color: var(--fresha-accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--fresha-accent);
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Summary view */
+        .summary-section {
+            background: linear-gradient(135deg, var(--fresha-dark) 0%, var(--fresha-accent) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .summary-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .summary-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--fresha-accent-light);
+        }
+
+        .summary-item h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .summary-item p {
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .summary-checklist {
+            list-style: none;
+        }
+
+        .summary-checklist li {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .summary-checklist li:before {
+            content: "\2610 ";
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--color-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+            }
+
+            .progress-dots {
+                gap: 0.8rem;
+            }
+
+            .progress-dot {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-badge">CT007 — Closing</div>
+        <h1>EARN Closing Planner</h1>
+        <p class="subtitle">You don't close a sale. You earn the decision.</p>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-dots">
+            <div style="text-align: center;">
+                <div class="progress-dot active" data-section="e">
+                    <span>E</span>
+                </div>
+                <div class="progress-label">Establish</div>
+            </div>
+            <div style="text-align: center;">
+                <div class="progress-dot" data-section="a">
+                    <span>A</span>
+                </div>
+                <div class="progress-label">Affirm</div>
+            </div>
+            <div style="text-align: center;">
+                <div class="progress-dot" data-section="r">
+                    <span>R</span>
+                </div>
+                <div class="progress-label">Recommend</div>
+            </div>
+            <div style="text-align: center;">
+                <div class="progress-dot" data-section="n">
+                    <span>N</span>
+                </div>
+                <div class="progress-label">Next Steps</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- E: Establish Readiness -->
+        <section id="section-e" class="section active">
+            <div class="section-header">
+                <div class="section-icon">\ud83d\udce1</div>
+                <div>
+                    <h2 class="section-title">E — Establish Readiness</h2>
+                    <p class="section-subtitle">Read buying signals. Are they ready?</p>
+                </div>
+            </div>
+
+            <form id="form-e">
+                <div class="form-group">
+                    <label for="prospect-name">Prospect Name & Business</label>
+                    <input type="text" id="prospect-name" placeholder="e.g. Sarah Chen, Blissful Spa & Wellness">
+                </div>
+
+                <div class="form-group">
+                    <label>Buying Signals Observed</label>
+
+                    <div class="checkbox-group">
+                        <div class="checkbox-subgroup">
+                            <div class="checkbox-subgroup-label">Verbal</div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="verbal-1" name="buying-signals" value="Asked about next steps">
+                                <label for="verbal-1">Asked about next steps</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="verbal-2" name="buying-signals" value="Asked about pricing">
+                                <label for="verbal-2">Asked about pricing</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="verbal-3" name="buying-signals" value="Timeline questions">
+                                <label for="verbal-3">Timeline questions</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="verbal-4" name="buying-signals" value="What if... language">
+                                <label for="verbal-4">"What if..." language</label>
+                            </div>
+                        </div>
+
+                        <div class="checkbox-subgroup">
+                            <div class="checkbox-subgroup-label">Emotional</div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emotional-1" name="buying-signals" value="Shift in tone/energy">
+                                <label for="emotional-1">Shift in tone/energy</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emotional-2" name="buying-signals" value="Forward-leaning">
+                                <label for="emotional-2">Forward-leaning</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emotional-3" name="buying-signals" value="Excitement about possibilities">
+                                <label for="emotional-3">Excitement about possibilities</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="emotional-4" name="buying-signals" value="When replacing if">
+                                <label for="emotional-4">"When" replacing "if"</label>
+                            </div>
+                        </div>
+
+                        <div class="checkbox-subgroup">
+                            <div class="checkbox-subgroup-label">Behavioural</div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="behavioural-1" name="buying-signals" value="Taking notes">
+                                <label for="behavioural-1">Taking notes</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="behavioural-2" name="buying-signals" value="Involving decision-makers">
+                                <label for="behavioural-2">Involving decision-makers</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="behavioural-3" name="buying-signals" value="Checking calendar">
+                                <label for="behavioural-3">Checking calendar</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="behavioural-4" name="buying-signals" value="Asking for references">
+                                <label for="behavioural-4">Asking for references</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Readiness Rating — How ready are they?</label>
+                    <div class="rating-scale">
+                        <div class="rating-option">
+                            <input type="radio" id="readiness-1" name="readiness" value="1">
+                            <label for="readiness-1">1 (Not ready)</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="readiness-2" name="readiness" value="2">
+                            <label for="readiness-2">2</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="readiness-3" name="readiness" value="3">
+                            <label for="readiness-3">3 (Neutral)</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="readiness-4" name="readiness" value="4">
+                            <label for="readiness-4">4</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="readiness-5" name="readiness" value="5">
+                            <label for="readiness-5">5 (Very ready)</label>
+                        </div>
+                    </div>
+                    <div id="readiness-hint" class="readiness-hint">
+                        <strong>\u26a0\ufe0f Heads up:</strong> Consider going back to "Tomorrow" in the 4T framework before closing. They may not be ready yet.
+                    </div>
+                </div>
+            </form>
+
+            <div class="button-group">
+                <button class="btn-outline" onclick="resetForm()">Reset</button>
+                <button class="btn-primary" onclick="goToSection('a')">Continue to Affirm \u2192</button>
+            </div>
+        </section>
+
+        <!-- A: Affirm the Gap -->
+        <section id="section-a" class="section">
+            <div class="section-header">
+                <div class="section-icon">\ud83e\ude9e</div>
+                <div>
+                    <h2 class="section-title">A — Affirm the Gap</h2>
+                    <p class="section-subtitle">Mirror their world back in their own words</p>
+                </div>
+            </div>
+
+            <form id="form-a">
+                <div class="form-group">
+                    <label for="current-state">Their Current State — In Their Words</label>
+                    <textarea id="current-state" placeholder="e.g. 'You mentioned you're losing about 15 bookings a week because clients can't book outside business hours...'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="problem-cost">Their Problem & True Cost</label>
+                    <textarea id="problem-cost" placeholder="e.g. 'You said that's costing you around \u00a33,000 a month, plus the stress of managing everything by phone...'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="desired-future">Their Desired Future</label>
+                    <textarea id="desired-future" placeholder="e.g. 'And your goal is a system where bookings come in 24/7 without you lifting a finger...'"></textarea>
+                </div>
+            </form>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToSection('e')">\u2190 Back to Establish</button>
+                <button class="btn-primary" onclick="goToSection('r')">Continue to Recommend \u2192</button>
+            </div>
+        </section>
+
+        <!-- R: Recommend & Resolve -->
+        <section id="section-r" class="section">
+            <div class="section-header">
+                <div class="section-icon">\ud83d\udcac</div>
+                <div>
+                    <h2 class="section-title">R — Recommend & Resolve</h2>
+                    <p class="section-subtitle">Make your case. Handle last-minute hesitation.</p>
+                </div>
+            </div>
+
+            <form id="form-r">
+                <div class="form-group">
+                    <label for="recommendation">Your Recommendation</label>
+                    <textarea id="recommendation" placeholder="e.g. 'Based on everything you've told me, I'd recommend the Premium plan with online booking and automated reminders...'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="anticipated-hesitation">Anticipated Hesitation</label>
+                    <textarea id="anticipated-hesitation" placeholder="e.g. 'I need to think about it' or 'What about the cost?'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="acknowledge-response">Acknowledge Response</label>
+                    <textarea id="acknowledge-response" placeholder="e.g. 'That's completely fair — it's a big decision...'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="explore-question">Explore Question</label>
+                    <textarea id="explore-question" placeholder="e.g. 'What specifically do you need to think through?'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="resolve-statement">Resolve Statement</label>
+                    <textarea id="resolve-statement" placeholder="e.g. 'With that addressed, does the plan still feel right for solving the booking gaps you mentioned?'"></textarea>
+                </div>
+            </form>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToSection('a')">\u2190 Back to Affirm</button>
+                <button class="btn-primary" onclick="goToSection('n')">Continue to Next Steps \u2192</button>
+            </div>
+        </section>
+
+        <!-- N: Next Steps -->
+        <section id="section-n" class="section">
+            <div class="section-header">
+                <div class="section-icon">\ud83c\udfaf</div>
+                <div>
+                    <h2 class="section-title">N — Next Steps</h2>
+                    <p class="section-subtitle">Secure a clear, specific, time-bound commitment</p>
+                </div>
+            </div>
+
+            <form id="form-n">
+                <div class="form-group">
+                    <label for="primary-next-step">Primary Next Step</label>
+                    <textarea id="primary-next-step" placeholder="e.g. 'I'll set up your account this afternoon and schedule onboarding for Thursday at 2pm. Does that work?'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Post-Close Actions Checklist</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="postclose-1" name="post-close" value="Send written confirmation within 24 hours">
+                            <label for="postclose-1">Send written confirmation within 24 hours</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="postclose-2" name="post-close" value="Introduce onboarding contact by name">
+                            <label for="postclose-2">Introduce onboarding contact by name</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="postclose-3" name="post-close" value="Share specific onboarding timeline with dates">
+                            <label for="postclose-3">Share specific onboarding timeline with dates</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="postclose-4" name="post-close" value="Schedule personal follow-up within first week">
+                            <label for="postclose-4">Schedule personal follow-up within first week</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToSection('r')">\u2190 Back to Recommend</button>
+                <button class="btn-primary" onclick="goToSection('summary')">View Closing Plan \u2192</button>
+            </div>
+        </section>
+
+        <!-- Summary View -->
+        <section id="section-summary" class="section">
+            <div class="section-header">
+                <div class="section-icon">\u2713</div>
+                <div>
+                    <h2 class="section-title">Your Closing Plan</h2>
+                    <p class="section-subtitle">Structured conversation guide for closing</p>
+                </div>
+            </div>
+
+            <div id="summary-content">
+                <div class="empty-state">
+                    <div class="empty-state-icon">\ud83d\udccb</div>
+                    <p>Fill in the sections above to generate your closing plan.</p>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="goToSection('n')">\u2190 Back to Next Steps</button>
+                <button class="btn-outline" onclick="generateSummary()">Refresh Plan</button>
+                <button class="btn-primary" onclick="downloadPlan()">\u2b07\ufe0f Download Plan</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Data management
+        const formData = {
+            e: {},
+            a: {},
+            r: {},
+            n: {}
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadFromStorage();
+        });
+
+        function setupEventListeners() {
+            // Readiness rating change
+            document.querySelectorAll('input[name="readiness"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const hint = document.getElementById('readiness-hint');
+                    if (this.value === '1' || this.value === '2') {
+                        hint.classList.add('show');
+                    } else {
+                        hint.classList.remove('show');
+                    }
+                    saveFormData('e');
+                });
+            });
+
+            // All form inputs
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.addEventListener('change', () => {
+                    const form = input.closest('form');
+                    if (form) {
+                        const formId = form.id.split('-')[1];
+                        saveFormData(formId);
+                    }
+                });
+            });
+
+            // Progress dots
+            document.querySelectorAll('.progress-dot').forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    goToSection(section);
+                });
+            });
+        }
+
+        function goToSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.remove('active');
+            });
+
+            // Show target section
+            document.getElementById('section-' + section).classList.add('active');
+
+            // Update progress dots
+            const sections = ['e', 'a', 'r', 'n', 'summary'];
+            document.querySelectorAll('.progress-dot').forEach(dot => {
+                dot.classList.remove('active', 'completed');
+                const dotSection = dot.dataset.section;
+                if (dotSection === section) {
+                    dot.classList.add('active');
+                } else if (sections.indexOf(dotSection) < sections.indexOf(section)) {
+                    dot.classList.add('completed');
+                }
+            });
+
+            // Generate summary if on summary page
+            if (section === 'summary') {
+                generateSummary();
+            }
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function saveFormData(section) {
+            const form = document.getElementById('form-' + section);
+            if (!form) return;
+
+            const formElements = form.querySelectorAll('input, textarea');
+            formData[section] = {};
+
+            formElements.forEach(el => {
+                if (el.type === 'checkbox') {
+                    if (!formData[section][el.name]) {
+                        formData[section][el.name] = [];
+                    }
+                    if (el.checked) {
+                        formData[section][el.name].push(el.value);
+                    }
+                } else if (el.type === 'radio') {
+                    if (el.checked) {
+                        formData[section][el.name] = el.value;
+                    }
+                } else {
+                    formData[section][el.id] = el.value;
+                }
+            });
+
+            localStorage.setItem('earnClosingData', JSON.stringify(formData));
+        }
+
+        function loadFromStorage() {
+            const stored = localStorage.getItem('earnClosingData');
+            if (!stored) return;
+
+            const data = JSON.parse(stored);
+            Object.keys(data).forEach(section => {
+                Object.keys(data[section]).forEach(key => {
+                    const el = document.getElementById(key);
+                    if (el) {
+                        if (el.type === 'checkbox') {
+                            el.checked = data[section][key].includes(el.value);
+                        } else if (el.type === 'radio') {
+                            el.checked = el.value === data[section][key];
+                        } else {
+                            el.value = data[section][key];
+                        }
+                    }
+                });
+            });
+
+            // Restore readiness hint
+            const readinessValue = data.e['readiness'];
+            if (readinessValue && (readinessValue === '1' || readinessValue === '2')) {
+                document.getElementById('readiness-hint').classList.add('show');
+            }
+        }
+
+        function generateSummary() {
+            const prospectName = formData.e['prospect-name'] || '(prospect name)';
+            const currentState = formData.a['current-state'] || '';
+            const problemCost = formData.a['problem-cost'] || '';
+            const desiredFuture = formData.a['desired-future'] || '';
+            const recommendation = formData.r['recommendation'] || '';
+            const anticipatedHesitation = formData.r['anticipated-hesitation'] || '';
+            const acknowledgeResponse = formData.r['acknowledge-response'] || '';
+            const exploreQuestion = formData.r['explore-question'] || '';
+            const resolveStatement = formData.r['resolve-statement'] || '';
+            const primaryNextStep = formData.n['primary-next-step'] || '';
+
+            // Get checked post-close actions
+            const postCloseActions = [];
+            document.querySelectorAll('input[name="post-close"]:checked').forEach(cb => {
+                postCloseActions.push(cb.value);
+            });
+
+            let html = '';
+
+            if (!currentState && !problemCost && !desiredFuture && !recommendation && !primaryNextStep) {
+                html = '<div class="empty-state"><div class="empty-state-icon">\ud83d\udccb</div><p>Fill in the sections above to generate your closing plan.</p></div>';
+            } else {
+                html = '<div class="summary-section"><h2>\ud83d\udccb Your Closing Conversation</h2>';
+
+                if (currentState || problemCost || desiredFuture) {
+                    html += '<div class="summary-item"><h3>\ud83e\ude9e The Gap (What You\'ll Mirror Back)</h3>';
+                    if (currentState) html += '<p><strong>Current State:</strong> ' + escapeHtml(currentState) + '</p>';
+                    if (problemCost) html += '<p><strong>Problem & Cost:</strong> ' + escapeHtml(problemCost) + '</p>';
+                    if (desiredFuture) html += '<p><strong>Desired Future:</strong> ' + escapeHtml(desiredFuture) + '</p>';
+                    html += '</div>';
+                }
+
+                if (recommendation) {
+                    html += '<div class="summary-item"><h3>\ud83d\udcac Your Recommendation</h3><p>' + escapeHtml(recommendation) + '</p></div>';
+                }
+
+                if (anticipatedHesitation) {
+                    html += '<div class="summary-item"><h3>\ud83d\udcac Handling Hesitation</h3>';
+                    html += '<p><strong>If they say:</strong> <em>"' + escapeHtml(anticipatedHesitation) + '"</em></p>';
+                    if (acknowledgeResponse) html += '<p><strong>You respond:</strong> "' + escapeHtml(acknowledgeResponse) + '"</p>';
+                    if (exploreQuestion) html += '<p><strong>Then ask:</strong> "' + escapeHtml(exploreQuestion) + '"</p>';
+                    if (resolveStatement) html += '<p><strong>After they answer:</strong> "' + escapeHtml(resolveStatement) + '"</p>';
+                    html += '</div>';
+                }
+
+                if (primaryNextStep) {
+                    html += '<div class="summary-item"><h3>\ud83c\udfaf Next Steps</h3><p>' + escapeHtml(primaryNextStep) + '</p>';
+                    if (postCloseActions.length > 0) {
+                        html += '<p style="margin-top: 1rem;"><strong>Post-Close Actions:</strong></p><ul class="summary-checklist">';
+                        postCloseActions.forEach(action => {
+                            html += '<li>' + escapeHtml(action) + '</li>';
+                        });
+                        html += '</ul>';
+                    }
+                    html += '</div>';
+                }
+
+                html += '</div>';
+            }
+
+            document.getElementById('summary-content').innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function resetForm() {
+            if (confirm('Are you sure you want to reset all your work?')) {
+                localStorage.removeItem('earnClosingData');
+                location.reload();
+            }
+        }
+
+        function downloadPlan() {
+            const prospectName = formData.e['prospect-name'] || 'Closing Plan';
+            const text = generatePlanText();
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', 'CT007-' + prospectName + '-ClosingPlan.txt');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function generatePlanText() {
+            const prospectName = formData.e['prospect-name'] || '(prospect name)';
+            const readiness = formData.e['readiness'] || '';
+            const currentState = formData.a['current-state'] || '';
+            const problemCost = formData.a['problem-cost'] || '';
+            const desiredFuture = formData.a['desired-future'] || '';
+            const recommendation = formData.r['recommendation'] || '';
+            const anticipatedHesitation = formData.r['anticipated-hesitation'] || '';
+            const acknowledgeResponse = formData.r['acknowledge-response'] || '';
+            const exploreQuestion = formData.r['explore-question'] || '';
+            const resolveStatement = formData.r['resolve-statement'] || '';
+            const primaryNextStep = formData.n['primary-next-step'] || '';
+
+            let text = 'CT007 - EARN CLOSING PLANNER\n';
+            text += '===============================\n';
+            text += 'Prospect: ' + prospectName + '\n';
+            text += 'Generated: ' + new Date().toLocaleDateString() + '\n\n';
+            text += 'E - ESTABLISH READINESS\n';
+            text += '-----------------------\n';
+            text += 'Readiness Rating: ' + readiness + '/5\n';
+            if (readiness && (readiness === '1' || readiness === '2')) {
+                text += 'Note: Consider 4T framework before closing.\n';
+            }
+            text += '\nA - AFFIRM THE GAP\n';
+            text += '------------------\n';
+            text += 'Their Current State:\n' + currentState + '\n\n';
+            text += 'Their Problem & Cost:\n' + problemCost + '\n\n';
+            text += 'Their Desired Future:\n' + desiredFuture + '\n\n';
+            text += 'R - RECOMMEND & RESOLVE\n';
+            text += '-----------------------\n';
+            text += 'Your Recommendation:\n' + recommendation + '\n\n';
+            text += 'Handling Hesitation:\n';
+            text += 'If they say: "' + anticipatedHesitation + '"\n';
+            text += 'You respond: "' + acknowledgeResponse + '"\n';
+            text += 'Then ask: "' + exploreQuestion + '"\n';
+            text += 'After they answer: "' + resolveStatement + '"\n\n';
+            text += 'N - NEXT STEPS\n';
+            text += '--------------\n';
+            text += 'Primary Next Step:\n' + primaryNextStep;
+
+            return text;
+        }
+    <\/script>
+</body>
+</html>
