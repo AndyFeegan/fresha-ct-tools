@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D.I.A.L. Planner — Pre-Call Preparation</title>
+<style>
+  :root {
+    --fresha-dark: #1a1a2e;
+    --fresha-accent: #6c5ce7;
+    --fresha-accent-light: #a29bfe;
+    --fresha-bg: #f4f3f8;
+    --fresha-white: #ffffff;
+    --fresha-text: #2d3436;
+    --fresha-muted: #636e72;
+    --fresha-border: #dfe6e9;
+    --fresha-success: #00b894;
+    --fresha-warning: #fdcb6e;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--fresha-bg);
+    color: var(--fresha-text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D.I.A.L. Planner — Pre-Call Preparation</title>
+<style>
+  :root {
+    --fresha-dark: #1a1a2e;
+    --fresha-accent: #6c5ce7;
+    --fresha-accent-light: #a29bfe;
+    --fresha-bg: #f4f3f8;
+    --fresha-white: #ffffff;
+    --fresha-text: #2d3436;
+    --fresha-muted: #636e72;
+    --fresha-border: #dfe6e9;
+    --fresha-success: #00b894;
+    --fresha-warning: #fdcb6e;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--fresha-bg);
+    color: var(--fresha-text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d5e 100%);
+    color: white;
+    padding: 28px 24px 24px;
+    text-align: center;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(108, 92, 231, 0.3);
+    border: 1px solid rgba(108, 92, 231, 0.5);
+    color: var(--fresha-accent-light);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+  .header h1 span { color: var(--fresha-accent-light); }
+  .header p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 480px; margin: 0 auto; }
+  .progress-bar {
+    background: var(--fresha-white);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--fresha-border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: var(--shadow-sm);
+  }
+  .progress-step { flex: 1; display: flex; align-items: center; gap: 8px; }
+  .progress-dot {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--fresha-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--fresha-muted);
+    transition: all 0.3s ease; flex-shrink: 0;
+  }
+  .progress-dot.active { background: var(--fresha-accent); color: white; }
+  .progress-dot.done { background: var(--fresha-success); color: white; }
+  .progress-label { font-size: 12px; font-weight: 600; color: var(--fresha-muted); display: none; }
+  @media (min-width: 600px) { .progress-label { display: block; } }
+  .progress-line { flex: 1; height: 2px; background: var(--fresha-border); max-width: 40px; }
+  .container { max-width: 680px; margin: 0 auto; padding: 20px 16px 100px; }
+  .dial-card {
+    background: var(--fresha-white); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+    margin-bottom: 20px; overflow: hidden; border: 1px solid var(--fresha-border);
+    transition: box-shadow 0.3s ease;
+  }
+  .dial-card:focus-within { box-shadow: var(--shadow-md); border-color: var(--fresha-accent-light); }
+  .card-header { padding: 18px 20px 14px; border-bottom: 1px solid var(--fresha-border); display: flex; align-items: flex-start; gap: 14px; }
+  .card-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .card-icon.decide { background: #eef0fb; color: #5b4dc7; }
+  .card-icon.intel { background: #eafaf5; color: #00a881; }
+  .card-icon.angle { background: #fff5e5; color: #e17c00; }
+  .card-icon.land { background: #fce4ec; color: #d63031; }
+  .card-title-group h2 { font-size: 17px; font-weight: 700; margin-bottom: 2px; }
+  .card-title-group h2 .letter { color: var(--fresha-accent); font-size: 19px; }
+  .card-subtitle { font-size: 13px; color: var(--fresha-muted); }
+  .card-body { padding: 16px 20px 20px; }
+  .field-group { margin-bottom: 16px; }
+  .field-group:last-child { margin-bottom: 0; }
+  .field-label { display: block; font-size: 13px; font-weight: 600; color: var(--fresha-text); margin-bottom: 6px; }
+  .field-hint { font-size: 12px; color: var(--fresha-muted); font-weight: 400; margin-left: 4px; }
+  textarea, input[type="text"], select {
+    width: 100%; border: 1px solid var(--fresha-border); border-radius: 8px;
+    padding: 10px 12px; font-size: 14px; font-family: inherit;
+    color: var(--fresha-text); background: var(--fresha-white);
+    transition: border-color 0.2s, box-shadow 0.2s; resize: vertical;
+  }
+  textarea:focus, input[type="text"]:focus, select:focus {
+    outline: none; border-color: var(--fresha-accent);
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
+  }
+  textarea::placeholder, input::placeholder { color: #b2bec3; }
+  textarea { min-height: 70px; }
+  .chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .chip {
+    padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--fresha-border);
+    background: var(--fresha-white); font-size: 13px; font-weight: 500;
+    color: var(--fresha-muted); cursor: pointer; transition: all 0.2s; user-select: none;
+  }
+  .chip:hover { border-color: var(--fresha-accent-light); color: var(--fresha-accent); }
+  .chip.selected { background: var(--fresha-accent); border-color: var(--fresha-accent); color: white; }
+  .checklist { list-style: none; }
+  .checklist li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f4; font-size: 14px; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--fresha-accent); flex-shrink: 0; cursor: pointer; }
+  .timing-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .timing-row > * { flex: 1; min-width: 140px; }
+  .actions { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .btn { padding: 12px 24px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; flex: 1; min-width: 140px; text-align: center; }
+  .btn-primary { background: var(--fresha-accent); color: white; }
+  .btn-primary:hover { background: #5b4dc7; }
+  .btn-secondary { background: var(--fresha-white); color: var(--fresha-text); border: 1.5px solid var(--fresha-border); }
+  .btn-secondary:hover { border-color: var(--fresha-accent-light); color: var(--fresha-accent); }
+  .summary-overlay { display: none; position: fixed; inset: 0; background: rgba(26,26,46,0.6); z-index: 100; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+  .summary-overlay.visible { display: flex; }
+  .summary-card { background: var(--fresha-white); border-radius: var(--radius); max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+  .summary-header { background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d5e 100%); color: white; padding: 20px 24px; border-radius: var(--radius) var(--radius) 0 0; }
+  .summary-header h2 { font-size: 20px; margin-bottom: 4px; }
+  .summary-header p { font-size: 13px; color: rgba(255,255,255,0.6); }
+  .summary-body { padding: 24px; }
+  .summary-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--fresha-border); }
+  .summary-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .summary-section h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--fresha-accent); margin-bottom: 8px; }
+  .summary-section p, .summary-section li { font-size: 14px; color: var(--fresha-text); }
+  .summary-section ul { list-style: none; padding: 0; }
+  .summary-section ul li { padding: 3px 0; padding-left: 16px; position: relative; }
+  .summary-section ul li::before { content: "\2713"; position: absolute; left: 0; color: var(--fresha-success); font-weight: 700; }
+  .summary-actions { padding: 16px 24px; border-top: 1px solid var(--fresha-border); display: flex; gap: 12px; flex-wrap: wrap; }
+  .empty-state { color: var(--fresha-muted); font-style: italic; font-size: 13px; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--fresha-dark); color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg); z-index: 200; opacity: 0; transition: all 0.3s ease; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  @media print {
+    body { background: white; }
+    .progress-bar, .actions, .summary-actions { display: none !important; }
+    .header { padding: 16px; }
+    .dial-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    .summary-overlay { position: static; display: block !important; background: none; }
+    .summary-card { max-height: none; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-badge">CT001 — Cold Calling</div>
+  <h1><span>D.I.A.L.</span> Planner</h1>
+  <p>Pre-call preparation tool. Fill in each step before you pick up the phone.</p>
+</div>
+<div class="progress-bar">
+  <div class="progress-step"><div class="progress-dot active" id="prog-d">D</div><span class="progress-label">Decide</span></div>
+  <div class="progress-line"></div>
+  <div class="progress-step"><div class="progress-dot" id="prog-i">I</div><span class="progress-label">Intel</span></div>
+  <div class="progress-line"></div>
+  <div class="progress-step"><div class="progress-dot" id="prog-a">A</div><span class="progress-label">Angle</span></div>
+  <div class="progress-line"></div>
+  <div class="progress-step"><div class="progress-dot" id="prog-l">L</div><span class="progress-label">Land</span></div>
+</div>
+<div class="container">
+  <div class="dial-card" id="card-decide">
+    <div class="card-header">
+      <div class="card-icon decide">🎯</div>
+      <div class="card-title-group">
+        <h2><span class="letter">D</span> — Decide</h2>
+        <div class="card-subtitle">Right vertical, right timing, right person</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-group">
+        <label class="field-label">Business name</label>
+        <input type="text" id="d-business" placeholder="e.g. Glow Beauty Studio" data-track="d">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Vertical / business type</label>
+        <input type="text" id="d-vertical" placeholder="e.g. Hair salon, Barbershop, Spa, Gym" data-track="d">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Contact name &amp; role</label>
+        <input type="text" id="d-contact" placeholder="e.g. Sarah Chen — Owner" data-track="d">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Why now? <span class="field-hint">What makes this the right time to call?</span></label>
+        <textarea id="d-timing" rows="2" placeholder="e.g. Just opened second location, busy season coming up, currently using pen-and-paper booking…" data-track="d"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Pre-call checklist</label>
+        <ul class="checklist">
+          <li><input type="checkbox" id="chk-vertical" data-track="d"><label for="chk-vertical">Confirmed vertical is a good fit for Fresha</label></li>
+          <li><input type="checkbox" id="chk-timing" data-track="d"><label for="chk-timing">Identified a timing trigger</label></li>
+          <li><input type="checkbox" id="chk-person" data-track="d"><label for="chk-person">Know the decision-maker's name</label></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="dial-card" id="card-intel">
+    <div class="card-header">
+      <div class="card-icon intel">🔍</div>
+      <div class="card-title-group">
+        <h2><span class="letter">I</span> — Intel</h2>
+        <div class="card-subtitle">60-second scan: Google, website, reviews, socials</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-group">
+        <label class="field-label">Google / website findings</label>
+        <textarea id="i-google" rows="2" placeholder="e.g. 4.3 stars on Google, 120+ reviews, website has no online booking link…" data-track="i"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Reviews snapshot <span class="field-hint">Any pain points or praise?</span></label>
+        <textarea id="i-reviews" rows="2" placeholder="e.g. Recurring complaint: hard to get an appointment. Praise: amazing staff" data-track="i"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Social media / other intel</label>
+        <textarea id="i-social" rows="2" placeholder="e.g. Active on Instagram, 2k followers, posting promotions manually…" data-track="i"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Current booking method <span class="field-hint">How do they manage appointments today?</span></label>
+        <input type="text" id="i-booking" placeholder="e.g. Phone only, another platform, pen-and-paper" data-track="i">
+      </div>
+    </div>
+  </div>
+  <div class="dial-card" id="card-angle">
+    <div class="card-header">
+      <div class="card-icon angle">💡</div>
+      <div class="card-title-group">
+        <h2><span class="letter">A</span> — Angle</h2>
+        <div class="card-subtitle">Choose your hook: efficiency, growth, reputation, or control</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-group">
+        <label class="field-label">Primary hook</label>
+        <div class="chip-group" id="angle-chips">
+          <div class="chip" data-value="Efficiency" onclick="selectChip(this)">⚡ Efficiency</div>
+          <div class="chip" data-value="Growth" onclick="selectChip(this)">📈 Growth</div>
+          <div class="chip" data-value="Reputation" onclick="selectChip(this)">⭐ Reputation</div>
+          <div class="chip" data-value="Control" onclick="selectChip(this)">🎛️ Control</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Why this angle? <span class="field-hint">Link it back to your Intel</span></label>
+        <textarea id="a-why" rows="2" placeholder="e.g. Reviews mention booking frustration → Efficiency hook: save 5 hours a week on phone bookings" data-track="a"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Opening line <span class="field-hint">Write the first sentence you'll say after hello</span></label>
+        <textarea id="a-opener" rows="2" placeholder="e.g. Hi Sarah, I noticed Glow Beauty has amazing reviews but no online booking — I help salons like yours fill chairs without being glued to the phone." data-track="a"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="dial-card" id="card-land">
+    <div class="card-header">
+      <div class="card-icon land">🚩</div>
+      <div class="card-title-group">
+        <h2><span class="letter">L</span> — Land</h2>
+        <div class="card-subtitle">Set a specific, defensible call objective</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-group">
+        <label class="field-label">Call objective <span class="field-hint">What specific outcome are you going for?</span></label>
+        <textarea id="l-objective" rows="2" placeholder="e.g. Book a 15-minute demo for Thursday at 2pm" data-track="l"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Fallback objective <span class="field-hint">If the primary doesn't land, what's your Plan B?</span></label>
+        <textarea id="l-fallback" rows="2" placeholder="e.g. Get their email to send a 2-minute Fresha overview video" data-track="l"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Best time to call</label>
+        <div class="timing-row">
+          <div>
+            <label class="field-label" style="font-size:12px;">Day</label>
+            <select id="l-day" data-track="l">
+              <option value="">Select…</option>
+              <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+              <option>Thursday</option><option>Friday</option><option>Saturday</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" style="font-size:12px;">Time</label>
+            <select id="l-time" data-track="l">
+              <option value="">Select…</option>
+              <option>Early morning (8–9am)</option>
+              <option>Mid-morning (10–11am)</option>
+              <option>Lunchtime (12–1pm)</option>
+              <option>Early afternoon (2–3pm)</option>
+              <option>Late afternoon (4–5pm)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" onclick="showSummary()">View My Plan</button>
+    <button class="btn btn-secondary" onclick="resetAll()">Start Over</button>
+  </div>
+</div>
+<div class="summary-overlay" id="summary-overlay" onclick="closeSummary(event)">
+  <div class="summary-card" onclick="event.stopPropagation()">
+    <div class="summary-header">
+      <h2>Your D.I.A.L. Plan</h2>
+      <p id="summary-business-line"></p>
+    </div>
+    <div class="summary-body" id="summary-body"></div>
+    <div class="summary-actions">
+      <button class="btn btn-primary" onclick="copyPlan()">Copy to Clipboard</button>
+      <button class="btn btn-secondary" onclick="printPlan()">Print</button>
+      <button class="btn btn-secondary" onclick="closeSummaryBtn()">Close</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied to clipboard!</div>
+<script>
+  const sections = { d: false, i: false, a: false, l: false };
+  function updateProgress() {
+    const fields = document.querySelectorAll('[data-track]');
+    const filled = { d: 0, i: 0, a: 0, l: 0 };
+    const totals = { d: 0, i: 0, a: 0, l: 0 };
+    fields.forEach(f => {
+      const s = f.dataset.track;
+      totals[s]++;
+      if (f.type === 'checkbox') { if (f.checked) filled[s]++; }
+      else if (f.value && f.value.trim()) { filled[s]++; }
+    });
+    const angleSelected = document.querySelector('.chip.selected');
+    totals.a++;
+    if (angleSelected) filled.a++;
+    ['d', 'i', 'a', 'l'].forEach(s => {
+      const dot = document.getElementById('prog-' + s);
+      const ratio = filled[s] / totals[s];
+      sections[s] = ratio >= 0.5;
+      if (ratio >= 1) { dot.classList.add('done'); dot.classList.remove('active'); dot.innerHTML = '\u2713'; }
+      else if (ratio > 0) { dot.classList.add('active'); dot.classList.remove('done'); dot.innerHTML = s.toUpperCase(); }
+      else { dot.classList.remove('active', 'done'); dot.innerHTML = s.toUpperCase(); }
+    });
+  }
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', updateProgress);
+    el.addEventListener('change', updateProgress);
+  });
+  function selectChip(chip) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    updateProgress();
+  }
+  function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  function showSummary() {
+    const business = val('d-business') || 'Unnamed Business';
+    const overlay = document.getElementById('summary-overlay');
+    const body = document.getElementById('summary-body');
+    const bline = document.getElementById('summary-business-line');
+    bline.textContent = business + (val('d-contact') ? ' \u2014 ' + val('d-contact') : '');
+    const angleChip = document.querySelector('.chip.selected');
+    const angleName = angleChip ? angleChip.dataset.value : '';
+    const checklist = [];
+    if (document.getElementById('chk-vertical').checked) checklist.push('Vertical confirmed');
+    if (document.getElementById('chk-timing').checked) checklist.push('Timing trigger identified');
+    if (document.getElementById('chk-person').checked) checklist.push('Decision-maker known');
+    body.innerHTML = '<div class="summary-section"><h3>D \u2014 Decide</h3>'
+      + '<p><strong>' + esc(business) + '</strong>' + (val('d-vertical') ? ' (' + esc(val('d-vertical')) + ')' : '') + '</p>'
+      + (val('d-contact') ? '<p>Contact: ' + esc(val('d-contact')) + '</p>' : '')
+      + (val('d-timing') ? '<p>Why now: ' + esc(val('d-timing')) + '</p>' : '')
+      + (checklist.length ? '<ul>' + checklist.map(c => '<li>' + c + '</li>').join('') + '</ul>' : '')
+      + '</div>'
+      + '<div class="summary-section"><h3>I \u2014 Intel</h3>'
+      + (val('i-google') ? '<p>' + esc(val('i-google')) + '</p>' : '')
+      + (val('i-reviews') ? '<p><em>Reviews:</em> ' + esc(val('i-reviews')) + '</p>' : '')
+      + (val('i-social') ? '<p><em>Social:</em> ' + esc(val('i-social')) + '</p>' : '')
+      + (val('i-booking') ? '<p><em>Current booking:</em> ' + esc(val('i-booking')) + '</p>' : '')
+      + (!val('i-google') && !val('i-reviews') && !val('i-social') && !val('i-booking') ? '<p class="empty-state">No intel gathered yet</p>' : '')
+      + '</div>'
+      + '<div class="summary-section"><h3>A \u2014 Angle</h3>'
+      + (angleName ? '<p><strong>Hook:</strong> ' + esc(angleName) + '</p>' : '<p class="empty-state">No angle selected</p>')
+      + (val('a-why') ? '<p>' + esc(val('a-why')) + '</p>' : '')
+      + (val('a-opener') ? '<p><em>Opener:</em> "' + esc(val('a-opener')) + '"</p>' : '')
+      + '</div>'
+      + '<div class="summary-section"><h3>L \u2014 Land</h3>'
+      + (val('l-objective') ? '<p><strong>Objective:</strong> ' + esc(val('l-objective')) + '</p>' : '<p class="empty-state">No objective set</p>')
+      + (val('l-fallback') ? '<p><strong>Fallback:</strong> ' + esc(val('l-fallback')) + '</p>' : '')
+      + (val('l-day') || val('l-time') ? '<p><strong>Call timing:</strong> ' + esc([val('l-day'), val('l-time')].filter(Boolean).join(', ')) + '</p>' : '')
+      + '</div>';
+    overlay.classList.add('visible');
+  }
+  function esc(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+  function closeSummary(e) { if (e.target === document.getElementById('summary-overlay')) document.getElementById('summary-overlay').classList.remove('visible'); }
+  function closeSummaryBtn() { document.getElementById('summary-overlay').classList.remove('visible'); }
+  function copyPlan() {
+    const business = val('d-business') || 'Unnamed Business';
+    const angleChip = document.querySelector('.chip.selected');
+    const angleName = angleChip ? angleChip.dataset.value : 'Not selected';
+    let text = 'D.I.A.L. PLAN \u2014 ' + business + '\n' + '='.repeat(40) + '\n\n';
+    text += 'DECIDE\nBusiness: ' + (val('d-business') || '\u2014') + '\nVertical: ' + (val('d-vertical') || '\u2014') + '\nContact: ' + (val('d-contact') || '\u2014') + '\nWhy now: ' + (val('d-timing') || '\u2014') + '\n\n';
+    text += 'INTEL\nGoogle/Web: ' + (val('i-google') || '\u2014') + '\nReviews: ' + (val('i-reviews') || '\u2014') + '\nSocial: ' + (val('i-social') || '\u2014') + '\nCurrent booking: ' + (val('i-booking') || '\u2014') + '\n\n';
+    text += 'ANGLE\nHook: ' + angleName + '\nWhy: ' + (val('a-why') || '\u2014') + '\nOpener: ' + (val('a-opener') || '\u2014') + '\n\n';
+    text += 'LAND\nObjective: ' + (val('l-objective') || '\u2014') + '\nFallback: ' + (val('l-fallback') || '\u2014') + '\nBest time: ' + ([val('l-day'), val('l-time')].filter(Boolean).join(', ') || '\u2014') + '\n';
+    navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!')).catch(() => showToast('Copy failed'));
+  }
+  function printPlan() { window.print(); }
+  function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+  function resetAll() {
+    if (!confirm('Clear all fields and start over?')) return;
+    document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+    document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
