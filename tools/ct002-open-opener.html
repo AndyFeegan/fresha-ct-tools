@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CT002 O.P.E.N. Opener Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --fresha-dark: #1a1a2e;
+            --fresha-accent: #6c5ce7;
+            --fresha-accent-light: #a29bfe;
+            --fresha-bg: #f4f3f8;
+            --gray-light: #e8e8f0;
+            --gray-text: #666;
+            --success: #27ae60;
+            --text-dark: #2c3e50;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: var(--fresha-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d4a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--fresha-accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .header p { font-size: 1.1rem; opacity: 0.9; }
+
+        .progress-bar {
+            position: sticky; top: 0; z-index: 100; background: white;
+            padding: 1.5rem 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+        }
+
+        .progress-dot { display: flex; align-items: center; gap: 0.75rem; }
+
+        .dot {
+            width: 32px; height: 32px; border-radius: 50%; background-color: var(--gray-light);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem; color: var(--gray-text); transition: all 0.3s ease;
+        }
+
+        .dot.active { background-color: var(--fresha-accent); color: white; transform: scale(1.1); }
+        .progress-dot label { font-size: 0.9rem; font-weight: 600; color: var(--gray-text); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+
+        .card {
+            background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12); }
+
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .card-icon {
+            width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 1.8rem; font-weight: 700; color: white;
+        }
+        .card-icon.o { background-color: #3498db; }
+        .card-icon.p { background-color: #e74c3c; }
+        .card-icon.e { background-color: #f39c12; }
+        .card-icon.n { background-color: #9b59b6; }
+        .card-header h2 { font-size: 1.8rem; margin-bottom: 0.25rem; }
+        .card-header p { color: var(--gray-text); font-size: 0.95rem; }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); font-size: 0.95rem; }
+        .form-group input[type="text"], .form-group textarea {
+            width: 100%; padding: 0.75rem; border: 2px solid var(--gray-light); border-radius: 8px;
+            font-family: inherit; font-size: 0.95rem; transition: border-color 0.3s ease; resize: vertical; min-height: 80px;
+        }
+        .form-group textarea { min-height: 100px; }
+        .form-group input[type="text"]:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--fresha-accent); box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        .chip-group { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .chip {
+            padding: 0.6rem 1.2rem; border: 2px solid var(--gray-light); background-color: white;
+            border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            transition: all 0.3s ease; color: var(--text-dark);
+        }
+        .chip:hover { border-color: var(--fresha-accent); color: var(--fresha-accent); }
+        .chip.selected { background-color: var(--fresha-accent); border-color: var(--fresha-accent); color: white; }
+
+        .checklist { background-color: #f9f9fc; border-left: 4px solid var(--fresha-accent); padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+        .checkbox-item { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.95rem; }
+        .checkbox-item:last-child { margin-bottom: 0; }
+        .checkbox-item input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--fresha-accent); }
+        .checkbox-item label { cursor: pointer; margin: 0; font-weight: 500; color: var(--text-dark); }
+
+        .action-buttons { display: flex; gap: 1rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap; }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+        .btn-primary { background-color: var(--fresha-accent); color: white; }
+        .btn-primary:hover { background-color: #5a4fc9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3); }
+        .btn-secondary { background-color: white; color: var(--fresha-accent); border: 2px solid var(--fresha-accent); }
+        .btn-secondary:hover { background-color: var(--fresha-bg); transform: translateY(-2px); }
+        .btn-small { padding: 0.5rem 1rem; font-size: 0.85rem; }
+
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); overflow-y: auto; }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background-color: white; padding: 2rem; border-radius: 12px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--gray-light); padding-bottom: 1rem; }
+        .modal-header h2 { margin: 0; }
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-text); }
+        .close-btn:hover { color: var(--text-dark); }
+        .modal-section { margin-bottom: 1.5rem; }
+        .modal-section h3 { color: var(--fresha-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+        .modal-section p { background-color: var(--fresha-bg); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--fresha-accent); line-height: 1.7; color: var(--text-dark); }
+        .modal-buttons { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap; }
+        .modal-buttons .btn { flex: 1; min-width: 140px; }
+
+        .toast { position: fixed; bottom: 2rem; right: 2rem; background-color: var(--fresha-accent); color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); z-index: 2000; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .progress-bar { gap: 1rem; }
+            .progress-dot label { display: none; }
+            .container { padding: 1.5rem 1rem; }
+            .card { padding: 1.5rem; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons .btn { width: 100%; }
+            .modal-buttons { flex-direction: column; }
+            .modal-buttons .btn { width: 100%; }
+        }
+        @media print { body { background-color: white; } .header, .progress-bar, .action-buttons, .modal { display: none !important; } .card { break-inside: avoid; page-break-inside: avoid; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="badge">CT002</div>
+        <h1>Call Openers</h1>
+        <p>O.P.E.N. Opener Builder</p>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-dot"><div class="dot active" id="dot-o">O</div><label>Orient</label></div>
+        <div class="progress-dot"><div class="dot" id="dot-p">P</div><label>Pattern</label></div>
+        <div class="progress-dot"><div class="dot" id="dot-e">E</div><label>Earn</label></div>
+        <div class="progress-dot"><div class="dot" id="dot-n">N</div><label>Navigate</label></div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header"><div class="card-icon o">O</div><div><h2>Orient</h2><p>Name, company, context in under 5 seconds</p></div></div>
+            <div class="form-group"><label>Scenario Type</label><div class="chip-group"><button class="chip selected" data-scenario="cold">Cold</button><button class="chip" data-scenario="warm">Warm</button><button class="chip" data-scenario="referral">Referral</button></div></div>
+            <div class="form-group"><label for="prospect-name">Prospect Name</label><input type="text" id="prospect-name" placeholder="e.g. Sarah"></div>
+            <div class="form-group"><label for="business-name">Business Name</label><input type="text" id="business-name" placeholder="e.g. Camden Hair & Beauty"></div>
+            <div class="form-group"><label for="context-line">Context Line</label><textarea id="context-line" placeholder="e.g. I can see you're a busy salon in Camden with great reviews..."></textarea></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><div class="card-icon p">P</div><div><h2>Pattern Interrupt</h2><p>Break autopilot with an observation, not a pitch</p></div></div>
+            <div class="form-group"><label for="observation">Observation</label><textarea id="observation" placeholder="e.g. I noticed most of your bookings seem to come through Instagram DMs — that must take hours..."></textarea></div>
+            <div class="checklist"><div class="checkbox-item"><input type="checkbox" id="check-p1"><label for="check-p1">Uses an observation, not a pitch</label></div><div class="checkbox-item"><input type="checkbox" id="check-p2"><label for="check-p2">Breaks the pattern of a typical cold call</label></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><div class="card-icon e">E</div><div><h2>Earn Time</h2><p>Ask permission to continue (and why it works)</p></div></div>
+            <div class="form-group"><label for="permission-ask">Permission Ask</label><textarea id="permission-ask" placeholder="e.g. Would it be worth 90 seconds to see if there's a quicker way to handle that?"></textarea></div>
+            <div class="checklist"><div class="checkbox-item"><input type="checkbox" id="check-e1"><label for="check-e1">Asks permission, doesn't assume it</label></div><div class="checkbox-item"><input type="checkbox" id="check-e2"><label for="check-e2">Gives a specific time commitment</label></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><div class="card-icon n">N</div><div><h2>Navigate</h2><p>Bridge smoothly into discovery</p></div></div>
+            <div class="form-group"><label for="bridge-discovery">Bridge to Discovery</label><textarea id="bridge-discovery" placeholder="e.g. Great — let me ask you this: how are you currently managing your appointments day to day?"></textarea></div>
+        </div>
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="view-btn">View My Opener</button>
+            <button class="btn btn-secondary" id="copy-btn">Copy to Clipboard</button>
+            <button class="btn btn-secondary" id="print-btn">Print</button>
+            <button class="btn btn-secondary" id="reset-btn">Start Over</button>
+        </div>
+    </div>
+    <div class="modal" id="summary-modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Your O.P.E.N. Opener</h2><button class="close-btn" onclick="closeModal()">&times;</button></div>
+            <div class="modal-section"><h3>Orient</h3><p id="modal-orient"></p></div>
+            <div class="modal-section"><h3>Pattern Interrupt</h3><p id="modal-pattern"></p></div>
+            <div class="modal-section"><h3>Earn Time</h3><p id="modal-earn"></p></div>
+            <div class="modal-section"><h3>Navigate</h3><p id="modal-navigate"></p></div>
+            <div class="modal-section" style="margin-top: 2rem; border-top: 2px solid var(--gray-light); padding-top: 1.5rem;"><h3>Full Script</h3><p id="modal-script"></p></div>
+            <div class="modal-buttons"><button class="btn btn-primary" id="modal-copy-btn">Copy Full Script</button><button class="btn btn-secondary" id="modal-print-btn">Print</button></div>
+        </div>
+    </div>
+    <script>
+        const data = { scenario: 'cold', prospectName: '', businessName: '', contextLine: '', observation: '', permissionAsk: '', bridgeDiscovery: '' };
+        document.querySelectorAll('[data-scenario]').forEach(btn => { btn.addEventListener('click', function() { document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('selected')); this.classList.add('selected'); data.scenario = this.dataset.scenario; updateProgress(); }); });
+        document.getElementById('prospect-name').addEventListener('input', (e) => { data.prospectName = e.target.value; updateProgress(); });
+        document.getElementById('business-name').addEventListener('input', (e) => { data.businessName = e.target.value; updateProgress(); });
+        document.getElementById('context-line').addEventListener('input', (e) => { data.contextLine = e.target.value; updateProgress(); });
+        document.getElementById('observation').addEventListener('input', (e) => { data.observation = e.target.value; updateProgress(); });
+        document.getElementById('permission-ask').addEventListener('input', (e) => { data.permissionAsk = e.target.value; updateProgress(); });
+        document.getElementById('bridge-discovery').addEventListener('input', (e) => { data.bridgeDiscovery = e.target.value; updateProgress(); });
+        function updateProgress() {
+            const oComplete = data.prospectName && data.businessName && data.contextLine;
+            const pComplete = data.observation && document.getElementById('check-p1').checked && document.getElementById('check-p2').checked;
+            const eComplete = data.permissionAsk && document.getElementById('check-e1').checked && document.getElementById('check-e2').checked;
+            const nComplete = data.bridgeDiscovery;
+            document.getElementById('dot-o').classList.toggle('active', oComplete);
+            document.getElementById('dot-p').classList.toggle('active', pComplete);
+            document.getElementById('dot-e').classList.toggle('active', eComplete);
+            document.getElementById('dot-n').classList.toggle('active', nComplete);
+        }
+        function generateOrient() { if (!data.prospectName || !data.businessName) return ''; return `Hi ${data.prospectName}, this is [Your Name] from Fresha. I'm calling because I came across ${data.businessName} — ${data.contextLine}`; }
+        function generatePattern() { return data.observation || ''; }
+        function generateEarn() { return data.permissionAsk || ''; }
+        function generateNavigate() { return data.bridgeDiscovery || ''; }
+        function generateFullScript() { return [generateOrient(), generatePattern(), generateEarn(), generateNavigate()].filter(p => p).join(' '); }
+        function openModal() { document.getElementById('modal-orient').textContent = generateOrient(); document.getElementById('modal-pattern').textContent = generatePattern(); document.getElementById('modal-earn').textContent = generateEarn(); document.getElementById('modal-navigate').textContent = generateNavigate(); document.getElementById('modal-script').textContent = generateFullScript(); document.getElementById('summary-modal').classList.add('show'); }
+        function closeModal() { document.getElementById('summary-modal').classList.remove('show'); }
+        document.getElementById('view-btn').addEventListener('click', openModal);
+        function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => { showToast('Copied to clipboard!'); }); }
+        document.getElementById('copy-btn').addEventListener('click', () => { const structured = `ORIENT:\n${generateOrient()}\n\nPATTERN INTERRUPT:\n${generatePattern()}\n\nEARN TIME:\n${generateEarn()}\n\nNAVIGATE:\n${generateNavigate()}\n\nFULL SCRIPT:\n${generateFullScript()}`; copyToClipboard(structured); });
+        document.getElementById('modal-copy-btn').addEventListener('click', () => { copyToClipboard(generateFullScript()); });
+        document.getElementById('print-btn').addEventListener('click', () => { window.print(); });
+        document.getElementById('modal-print-btn').addEventListener('click', () => { window.print(); });
+        document.getElementById('reset-btn').addEventListener('click', () => { if (confirm('Are you sure? This will clear all your inputs.')) { Object.keys(data).forEach(key => { data[key] = key === 'scenario' ? 'cold' : ''; }); document.getElementById('prospect-name').value = ''; document.getElementById('business-name').value = ''; document.getElementById('context-line').value = ''; document.getElementById('observation').value = ''; document.getElementById('permission-ask').value = ''; document.getElementById('bridge-discovery').value = ''; document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('selected')); document.querySelector('[data-scenario="cold"]').classList.add('selected'); document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false); updateProgress(); showToast('Form reset'); } });
+        function showToast(message) { const toast = document.createElement('div'); toast.className = 'toast'; toast.textContent = message; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+        document.getElementById('summary-modal').addEventListener('click', (e) => { if (e.target.id === 'summary-modal') closeModal(); });
+        updateProgress();
+    </script>
+</body>
+</html>
