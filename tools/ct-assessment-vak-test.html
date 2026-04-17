@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CT Assessment — VAK Test</title>
+<style>
+:root{
+  --fresha-dark: #1a1a2e;
+  --fresha-accent: #6c5ce7;
+  --fresha-accent-light: #a29bfe;
+  --fresha-bg: #f4f3f8;
+  --fresha-white: #ffffff;
+  --fresha-text: #2d3436;
+  --fresha-muted: #636e72;
+  --fresha-border: #dfe6e9;
+  --fresha-success: #00b894;
+  --visual: #2563EB;
+  --visual-soft: #EEF4FF;
+  --auditory: #7C3AED;
+  --auditory-soft: #F3EEFF;
+  --kinaesthetic: #0F9F6E;
+  --kinaesthetic-soft: #ECFDF5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:linear-gradient(135deg,#e8856c 0%,#d964a7 18%,#c86dd1 35%,#a678e0 50%,#8b7ae8 65%,#7b8eef 80%,#5cc0c8 100%);
+  background-attachment:fixed;
+  color:var(--fresha-text);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+.header{
+  background:#0a0a0f;
+  background-image:radial-gradient(ellipse at 50% 100%,rgba(108,92,231,0.35) 0%,transparent 60%);
+  padding:40px 24px;
+  text-align:center;
+  color:var(--fresha-white);
+}
+.header-logo{
+  display:block;
+  margin:0 auto 16px;
+  height:24px;
+  opacity:0.9;
+}
+.header-badge{
+  background:#3b2d8b;
+  color:var(--fresha-white);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  padding:8px 14px;
+  border-radius:8px;
+  display:inline-block;
+  margin-bottom:16px;
+}
+.header h1{
+  font-size:2.2rem;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.header p{
+  color:rgba(255,255,255,0.65);
+  font-size:1rem;
+}
+
+.wrapper{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:48px 24px 96px;}
+.screen{display:none;}
+.screen.active{display:block;animation:fadeUp .45s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.hero-card,.panel,.scores-wrap,.section-card{
+  background:var(--fresha-white);
+  border:1px solid var(--fresha-border);
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+.hero-card{padding:36px 34px;margin-bottom:22px;}
+.eyebrow{font-size:.73rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--fresha-accent);margin-bottom:14px;}
+.hero-title{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:700;line-height:1.02;letter-spacing:-.04em;margin-bottom:16px;max-width:700px;}
+.hero-sub{font-size:1rem;line-height:1.75;color:var(--fresha-muted);max-width:680px;margin-bottom:28px;}
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;}
+.legend-item{border:1px solid var(--fresha-border);background:var(--fresha-bg);border-radius:12px;padding:18px 16px;}
+.legend-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.legend-dot{width:12px;height:12px;border-radius:999px}
+.legend-name{font-weight:700;font-size:.95rem}
+.legend-desc{font-size:.86rem;color:var(--fresha-muted);line-height:1.55}
+.field-wrap{margin-bottom:24px;}
+.field-label{display:block;font-size:.76rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--fresha-muted);margin-bottom:10px;}
+.field-input{
+  width:100%;padding:16px 18px;border-radius:12px;border:1px solid var(--fresha-border);
+  background:#fff;font:inherit;color:var(--fresha-text);outline:none;transition:.2s;
+}
+.field-input:focus{border-color:var(--fresha-accent);box-shadow:0 0 0 4px rgba(108,92,231,.08);}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:15px 24px;border-radius:12px;border:none;font-weight:700;
+  letter-spacing:.01em;text-decoration:none;cursor:pointer;transition:.18s ease;font-family:inherit;
+}
+.btn-primary{background:var(--fresha-accent);color:#fff;}
+.btn-primary:hover{background:#5a4cc8;transform:translateY(-1px);}
+.btn-secondary{background:#fff;color:var(--fresha-muted);border:1px solid var(--fresha-border);}
+.btn-secondary:hover{background:var(--fresha-bg);color:var(--fresha-text);}
+
+.panel{padding:28px 28px 30px;}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.progress-label,.progress-pct{font-size:.8rem;font-weight:700;color:var(--fresha-muted);letter-spacing:.04em;}
+.progress-track{height:10px;background:#e8e8f0;border-radius:999px;overflow:hidden;margin-bottom:28px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--fresha-accent),var(--fresha-accent-light));width:0%;transition:width .35s ease;}
+.q-num{font-size:.76rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--fresha-muted);margin-bottom:12px;}
+.q-text{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;line-height:1.28;letter-spacing:-.02em;margin-bottom:22px;}
+.options-list{display:grid;gap:12px;}
+.opt-btn{
+  display:flex;gap:14px;align-items:flex-start;text-align:left;width:100%;
+  padding:18px 18px;background:#fff;border:1px solid var(--fresha-border);border-radius:12px;
+  cursor:pointer;font:inherit;transition:.15s ease;
+}
+.opt-btn:hover{border-color:var(--fresha-accent);box-shadow:0 6px 18px rgba(108,92,231,.08);transform:translateY(-1px);}
+.opt-btn.selected{border-color:var(--fresha-accent);background:var(--fresha-bg);}
+.opt-icon{
+  width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.82rem;background:#f0f0f5;color:var(--fresha-muted);flex-shrink:0;
+}
+.opt-copy{font-size:.97rem;line-height:1.6;color:var(--fresha-muted);}
+.opt-btn.selected .opt-copy,.opt-btn:hover .opt-copy{color:var(--fresha-text);}
+
+.report-header{margin-bottom:24px;}
+.report-name{font-size:clamp(2.1rem,5vw,3.3rem);font-weight:700;letter-spacing:-.04em;line-height:1.02;margin:8px 0 14px;}
+.style-badge{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.badge-pip{width:10px;height:10px;border-radius:999px;}
+.tagline{font-size:1rem;color:var(--fresha-muted);line-height:1.7;max-width:720px;}
+.scores-wrap{padding:26px 24px;margin:24px 0 18px;}
+.scores-head{font-size:.76rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--fresha-muted);margin-bottom:18px;}
+.score-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.score-row:last-child{margin-bottom:0;}
+.score-label{width:140px;font-size:.9rem;font-weight:700;flex-shrink:0;}
+.score-track{flex:1;height:10px;background:#e8e8f0;border-radius:999px;overflow:hidden;}
+.score-fill{height:100%;width:0%;transition:width .8s ease;}
+.score-pct{width:44px;text-align:right;font-size:.82rem;font-weight:700;color:var(--fresha-muted);}
+.report-grid{display:grid;gap:16px;}
+.section-card{padding:22px;}
+.section-title{font-size:.84rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--fresha-muted);margin-bottom:14px;}
+.section-card p{font-size:.97rem;line-height:1.75;color:var(--fresha-text);margin-bottom:12px;}
+.section-card p:last-child{margin-bottom:0;}
+.bullet-list{list-style:none;display:grid;gap:10px;}
+.bullet-list li{
+  border:1px solid var(--fresha-border);background:var(--fresha-bg);border-radius:12px;padding:14px 15px;
+  font-size:.95rem;line-height:1.65;color:var(--fresha-text);
+}
+.traits{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.trait{
+  padding:8px 11px;border-radius:999px;font-size:.76rem;font-weight:700;letter-spacing:.04em;
+  background:#f0f0f5;color:var(--fresha-muted);
+}
+.action-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:24px;}
+.note{text-align:center;color:var(--fresha-muted);font-size:.82rem;margin-top:12px;}
+
+@media(max-width:760px){
+  .legend{grid-template-columns:1fr;}
+  .score-row{align-items:flex-start;flex-wrap:wrap}
+  .score-label{width:100%}
+}
+@media print{
+  body{background:#fff;}
+  .header{display:none;}
+  .wrapper{padding:0;max-width:100%;}
+  .hero-card,.panel,.scores-wrap,.section-card{box-shadow:none;}
+  .no-print{display:none !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img class="header-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfwAAACXCAYAAADwFuk+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAC3DSURBVHhe7Z0HuDVVdf6TGKMSgwaNCtixKyogYkFsKNiJGjUqlqgIKvYKFuySaGLDGks0lr+9l78aa8QugiiCqICKggoCH9+9Z6217zwv7JtcF/e795wze++Zc2f9nuc8Pn7cM2vNPjPzzt57lT/7s01ASumvAFwFwO4A9gPwBDN7tZl9QlW/LSI/V9WzROQ8VTVVnajqOSLyW1U9zsw+b2ZvAfA0APcCcLOU0lVTShf3toIgCIIgaAyAW5vZG0TkR6r6G1U9l4KeOpBfCPhiwJeBE8zsNQD2TyldxvsWBEEQBEFHUkqX5Ew7Cy+8ILeCtvkRkd8BOCSl9Jfe1yAIgiAIZoBL6JPJZG8zewf337349k0W/5+Z2UsA7Oj9D4IgCIJgAyigZvZ2VRUvtENERM5PKR2UUtrOn0sQBEEQBA4AlzKzF4jIqV5Whw5fTpgRkFLa259XEARBEAR5+R7ADZke1+cefQlEZCuA55599tk7+PMMgiAIglED4CEMhPPiuajk4MLvA7iGP9cgCIIgGB15Cf9FItIpd36oqOqvROQ+KaW/8OceBEEQBKOAImhmH1/0JfyNyLP9Z/jzD4IgCIJNT86rf78Xx82Kqm41s3+JKP4gCIJgNLBKHfe3vShudriSYWYvj2I9QRAEwaaH0fhm9q7Nvoy/LZi6Z2ZHsdmPH5sgCNoC4AYAblXxs7u3GQSjgCLHDnZeBMdGztd/RgTyBUF/cKXNzP6/vz9LIiI/9XaDYBSo6oNUddnfFGOE48AWvn6MgiBoQwh+EFQipbRHSulsf0OMGVU9k8t+fqyCIKhPCH4QVADAJVT1aH8zBBc8ELYA2NmPWRAEdQnBD4IKqOqzmYvub4bgQszsA37MgiCoSwh+EBQGwK7+JgguCoBHMYPBj18QBHUIwQ+CwpjZO/1NEFwUETkPwE38+AVBUIcQ/CAoSErpehGVPz1m9g4/hkEQ1CEEPwg6MgbB876WhP0UvM0gCOoSgh8EHRmD4HtfS2JmJ3ubQRDUJQQ/CDoSgh8EwSIQgh8EHQnBD4JgEQjBD4KOhOAHQbAIhOAHQUdC8IMgWARC8IOgI5tZ8Pnbmdkd/FiVRkR+BmAf/FgGQVCOEPwg6MhmFnzCbmT+GJVGRLb4TNoT7wU+jMzs/QDu4MczCIL6hOAHQUc2u+CnlO7sfS0NK+15m0EQ1CUEPwg6MgbB976WhP0UvM0gCOoSgh8EHQnBD4JgEQjBD4KOjEHwva8lAXC4txkEQV1C8IOgIyH4QRAsAiH4QdCREPwgCBaBEPwg6EgIfhAEi0AIfhB0JAQ/CIJFoKTg/x+0NHcWxrJmZwAAAABJRU5ErkJggg==" alt="fresha">
+  <div class="header-badge">CT ASSESSMENT</div>
+  <h1>VAK <span style="color: var(--fresha-accent-light)">Test</span></h1>
+  <p>Discover how you learn best</p>
+</div>
+
+<div class="wrapper">
+
+  <div id="intro-screen" class="screen active">
+    <div class="hero-card">
+      <div class="eyebrow">Learning profile assessment</div>
+      <h1 class="hero-title">Your Learning Style Discovery</h1>
+      <p class="hero-sub">A short, modern assessment that reveals whether you naturally learn best through seeing, hearing, or doing — with a practical report you can share, print, or save as PDF.</p>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-top"><div class="legend-dot" style="background:var(--visual)"></div><div class="legend-name">Visual</div></div>
+          <div class="legend-desc">You learn best by seeing diagrams, structure, layouts, models, and written information.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-top"><div class="legend-dot" style="background:var(--auditory)"></div><div class="legend-name">Auditory</div></div>
+          <div class="legend-desc">You absorb ideas best by listening, discussing, explaining out loud, and hearing examples.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-top"><div class="legend-dot" style="background:var(--kinaesthetic)"></div><div class="legend-name">Kinaesthetic</div></div>
+          <div class="legend-desc">You learn best through action, practice, experimentation, movement, and hands-on experience.</div>
+        </div>
+      </div>
+
+      <div class="field-wrap">
+        <label class="field-label" for="user-name">Your name</label>
+        <input class="field-input" id="user-name" type="text" placeholder="First name" autocomplete="given-name">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="startQuiz()">Start assessment</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-screen" class="screen">
+    <div class="panel">
+      <div class="progress-header">
+        <div class="progress-label" id="q-progress-label">Question 1 of 18</div>
+        <div class="progress-pct" id="q-progress-pct">0%</div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+      <div class="q-num" id="q-number">01 / 18</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options-list" id="options-grid"></div>
+    </div>
+  </div>
+
+  <div id="report-screen" class="screen">
+    <div class="report-header">
+      <div class="eyebrow">Learning profile</div>
+      <div class="report-name" id="report-name">Participant</div>
+      <div class="style-badge" id="style-badge"><div class="badge-pip" id="badge-pip"></div><span id="badge-label"></span></div>
+      <div class="tagline" id="tagline"></div>
+    </div>
+
+    <div class="scores-wrap">
+      <div class="scores-head">VAK profile breakdown</div>
+      <div class="score-row">
+        <div class="score-label" style="color:var(--visual)">Visual</div>
+        <div class="score-track"><div class="score-fill" id="bar-V" style="background:var(--visual)"></div></div>
+        <div class="score-pct" id="num-V">0%</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label" style="color:var(--auditory)">Auditory</div>
+        <div class="score-track"><div class="score-fill" id="bar-A" style="background:var(--auditory)"></div></div>
+        <div class="score-pct" id="num-A">0%</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label" style="color:var(--kinaesthetic)">Kinaesthetic</div>
+        <div class="score-track"><div class="score-fill" id="bar-K" style="background:var(--kinaesthetic)"></div></div>
+        <div class="score-pct" id="num-K">0%</div>
+      </div>
+    </div>
+
+    <div class="report-grid" id="report-sections"></div>
+
+    <div class="action-row no-print" id="report-actions">
+      <a id="btn-open" class="btn btn-primary" href="#" target="_blank" rel="noreferrer">Open full report</a>
+      <button id="btn-pdf" class="btn btn-secondary" onclick="window.print()" style="display:none;">Print / Save as PDF</button>
+      <button id="btn-restart" class="btn btn-secondary" onclick="restart()">Start again</button>
+    </div>
+    <div class="note no-print" id="report-note">Opens in a new tab — ideal for printing or saving as PDF.</div>
+  </div>
+</div>
+
+<script>
+const baseQuestions = [
+  {text:"When you are learning a new tool, what helps you most?",options:[
+    {text:"Seeing screenshots, layouts, or a step-by-step visual guide.",c:'V'},
+    {text:"Having someone explain it to me and talking it through.",c:'A'},
+    {text:"Clicking around and trying it myself until it makes sense.",c:'K'}]},
+  {text:"If someone gives you directions to a place, you prefer...",options:[
+    {text:"A map or pins so I can picture the route.",c:'V'},
+    {text:"Clear spoken directions I can remember.",c:'A'},
+    {text:"Landmarks and getting a feel for the route as I go.",c:'K'}]},
+  {text:"In a workshop or training session, you learn fastest when...",options:[
+    {text:"The presenter uses slides, models, and examples on screen.",c:'V'},
+    {text:"There is discussion, explanation, and Q&A.",c:'A'},
+    {text:"There are exercises, simulations, or practical tasks.",c:'K'}]},
+  {text:"When you are trying to remember something, you usually...",options:[
+    {text:"Picture what you saw on the page or screen.",c:'V'},
+    {text:"Replay what was said or repeat it to yourself.",c:'A'},
+    {text:"Recall what you were doing or how it felt in practice.",c:'K'}]},
+  {text:"When reading instructions, what is your natural preference?",options:[
+    {text:"Clean formatting, diagrams, and structure.",c:'V'},
+    {text:"To read them out loud or hear someone summarise them.",c:'A'},
+    {text:"To skim them and begin applying them straight away.",c:'K'}]},
+  {text:"If you are solving a problem with a team, you tend to...",options:[
+    {text:"Sketch it, map it, or organise ideas visually.",c:'V'},
+    {text:"Talk through possibilities until the answer becomes clear.",c:'A'},
+    {text:"Prototype, test, or work it out while moving.",c:'K'}]},
+  {text:"At school or in training, what usually helped you most?",options:[
+    {text:"Charts, notes, diagrams, and reading material.",c:'V'},
+    {text:"Lectures, discussion, and hearing examples.",c:'A'},
+    {text:"Labs, role-play, exercises, and doing it for real.",c:'K'}]},
+  {text:"When you meet someone new, what sticks with you first?",options:[
+    {text:"Their face, expression, or how they looked.",c:'V'},
+    {text:"Their voice and what they said.",c:'A'},
+    {text:"Their energy, handshake, or the experience of meeting them.",c:'K'}]},
+  {text:"When you revise for something important, you are most likely to...",options:[
+    {text:"Use notes, colour-coding, mind maps, or flashcards.",c:'V'},
+    {text:"Explain it out loud, listen to recordings, or discuss it.",c:'A'},
+    {text:"Practise questions, rehearse physically, or learn by repetition.",c:'K'}]},
+  {text:"What frustrates you most in a learning session?",options:[
+    {text:"Messy slides, poor structure, or nothing to look at.",c:'V'},
+    {text:"Not enough explanation or no chance to ask questions.",c:'A'},
+    {text:"Too much theory and not enough practice.",c:'K'}]},
+  {text:"If you are trying to understand a new concept, you tend to ask...",options:[
+    {text:"Can you show me what that looks like?",c:'V'},
+    {text:"Can you explain that again in different words?",c:'A'},
+    {text:"Can I try it and see how it works?",c:'K'}]},
+  {text:"When you are presenting an idea, you naturally rely on...",options:[
+    {text:"Slides, diagrams, or a visual structure.",c:'V'},
+    {text:"Storytelling, tone, and talking the audience through it.",c:'A'},
+    {text:"Examples, demos, or getting people involved.",c:'K'}]},
+  {text:"If you had to learn a new process quickly, you would rather...",options:[
+    {text:"Read the guide and look at a clear example first.",c:'V'},
+    {text:"Have someone walk me through it verbally.",c:'A'},
+    {text:"Shadow someone and do it with them immediately.",c:'K'}]},
+  {text:"What helps a meeting feel productive to you?",options:[
+    {text:"A visible agenda, clear notes, and shared screens.",c:'V'},
+    {text:"Good discussion, explanation, and verbal clarity.",c:'A'},
+    {text:"Decisions turning into actions and next steps quickly.",c:'K'}]},
+  {text:"When you are stuck, you usually...",options:[
+    {text:"Look for examples, screenshots, or reference material.",c:'V'},
+    {text:"Talk it out with someone.",c:'A'},
+    {text:"Experiment until something clicks.",c:'K'}]},
+  {text:"How do you normally learn best from mistakes?",options:[
+    {text:"Reviewing what happened and seeing the pattern clearly.",c:'V'},
+    {text:"Debriefing it in conversation and hearing feedback.",c:'A'},
+    {text:"Trying again differently until it works.",c:'K'}]},
+  {text:"What kind of content do you gravitate toward first?",options:[
+    {text:"Dashboards, written summaries, diagrams, and visuals.",c:'V'},
+    {text:"Podcasts, voice notes, conversations, and discussion.",c:'A'},
+    {text:"Interactive tools, walkthroughs, and live practice.",c:'K'}]},
+  {text:"When you finally understand something, it usually feels like...",options:[
+    {text:"I can see the whole picture clearly now.",c:'V'},
+    {text:"I can explain it clearly now.",c:'A'},
+    {text:"I know how to do it now.",c:'K'}]}
+];
+
+const profiles = {
+  VV:{
+    name:'Visual',
+    title:'The Visual Thinker',
+    colour:'var(--visual)', soft:'var(--visual-soft)',
+    tagline:'You learn best when ideas are clear, structured, and easy to see.',
+    overview:`{name}, your results suggest a strongly Visual learning preference. You tend to absorb information best when it is organised in a way you can see and mentally map. Diagrams, layouts, written instructions, dashboards, frameworks, examples, and structured notes are all likely to help you learn faster and retain more.`,
+    style:`You are likely at your best when information is clear, elegant, and well structured. You quickly spot patterns, connect parts to a bigger picture, and notice when something is visually confusing or poorly organised. When learning, clarity of presentation matters more to you than people often realise.`,
+    strengths:['You spot patterns and structure quickly.','You remember layouts, examples, and written material well.','You are often strong at organising complexity into something clearer.','You benefit from maps, frameworks, and visual models.'],
+    growth:`Your next level comes from complementing visual clarity with more active rehearsal. Sometimes seeing and understanding can feel complete before real-world practice has fully embedded the skill. Turning ideas into action sooner will deepen retention.`,
+    tips:['Use mind maps, diagrams, and colour-coded notes.','Ask for examples, screenshots, or frameworks.','Turn conversations into written summaries quickly.','Build one-page cheat sheets for new topics.'],
+    traits:['Structured','Observant','Pattern-oriented','Clear-thinking']
+  },
+  VA:{
+    name:'Visual with Auditory',
+    title:'The Structured Communicator',
+    colour:'var(--visual)', soft:'var(--visual-soft)',
+    tagline:'You learn best when strong visuals are paired with clear explanation.',
+    overview:`{name}, your profile suggests you learn best through a blend of seeing and hearing. You benefit from structure, diagrams, and written material, but your understanding strengthens when ideas are also explained, discussed, or talked through.`,
+    style:`You are likely to do very well in environments where there is both strong visual organisation and room for discussion. You want to see the model and hear the logic. That combination helps concepts land deeply and feel usable.`,
+    strengths:['You combine strong pattern recognition with verbal understanding.','You can often explain structured ideas clearly to others.','You do well with slides plus discussion or notes plus explanation.','You often bridge detail and communication effectively.'],
+    growth:`Your edge is moving more quickly from understanding to experimentation. Once you can see it and explain it, the next step is applying it in a live setting sooner.`,
+    tips:['Pair notes with verbal summaries.','Use diagrams, then explain them out loud.','Ask clarifying questions after reading.','Record short spoken recaps of key ideas.'],
+    traits:['Clear','Balanced','Organised','Articulate']
+  },
+  VK:{
+    name:'Visual with Kinaesthetic',
+    title:'The Practical Mapper',
+    colour:'var(--visual)', soft:'var(--visual-soft)',
+    tagline:'You learn best when you can see the structure and then apply it quickly.',
+    overview:`{name}, your profile suggests a strong Visual preference supported by Kinaesthetic learning. You like to understand the model first, then test it in practice. Seeing the shape of something matters to you, but so does experiencing how it works in the real world.`,
+    style:`You are likely to learn quickly when there is a clear framework followed by immediate application. Theory alone can feel incomplete; you want to move from picture to practice without too much delay.`,
+    strengths:['You connect structure to action quickly.','You benefit from walkthroughs followed by live use.','You often learn efficiently through examples and experimentation.','You can translate abstract ideas into usable steps.'],
+    growth:`Your edge is slowing down enough to reflect after doing. You may move into action quickly, but short moments of review will help you lock in what worked and why.`,
+    tips:['Start with a visual overview, then practise immediately.','Use checklists and annotated examples.','Review what happened after each attempt.','Turn processes into simple visual workflows.'],
+    traits:['Applied','Fast-learning','Structured','Action-oriented']
+  },
+  AA:{
+    name:'Auditory',
+    title:'The Auditory Processor',
+    colour:'var(--auditory)', soft:'var(--auditory-soft)',
+    tagline:'You learn best when ideas are explained, discussed, and heard clearly.',
+    overview:`{name}, your results suggest a strongly Auditory learning preference. You tend to understand and retain information best through listening, talking, discussion, storytelling, and hearing ideas expressed clearly. Conversation is not a side feature for you — it is often the learning process itself.`,
+    style:`You are likely to think best in dialogue. Hearing something said out loud, rephrased, questioned, or debated helps it settle into memory and meaning. You may naturally process ideas by explaining them to someone else or hearing yourself say them.`,
+    strengths:['You absorb meaning well through explanation and discussion.','You often ask excellent clarifying questions.','You can remember phrasing, examples, and spoken logic.','You often communicate learning back to others effectively.'],
+    growth:`Your edge is making sure spoken understanding becomes something you can revisit. Converting conversations into notes, summaries, or action steps will help protect what you learn from fading.`,
+    tips:['Talk ideas through with someone.','Record voice notes after learning sessions.','Explain concepts back in your own words.','Use discussion to clarify, then summarise key takeaways.'],
+    traits:['Verbal','Curious','Expressive','Discussion-led']
+  },
+  AV:{
+    name:'Auditory with Visual',
+    title:'The Explained Strategist',
+    colour:'var(--auditory)', soft:'var(--auditory-soft)',
+    tagline:'You learn best when explanation is supported by a clear visual structure.',
+    overview:`{name}, your profile suggests an Auditory preference with strong Visual support. You like to hear the story, logic, and reasoning behind something, while also seeing an organised structure that helps you anchor it.`,
+    style:`You often learn most effectively when presenters explain clearly and also give you something concrete to reference, such as notes, diagrams, or a model. You like learning to feel coherent both verbally and visually.`,
+    strengths:['You combine discussion and structure effectively.','You often retain both the message and the framework.','You can turn explanation into organised understanding.','You do well in collaborative learning environments.'],
+    growth:`Your edge is bringing in more live application. Once something makes sense in conversation and on paper, practising it will make the learning more durable.`,
+    tips:['Use notes while listening to explanations.','Ask for a model or diagram alongside verbal teaching.','Summarise discussions visually after the fact.','Turn meetings into action lists and frameworks.'],
+    traits:['Thoughtful','Communicative','Structured','Insightful']
+  },
+  AK:{
+    name:'Auditory with Kinaesthetic',
+    title:'The Active Collaborator',
+    colour:'var(--auditory)', soft:'var(--auditory-soft)',
+    tagline:'You learn best by talking it through and then trying it in the real world.',
+    overview:`{name}, your profile suggests you learn through a mix of hearing and doing. Discussion helps you make sense of ideas, but you really lock them in when you apply them. You likely enjoy interactive sessions where conversation leads naturally into action.`,
+    style:`You may find long static materials draining if they are not paired with dialogue or practice. You often need to hear enough to get the concept, then test it to make it real.`,
+    strengths:['You learn well in coaching, workshops, and live walkthroughs.','You ask clarifying questions and then move into practice.','You often translate talk into action quickly.','You build confidence through repetition and feedback.'],
+    growth:`Your edge is capturing what you learn more deliberately. Because you learn dynamically, valuable insights can be lost unless you document the key takeaways after each session.`,
+    tips:['Talk through a task before doing it.','Use live practice with instant feedback.','Debrief after exercises to reinforce the lesson.','Write down what worked after each attempt.'],
+    traits:['Interactive','Practical','Engaged','Collaborative']
+  },
+  KK:{
+    name:'Kinaesthetic',
+    title:'The Hands-On Learner',
+    colour:'var(--kinaesthetic)', soft:'var(--kinaesthetic-soft)',
+    tagline:'You learn best by doing, testing, practising, and experiencing things directly.',
+    overview:`{name}, your results suggest a strongly Kinaesthetic learning preference. You are likely to learn fastest when you can get involved, try things, move quickly into practice, and build confidence through repetition. Learning becomes real for you when it becomes active.`,
+    style:`You often find that understanding deepens only when something moves from theory into experience. Long explanations without action can feel frustrating. You want momentum, direct engagement, and a chance to see what works in practice.`,
+    strengths:['You learn quickly through repetition and live experience.','You build confidence through action, not just theory.','You are often highly adaptable in real situations.','You tend to turn learning into usable behaviour quickly.'],
+    growth:`Your edge is pausing long enough to reflect and structure what you have learned. Doing is powerful for you, but a small amount of review can dramatically improve retention and consistency.`,
+    tips:['Practise as early as possible.','Use walkthroughs, simulations, and trial runs.','Build learning into real tasks instead of theory alone.','Pause after doing to capture the lesson clearly.'],
+    traits:['Practical','Energetic','Adaptive','Action-led']
+  },
+  KV:{
+    name:'Kinaesthetic with Visual',
+    title:'The Applied Builder',
+    colour:'var(--kinaesthetic)', soft:'var(--kinaesthetic-soft)',
+    tagline:'You learn best when you can see the model and immediately put it into action.',
+    overview:`{name}, your profile suggests Kinaesthetic learning supported by Visual structure. You want enough clarity to see the process, then you prefer to learn by doing. You are likely effective when instructions are simple, visible, and easy to apply straight away.`,
+    style:`You often dislike overly abstract teaching. A quick demonstration, a simple model, and then live practice is usually your ideal path to confidence.`,
+    strengths:['You turn frameworks into action well.','You learn effectively from demos and walkthroughs.','You often improve quickly through visible examples plus repetition.','You can build confidence faster than people expect once you start.'],
+    growth:`Your edge is spending a little more time on upfront explanation when the topic is complex. Sometimes extra context at the start can save rework later.`,
+    tips:['Ask for a demo, then do it yourself.','Use visual process maps or checklists.','Review examples before attempting new tasks.','Capture a simple workflow after practice.'],
+    traits:['Practical','Fast-moving','Concrete','Implementation-focused']
+  },
+  KA:{
+    name:'Kinaesthetic with Auditory',
+    title:'The Experiential Communicator',
+    colour:'var(--kinaesthetic)', soft:'var(--kinaesthetic-soft)',
+    tagline:'You learn best when ideas are discussed and then experienced directly.',
+    overview:`{name}, your profile suggests a Kinaesthetic preference with Auditory support. You often need enough conversation to understand the logic, then you want to test it. Interactive, coaching-style environments are likely where you perform best.`,
+    style:`You learn strongly in sessions that are dynamic, social, and practical. Discussion helps you orient yourself, but doing is what creates real mastery.`,
+    strengths:['You combine quick feedback with practical action.','You tend to learn well from coaching and live collaboration.','You can adapt fast once you are in motion.','You often make learning feel alive and usable for others too.'],
+    growth:`Your edge is adding more structure around what you learn. Brief notes, recaps, or visual steps will help make your practical learning easier to repeat consistently.`,
+    tips:['Talk it through briefly, then practise.','Use role-play, shadowing, and live feedback.','Capture the steps after you do them once.','Build routines around repetition and review.'],
+    traits:['Dynamic','Practical','Social','Feedback-driven']
+  }
+};
+
+const styleMeta = {
+  V:{label:'Visual',hex:getComputedStyle(document.documentElement).getPropertyValue('--visual').trim(),soft:getComputedStyle(document.documentElement).getPropertyValue('--visual-soft').trim()},
+  A:{label:'Auditory',hex:getComputedStyle(document.documentElement).getPropertyValue('--auditory').trim(),soft:getComputedStyle(document.documentElement).getPropertyValue('--auditory-soft').trim()},
+  K:{label:'Kinaesthetic',hex:getComputedStyle(document.documentElement).getPropertyValue('--kinaesthetic').trim(),soft:getComputedStyle(document.documentElement).getPropertyValue('--kinaesthetic-soft').trim()}
+};
+
+const letters = ['A','B','C','D'];
+let currentQ = 0;
+let answers = [];
+let userName = '';
+let questions = [];
+
+function shuffle(array){
+  const arr = [...array];
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function prepareQuestions(){
+  questions = shuffle(baseQuestions).map(q => ({
+    text:q.text,
+    options:shuffle(q.options)
+  }));
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startQuiz(){
+  userName = document.getElementById('user-name').value.trim() || 'Participant';
+  answers = [];
+  currentQ = 0;
+  prepareQuestions();
+  showScreen('quiz-screen');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = questions[currentQ], total = questions.length;
+  const pct = Math.round((currentQ / total) * 100);
+  document.getElementById('q-progress-label').textContent = `Question ${currentQ + 1} of ${total}`;
+  document.getElementById('q-progress-pct').textContent = `${pct}%`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('q-number').textContent = String(currentQ + 1).padStart(2,'0') + ' / ' + total;
+  document.getElementById('q-text').textContent = q.text;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  q.options.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<div class="opt-icon">${letters[i] || i+1}</div><div class="opt-copy">${opt.text}</div>`;
+    btn.onclick = ()=>selectAnswer(opt.c, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function selectAnswer(style, btn){
+  document.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers.push(style);
+  setTimeout(()=>{
+    currentQ++;
+    if(currentQ < questions.length) renderQuestion();
+    else buildReport();
+  }, 220);
+}
+
+function computeScores(){
+  const counts = {V:0,A:0,K:0};
+  answers.forEach(a => counts[a]++);
+  const t = answers.length || 1;
+  return {
+    V: Math.round(counts.V / t * 100),
+    A: Math.round(counts.A / t * 100),
+    K: Math.round(counts.K / t * 100)
+  };
+}
+
+function resolveProfile(scores){
+  const sorted = ['V','A','K'].sort((a,b)=> scores[b] - scores[a]);
+  const key = sorted[0] + sorted[1];
+  return {dominant:sorted[0], secondary:sorted[1], profile:profiles[key] || profiles[sorted[0]+sorted[0]]};
+}
+
+function buildReport(){
+  const scores = computeScores();
+  const {dominant, secondary, profile} = resolveProfile(scores);
+  const meta = styleMeta[dominant];
+  const secondaryMeta = styleMeta[secondary];
+
+  document.getElementById('report-name').textContent = userName;
+  document.getElementById('badge-label').textContent = profile.name;
+  document.getElementById('badge-pip').style.background = meta.hex;
+
+  const badge = document.getElementById('style-badge');
+  badge.style.background = meta.soft;
+  badge.style.color = meta.hex;
+  badge.style.border = `1px solid ${meta.hex}22`;
+
+  document.getElementById('tagline').textContent = `${profile.title} — ${profile.tagline} Your secondary preference is ${secondaryMeta.label}.`;
+
+  showScreen('report-screen');
+
+  setTimeout(()=>{
+    setBar('V', scores.V);
+    setBar('A', scores.A);
+    setBar('K', scores.K);
+  },150);
+
+  const sections = document.getElementById('report-sections');
+  sections.innerHTML = `
+    <div class="section-card">
+      <div class="section-title">Overview</div>
+      <p>${profile.overview.replace('{name}', userName)}</p>
+    </div>
+    <div class="section-card">
+      <div class="section-title">How you learn best</div>
+      <p>${profile.style}</p>
+      <div class="traits">${profile.traits.map(t=>`<span class="trait">${t}</span>`).join('')}</div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">Natural strengths</div>
+      <ul class="bullet-list">${profile.strengths.map(x=>`<li>${x}</li>`).join('')}</ul>
+    </div>
+    <div class="section-card">
+      <div class="section-title">Practical tips</div>
+      <ul class="bullet-list">${profile.tips.map(x=>`<li>${x}</li>`).join('')}</ul>
+    </div>
+    <div class="section-card">
+      <div class="section-title">Growth edge</div>
+      <p>${profile.growth}</p>
+    </div>
+  `;
+
+  const pdfBtn = document.getElementById('btn-pdf');
+  const restartBtn = document.getElementById('btn-restart');
+  const note = document.getElementById('report-note');
+  if (pdfBtn) pdfBtn.style.display = 'none';
+  if (restartBtn) restartBtn.style.display = 'inline-flex';
+  if (note) note.textContent = 'Opens in a new tab — ideal for printing or saving as PDF.';
+
+  setReportLink(scores, dominant, secondary);
+}
+
+function setBar(key, value){
+  document.getElementById('bar-' + key).style.width = value + '%';
+  document.getElementById('num-' + key).textContent = value + '%';
+}
+
+function setReportLink(scores, dominant, secondary){
+  const params = new URLSearchParams({
+    report:'1',
+    name:userName,
+    dom:dominant,
+    sec:secondary,
+    V:scores.V,
+    A:scores.A,
+    K:scores.K
+  });
+  document.getElementById('btn-open').href = window.location.origin + window.location.pathname + '?' + params.toString();
+}
+
+function renderStandaloneReport(name, dom, sec, scores){
+  const profile = profiles[dom + sec] || profiles[dom + dom];
+  const meta = styleMeta[dom];
+  const secondaryMeta = styleMeta[sec];
+
+  document.getElementById('report-name').textContent = name;
+  document.getElementById('badge-label').textContent = profile.name;
+  document.getElementById('badge-pip').style.background = meta.hex;
+  const badge = document.getElementById('style-badge');
+  badge.style.background = meta.soft;
+  badge.style.color = meta.hex;
+  badge.style.border = `1px solid ${meta.hex}22`;
+  document.getElementById('tagline').textContent = `${profile.title} — ${profile.tagline} Your secondary preference is ${secondaryMeta.label}.`;
+
+  const pdfBtn = document.getElementById('btn-pdf');
+  const restartBtn = document.getElementById('btn-restart');
+  const note = document.getElementById('report-note');
+  if (pdfBtn) pdfBtn.style.display = 'inline-flex';
+  if (restartBtn) restartBtn.style.display = 'none';
+  if (note) note.textContent = 'Use the Print / Save as PDF button to export this report.';
+
+  showScreen('report-screen');
+  setTimeout(()=>{
+    setBar('V', scores.V); setBar('A', scores.A); setBar('K', scores.K);
+  }, 100);
+  document.getElementById('report-sections').innerHTML = `
+    <div class="section-card">
+      <div class="section-title">Overview</div>
+      <p>${profile.overview.replace('{name}', name)}</p>
+    </div>
+    <div class="section-card">
+      <div class="section-title">How you learn best</div>
+      <p>${profile.style}</p>
+      <div class="traits">${profile.traits.map(t=>`<span class="trait">${t}</span>`).join('')}</div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">Natural strengths</div>
+      <ul class="bullet-list">${profile.strengths.map(x=>`<li>${x}</li>`).join('')}</ul>
+    </div>
+    <div class="section-card">
+      <div class="section-title">Practical tips</div>
+      <ul class="bullet-list">${profile.tips.map(x=>`<li>${x}</li>`).join('')}</ul>
+    </div>
+    <div class="section-card">
+      <div class="section-title">Growth edge</div>
+      <p>${profile.growth}</p>
+    </div>
+  `;
+  setReportLink(scores, dom, sec);
+}
+
+function checkReportMode(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('report') !== '1' && !params.get('dom')) return false;
+  const name = params.get('name') || 'Participant';
+  const dom = params.get('dom') || 'V';
+  const sec = params.get('sec') || 'A';
+  const scores = {
+    V: +params.get('V') || 0,
+    A: +params.get('A') || 0,
+    K: +params.get('K') || 0
+  };
+  renderStandaloneReport(name, dom, sec, scores);
+  return true;
+}
+
+function restart(){
+  document.getElementById('user-name').value = userName === 'Participant' ? '' : userName;
+  showScreen('intro-screen');
+}
+
+checkReportMode();
+</script>
+</body>
+</html>
