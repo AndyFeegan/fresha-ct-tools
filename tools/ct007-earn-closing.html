@@ -5,16 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CT007 — EARN Closing Planner</title>
     <style>
+        
         :root {
             --fresha-dark: #1a1a2e;
             --fresha-accent: #6c5ce7;
             --fresha-accent-light: #a29bfe;
             --fresha-bg: #f4f3f8;
-            --color-blue: #3498db;
-            --color-teal: #1abc9c;
-            --color-orange: #e67e22;
-            --color-green: #27ae60;
-            --color-gray: #95a5a6;
+            --fresha-white: #ffffff;
+            --fresha-text: #2d3436;
+            --fresha-muted: #636e72;
+            --fresha-border: #dfe6e9;
+            --fresha-success: #00b894;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
         }
 
         * {
@@ -24,90 +29,112 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: var(--fresha-bg);
-            color: var(--fresha-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--fresha-text);
             line-height: 1.6;
         }
 
         /* Header */
-        header {
-            background: linear-gradient(135deg, var(--fresha-dark) 0%, var(--fresha-accent) 100%);
+        .header {
+            background: #0a0a0f;
+            background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
             color: white;
-            padding: 2rem 1.5rem;
+            padding: 28px 24px 24px;
             text-align: center;
             position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-logo {
+            display: block;
+            margin: 0 auto 12px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900;
+            font-size: 36px;
+            color: white;
+            letter-spacing: -1.5px;
+            line-height: 1;
         }
 
         .header-badge {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            background: #3b2d8b;
+            color: var(--fresha-white);
+            font-size: 11px;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.5px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(59, 45, 139, 0.4);
         }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 26px;
             font-weight: 700;
-            margin: 0.5rem 0 0.25rem 0;
+            letter-spacing: -0.5px;
+            margin: 0;
         }
 
         .subtitle {
-            font-size: 1.1rem;
-            font-weight: 300;
-            opacity: 0.95;
-            font-style: italic;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.65);
+            margin-top: 8px;
+            margin-bottom: 0;
         }
 
         /* Progress Bar */
-        .progress-container {
+        .progress-bar {
             position: sticky;
             top: 0;
-            background: white;
-            border-bottom: 2px solid var(--fresha-accent-light);
-            padding: 1rem 1.5rem;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            background: var(--fresha-white);
+            border-bottom: 1px solid var(--fresha-border);
+            padding: 16px 24px;
+            z-index: 10;
+            box-shadow: var(--shadow-sm);
         }
 
         .progress-dots {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
         }
 
         .progress-dot {
-            width: 50px;
-            height: 50px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: var(--fresha-bg);
-            border: 3px solid var(--color-gray);
+            background: var(--fresha-border);
+            color: var(--fresha-muted);
+            font-size: 12px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
         }
 
         .progress-dot.active {
-            border-color: var(--fresha-accent);
             background: var(--fresha-accent);
             color: white;
-            transform: scale(1.1);
         }
 
         .progress-dot.completed {
-            background: var(--color-green);
-            border-color: var(--color-green);
+            background: var(--fresha-success);
             color: white;
         }
 
@@ -116,28 +143,35 @@
         }
 
         .progress-label {
-            font-size: 0.75rem;
+            font-size: 12px;
             font-weight: 600;
+            color: var(--fresha-muted);
             text-align: center;
-            color: var(--fresha-dark);
-            margin-top: 0.4rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            white-space: nowrap;
+            display: none;
+        }
+
+        .progress-connector {
+            width: 40px;
+            height: 2px;
+            background: var(--fresha-border);
+            margin: 0 -8px;
         }
 
         /* Main Content */
         .container {
-            max-width: 900px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 2rem 1.5rem;
+            padding: 20px 16px 100px;
         }
 
         .section {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--fresha-border);
+            margin-bottom: 20px;
+            overflow: hidden;
             display: none;
         }
 
@@ -158,33 +192,48 @@
         }
 
         .section-header {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--fresha-border);
             display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--fresha-accent-light);
+            align-items: flex-start;
+            gap: 14px;
         }
 
         .section-icon {
-            font-size: 2rem;
-            margin-right: 1rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            flex-shrink: 0;
+            background: var(--fresha-accent);
+            color: white;
         }
 
         .section-title {
-            font-size: 1.8rem;
+            font-size: 17px;
             font-weight: 700;
-            color: var(--fresha-dark);
+            color: var(--fresha-text);
+            margin: 0;
         }
 
         .section-subtitle {
-            font-size: 0.95rem;
-            color: var(--color-gray);
-            margin-top: 0.25rem;
+            font-size: 13px;
+            color: var(--fresha-muted);
+            margin-top: 4px;
+            margin-bottom: 0;
+        }
+
+        .section-body {
+            padding: 16px 20px 20px;
         }
 
         /* Form elements */
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 16px;
         }
 
         .form-group:last-child {
@@ -193,20 +242,20 @@
 
         label {
             display: block;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--fresha-dark);
-            font-size: 0.95rem;
+            color: var(--fresha-text);
+            margin-bottom: 6px;
         }
 
         input[type="text"],
         textarea {
             width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--fresha-accent-light);
+            border: 1px solid var(--fresha-border);
             border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 14px;
             font-family: inherit;
-            font-size: 0.95rem;
             transition: border-color 0.3s ease;
         }
 
@@ -214,51 +263,70 @@
         textarea:focus {
             outline: none;
             border-color: var(--fresha-accent);
-            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
         }
 
         textarea {
-            min-height: 90px;
+            min-height: 70px;
             resize: vertical;
         }
 
         ::placeholder {
-            color: var(--color-gray);
+            color: var(--fresha-muted);
             opacity: 0.7;
+        }
+
+        .hint-text {
+            font-size: 12px;
+            color: var(--fresha-muted);
+            font-weight: 400;
+            margin-top: 4px;
         }
 
         /* Checkboxes */
         .checkbox-group {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 8px;
         }
 
         .checkbox-subgroup {
-            margin-bottom: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .checkbox-subgroup:last-child {
+            margin-bottom: 0;
         }
 
         .checkbox-subgroup-label {
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 600;
             text-transform: uppercase;
-            color: var(--fresha-accent);
             letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
+            color: var(--fresha-accent);
+            margin-bottom: 8px;
         }
 
         .checkbox-item {
             display: flex;
             align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f4;
+            font-size: 14px;
             cursor: pointer;
+        }
+
+        .checkbox-item:last-child {
+            border-bottom: none;
         }
 
         input[type="checkbox"] {
             width: 18px;
             height: 18px;
             cursor: pointer;
-            margin-right: 0.75rem;
             accent-color: var(--fresha-accent);
+            flex-shrink: 0;
         }
 
         .checkbox-item label {
@@ -271,7 +339,7 @@
         /* Readiness rating */
         .rating-scale {
             display: flex;
-            gap: 1rem;
+            gap: 16px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -279,20 +347,22 @@
         .rating-option {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
         }
 
         .rating-option input[type="radio"] {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
             accent-color: var(--fresha-accent);
+            flex-shrink: 0;
         }
 
         .rating-option label {
             margin: 0;
             font-weight: 400;
             cursor: pointer;
+            font-size: 14px;
         }
 
         /* Readiness hint */
@@ -300,10 +370,10 @@
             display: none;
             background: #fff3cd;
             border-left: 4px solid #ffc107;
-            padding: 1rem;
+            padding: 12px 16px;
             border-radius: 4px;
-            margin-top: 1rem;
-            font-size: 0.9rem;
+            margin-top: 12px;
+            font-size: 14px;
             color: #856404;
         }
 
@@ -314,21 +384,19 @@
         /* Navigation buttons */
         .button-group {
             display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: space-between;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         button {
-            padding: 0.8rem 1.5rem;
+            padding: 12px 24px;
             border: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .btn-primary {
@@ -337,29 +405,29 @@
         }
 
         .btn-primary:hover {
-            background: var(--fresha-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+            background: #5b4dc7;
         }
 
         .btn-secondary {
-            background: var(--fresha-accent-light);
-            color: white;
+            background: var(--fresha-white);
+            color: var(--fresha-text);
+            border: 1.5px solid var(--fresha-border);
         }
 
         .btn-secondary:hover {
-            background: var(--fresha-accent);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--fresha-accent);
+            border-color: var(--fresha-accent-light);
             color: var(--fresha-accent);
         }
 
+        .btn-outline {
+            background: var(--fresha-white);
+            color: var(--fresha-text);
+            border: 1.5px solid var(--fresha-border);
+        }
+
         .btn-outline:hover {
-            background: var(--fresha-accent);
-            color: white;
+            border-color: var(--fresha-accent-light);
+            color: var(--fresha-accent);
         }
 
         button:disabled {
@@ -369,137 +437,179 @@
 
         /* Summary view */
         .summary-section {
-            background: linear-gradient(135deg, var(--fresha-dark) 0%, var(--fresha-accent) 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
+            background: var(--fresha-bg);
+            border-radius: var(--radius);
+            padding: 24px;
         }
 
         .summary-section h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+            font-size: 18px;
+            margin-bottom: 16px;
             font-weight: 700;
+            color: var(--fresha-text);
         }
 
         .summary-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
+            background: var(--fresha-white);
+            padding: 16px;
             border-radius: 8px;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--fresha-accent-light);
+            margin-bottom: 12px;
+            border-left: 4px solid var(--fresha-accent);
+        }
+
+        .summary-item:last-child {
+            margin-bottom: 0;
         }
 
         .summary-item h3 {
-            font-size: 1rem;
+            font-size: 14px;
             font-weight: 700;
-            margin-bottom: 0.5rem;
-            opacity: 0.9;
+            margin-bottom: 8px;
+            color: var(--fresha-text);
         }
 
         .summary-item p {
-            margin: 0.5rem 0;
-            font-size: 0.95rem;
+            margin: 8px 0;
+            font-size: 14px;
             line-height: 1.6;
+            color: var(--fresha-text);
         }
 
         .summary-checklist {
             list-style: none;
+            margin-top: 12px;
         }
 
         .summary-checklist li {
-            margin: 0.5rem 0;
+            margin: 8px 0;
             display: flex;
             align-items: flex-start;
+            font-size: 14px;
         }
 
         .summary-checklist li:before {
             content: "\2610 ";
-            margin-right: 0.5rem;
+            margin-right: 8px;
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         /* Empty state */
         .empty-state {
             text-align: center;
-            padding: 3rem 1.5rem;
-            color: var(--color-gray);
-        }
-
-        .empty-state-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
+            padding: 48px 24px;
+            color: var(--fresha-muted);
         }
 
         .empty-state p {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
+            font-size: 14px;
+            margin-bottom: 16px;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.6rem;
+        @media (max-width: 600px) {
+            .progress-label {
+                display: none;
             }
 
-            .subtitle {
-                font-size: 0.95rem;
+            .progress-connector {
+                display: none;
             }
 
             .progress-dots {
-                gap: 0.8rem;
+                gap: 0;
             }
 
-            .progress-dot {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
+            .container {
+                padding: 16px 12px 100px;
+            }
+
+            .section {
+                border-radius: 8px;
+            }
+
+            .section-header {
+                padding: 14px 16px 12px;
+            }
+
+            .section-body {
+                padding: 12px 16px 16px;
             }
 
             .button-group {
                 flex-direction: column;
             }
 
-            .section {
-                padding: 1.5rem;
+            button {
+                width: 100%;
+            }
+
+            .rating-scale {
+                gap: 12px;
             }
         }
+
+        @media print {
+            .header,
+            .progress-bar,
+            .button-group {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover { color: white; }
+        .back-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <div class="header-badge">CT007 — Closing</div>
+    <div class="header">
+        <a href="sales-journey.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Sales Operating System</a>
+        <img class="header-logo" src="data:image/png;base64,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" alt="fresha">
+        <div class="header-badge">CT007 — CLOSING</div>
         <h1>EARN Closing Planner</h1>
         <p class="subtitle">You don't close a sale. You earn the decision.</p>
-    </header>
+    </div>
 
     <!-- Progress Bar -->
-    <div class="progress-container">
+    <div class="progress-bar">
         <div class="progress-dots">
-            <div style="text-align: center;">
-                <div class="progress-dot active" data-section="e">
-                    <span>E</span>
-                </div>
+            <div class="progress-step">
+                <div class="progress-dot active" data-section="e">E</div>
                 <div class="progress-label">Establish</div>
             </div>
-            <div style="text-align: center;">
-                <div class="progress-dot" data-section="a">
-                    <span>A</span>
-                </div>
+            <div class="progress-connector"></div>
+            <div class="progress-step">
+                <div class="progress-dot" data-section="a">A</div>
                 <div class="progress-label">Affirm</div>
             </div>
-            <div style="text-align: center;">
-                <div class="progress-dot" data-section="r">
-                    <span>R</span>
-                </div>
+            <div class="progress-connector"></div>
+            <div class="progress-step">
+                <div class="progress-dot" data-section="r">R</div>
                 <div class="progress-label">Recommend</div>
             </div>
-            <div style="text-align: center;">
-                <div class="progress-dot" data-section="n">
-                    <span>N</span>
-                </div>
+            <div class="progress-connector"></div>
+            <div class="progress-step">
+                <div class="progress-dot" data-section="n">N</div>
                 <div class="progress-label">Next Steps</div>
             </div>
         </div>
@@ -510,263 +620,272 @@
         <!-- E: Establish Readiness -->
         <section id="section-e" class="section active">
             <div class="section-header">
-                <div class="section-icon">\ud83d\udce1</div>
+                <div class="section-icon">E</div>
                 <div>
-                    <h2 class="section-title">E — Establish Readiness</h2>
+                    <h2 class="section-title">Establish Readiness</h2>
                     <p class="section-subtitle">Read buying signals. Are they ready?</p>
                 </div>
             </div>
 
-            <form id="form-e">
-                <div class="form-group">
-                    <label for="prospect-name">Prospect Name & Business</label>
-                    <input type="text" id="prospect-name" placeholder="e.g. Sarah Chen, Blissful Spa & Wellness">
-                </div>
+            <div class="section-body">
+                <form id="form-e">
+                    <div class="form-group">
+                        <label for="prospect-name">Prospect Name & Business</label>
+                        <input type="text" id="prospect-name" placeholder="e.g. Sarah Chen, Blissful Spa & Wellness">
+                    </div>
 
-                <div class="form-group">
-                    <label>Buying Signals Observed</label>
+                    <div class="form-group">
+                        <label>Buying Signals Observed</label>
 
-                    <div class="checkbox-group">
-                        <div class="checkbox-subgroup">
-                            <div class="checkbox-subgroup-label">Verbal</div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="verbal-1" name="buying-signals" value="Asked about next steps">
-                                <label for="verbal-1">Asked about next steps</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-subgroup">
+                                <div class="checkbox-subgroup-label">Verbal</div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="verbal-1" name="buying-signals" value="Asked about next steps">
+                                    <label for="verbal-1">Asked about next steps</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="verbal-2" name="buying-signals" value="Asked about pricing">
+                                    <label for="verbal-2">Asked about pricing</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="verbal-3" name="buying-signals" value="Timeline questions">
+                                    <label for="verbal-3">Timeline questions</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="verbal-4" name="buying-signals" value="What if... language">
+                                    <label for="verbal-4">"What if..." language</label>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="verbal-2" name="buying-signals" value="Asked about pricing">
-                                <label for="verbal-2">Asked about pricing</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="verbal-3" name="buying-signals" value="Timeline questions">
-                                <label for="verbal-3">Timeline questions</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="verbal-4" name="buying-signals" value="What if... language">
-                                <label for="verbal-4">"What if..." language</label>
-                            </div>
-                        </div>
 
-                        <div class="checkbox-subgroup">
-                            <div class="checkbox-subgroup-label">Emotional</div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="emotional-1" name="buying-signals" value="Shift in tone/energy">
-                                <label for="emotional-1">Shift in tone/energy</label>
+                            <div class="checkbox-subgroup">
+                                <div class="checkbox-subgroup-label">Emotional</div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="emotional-1" name="buying-signals" value="Shift in tone/energy">
+                                    <label for="emotional-1">Shift in tone/energy</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="emotional-2" name="buying-signals" value="Forward-leaning">
+                                    <label for="emotional-2">Forward-leaning</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="emotional-3" name="buying-signals" value="Excitement about possibilities">
+                                    <label for="emotional-3">Excitement about possibilities</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="emotional-4" name="buying-signals" value="When replacing if">
+                                    <label for="emotional-4">"When" replacing "if"</label>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="emotional-2" name="buying-signals" value="Forward-leaning">
-                                <label for="emotional-2">Forward-leaning</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="emotional-3" name="buying-signals" value="Excitement about possibilities">
-                                <label for="emotional-3">Excitement about possibilities</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="emotional-4" name="buying-signals" value="When replacing if">
-                                <label for="emotional-4">"When" replacing "if"</label>
-                            </div>
-                        </div>
 
-                        <div class="checkbox-subgroup">
-                            <div class="checkbox-subgroup-label">Behavioural</div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="behavioural-1" name="buying-signals" value="Taking notes">
-                                <label for="behavioural-1">Taking notes</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="behavioural-2" name="buying-signals" value="Involving decision-makers">
-                                <label for="behavioural-2">Involving decision-makers</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="behavioural-3" name="buying-signals" value="Checking calendar">
-                                <label for="behavioural-3">Checking calendar</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="behavioural-4" name="buying-signals" value="Asking for references">
-                                <label for="behavioural-4">Asking for references</label>
+                            <div class="checkbox-subgroup">
+                                <div class="checkbox-subgroup-label">Behavioural</div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="behavioural-1" name="buying-signals" value="Taking notes">
+                                    <label for="behavioural-1">Taking notes</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="behavioural-2" name="buying-signals" value="Involving decision-makers">
+                                    <label for="behavioural-2">Involving decision-makers</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="behavioural-3" name="buying-signals" value="Checking calendar">
+                                    <label for="behavioural-3">Checking calendar</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="behavioural-4" name="buying-signals" value="Asking for references">
+                                    <label for="behavioural-4">Asking for references</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label>Readiness Rating — How ready are they?</label>
-                    <div class="rating-scale">
-                        <div class="rating-option">
-                            <input type="radio" id="readiness-1" name="readiness" value="1">
-                            <label for="readiness-1">1 (Not ready)</label>
+                    <div class="form-group">
+                        <label>Readiness Rating — How ready are they?</label>
+                        <div class="rating-scale">
+                            <div class="rating-option">
+                                <input type="radio" id="readiness-1" name="readiness" value="1">
+                                <label for="readiness-1">1 (Not ready)</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" id="readiness-2" name="readiness" value="2">
+                                <label for="readiness-2">2</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" id="readiness-3" name="readiness" value="3">
+                                <label for="readiness-3">3 (Neutral)</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" id="readiness-4" name="readiness" value="4">
+                                <label for="readiness-4">4</label>
+                            </div>
+                            <div class="rating-option">
+                                <input type="radio" id="readiness-5" name="readiness" value="5">
+                                <label for="readiness-5">5 (Very ready)</label>
+                            </div>
                         </div>
-                        <div class="rating-option">
-                            <input type="radio" id="readiness-2" name="readiness" value="2">
-                            <label for="readiness-2">2</label>
-                        </div>
-                        <div class="rating-option">
-                            <input type="radio" id="readiness-3" name="readiness" value="3">
-                            <label for="readiness-3">3 (Neutral)</label>
-                        </div>
-                        <div class="rating-option">
-                            <input type="radio" id="readiness-4" name="readiness" value="4">
-                            <label for="readiness-4">4</label>
-                        </div>
-                        <div class="rating-option">
-                            <input type="radio" id="readiness-5" name="readiness" value="5">
-                            <label for="readiness-5">5 (Very ready)</label>
+                        <div id="readiness-hint" class="readiness-hint">
+                            <strong>Heads up:</strong> Consider going back to "Tomorrow" in the 4T framework before closing. They may not be ready yet.
                         </div>
                     </div>
-                    <div id="readiness-hint" class="readiness-hint">
-                        <strong>\u26a0\ufe0f Heads up:</strong> Consider going back to "Tomorrow" in the 4T framework before closing. They may not be ready yet.
-                    </div>
-                </div>
-            </form>
+                </form>
 
-            <div class="button-group">
-                <button class="btn-outline" onclick="resetForm()">Reset</button>
-                <button class="btn-primary" onclick="goToSection('a')">Continue to Affirm \u2192</button>
+                <div class="button-group">
+                    <button class="btn-outline" onclick="resetForm()">Reset</button>
+                    <button class="btn-primary" onclick="goToSection('a')">Continue to Affirm →</button>
+                </div>
             </div>
         </section>
 
         <!-- A: Affirm the Gap -->
         <section id="section-a" class="section">
             <div class="section-header">
-                <div class="section-icon">\ud83e\ude9e</div>
+                <div class="section-icon">A</div>
                 <div>
-                    <h2 class="section-title">A — Affirm the Gap</h2>
+                    <h2 class="section-title">Affirm the Gap</h2>
                     <p class="section-subtitle">Mirror their world back in their own words</p>
                 </div>
             </div>
 
-            <form id="form-a">
-                <div class="form-group">
-                    <label for="current-state">Their Current State — In Their Words</label>
-                    <textarea id="current-state" placeholder="e.g. 'You mentioned you're losing about 15 bookings a week because clients can't book outside business hours...'"></textarea>
-                </div>
+            <div class="section-body">
+                <form id="form-a">
+                    <div class="form-group">
+                        <label for="current-state">Their Current State — In Their Words</label>
+                        <textarea id="current-state" placeholder="e.g. 'You mentioned you're losing about 15 bookings a week because clients can't book outside business hours...'"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label for="problem-cost">Their Problem & True Cost</label>
-                    <textarea id="problem-cost" placeholder="e.g. 'You said that's costing you around \u00a33,000 a month, plus the stress of managing everything by phone...'"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label for="problem-cost">Their Problem & True Cost</label>
+                        <textarea id="problem-cost" placeholder="e.g. 'You said that's costing you around £3,000 a month, plus the stress of managing everything by phone...'"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label for="desired-future">Their Desired Future</label>
-                    <textarea id="desired-future" placeholder="e.g. 'And your goal is a system where bookings come in 24/7 without you lifting a finger...'"></textarea>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label for="desired-future">Their Desired Future</label>
+                        <textarea id="desired-future" placeholder="e.g. 'And your goal is a system where bookings come in 24/7 without you lifting a finger...'"></textarea>
+                    </div>
+                </form>
 
-            <div class="button-group">
-                <button class="btn-secondary" onclick="goToSection('e')">\u2190 Back to Establish</button>
-                <button class="btn-primary" onclick="goToSection('r')">Continue to Recommend \u2192</button>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goToSection('e')">← Back to Establish</button>
+                    <button class="btn-primary" onclick="goToSection('r')">Continue to Recommend →</button>
+                </div>
             </div>
         </section>
 
         <!-- R: Recommend & Resolve -->
         <section id="section-r" class="section">
             <div class="section-header">
-                <div class="section-icon">\ud83d\udcac</div>
+                <div class="section-icon">R</div>
                 <div>
-                    <h2 class="section-title">R — Recommend & Resolve</h2>
+                    <h2 class="section-title">Recommend & Resolve</h2>
                     <p class="section-subtitle">Make your case. Handle last-minute hesitation.</p>
                 </div>
             </div>
 
-            <form id="form-r">
-                <div class="form-group">
-                    <label for="recommendation">Your Recommendation</label>
-                    <textarea id="recommendation" placeholder="e.g. 'Based on everything you've told me, I'd recommend the Premium plan with online booking and automated reminders...'"></textarea>
-                </div>
+            <div class="section-body">
+                <form id="form-r">
+                    <div class="form-group">
+                        <label for="recommendation">Your Recommendation</label>
+                        <textarea id="recommendation" placeholder="e.g. 'Based on everything you've told me, I'd recommend the Premium plan with online booking and automated reminders...'"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label for="anticipated-hesitation">Anticipated Hesitation</label>
-                    <textarea id="anticipated-hesitation" placeholder="e.g. 'I need to think about it' or 'What about the cost?'"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label for="anticipated-hesitation">Anticipated Hesitation</label>
+                        <textarea id="anticipated-hesitation" placeholder="e.g. 'I need to think about it' or 'What about the cost?'"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label for="acknowledge-response">Acknowledge Response</label>
-                    <textarea id="acknowledge-response" placeholder="e.g. 'That's completely fair — it's a big decision...'"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label for="acknowledge-response">Acknowledge Response</label>
+                        <textarea id="acknowledge-response" placeholder="e.g. 'That's completely fair — it's a big decision...'"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label for="explore-question">Explore Question</label>
-                    <textarea id="explore-question" placeholder="e.g. 'What specifically do you need to think through?'"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label for="explore-question">Explore Question</label>
+                        <textarea id="explore-question" placeholder="e.g. 'What specifically do you need to think through?'"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label for="resolve-statement">Resolve Statement</label>
-                    <textarea id="resolve-statement" placeholder="e.g. 'With that addressed, does the plan still feel right for solving the booking gaps you mentioned?'"></textarea>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label for="resolve-statement">Resolve Statement</label>
+                        <textarea id="resolve-statement" placeholder="e.g. 'With that addressed, does the plan still feel right for solving the booking gaps you mentioned?'"></textarea>
+                    </div>
+                </form>
 
-            <div class="button-group">
-                <button class="btn-secondary" onclick="goToSection('a')">\u2190 Back to Affirm</button>
-                <button class="btn-primary" onclick="goToSection('n')">Continue to Next Steps \u2192</button>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goToSection('a')">← Back to Affirm</button>
+                    <button class="btn-primary" onclick="goToSection('n')">Continue to Next Steps →</button>
+                </div>
             </div>
         </section>
 
         <!-- N: Next Steps -->
         <section id="section-n" class="section">
             <div class="section-header">
-                <div class="section-icon">\ud83c\udfaf</div>
+                <div class="section-icon">N</div>
                 <div>
-                    <h2 class="section-title">N — Next Steps</h2>
+                    <h2 class="section-title">Next Steps</h2>
                     <p class="section-subtitle">Secure a clear, specific, time-bound commitment</p>
                 </div>
             </div>
 
-            <form id="form-n">
-                <div class="form-group">
-                    <label for="primary-next-step">Primary Next Step</label>
-                    <textarea id="primary-next-step" placeholder="e.g. 'I'll set up your account this afternoon and schedule onboarding for Thursday at 2pm. Does that work?'"></textarea>
-                </div>
+            <div class="section-body">
+                <form id="form-n">
+                    <div class="form-group">
+                        <label for="primary-next-step">Primary Next Step</label>
+                        <textarea id="primary-next-step" placeholder="e.g. 'I'll set up your account this afternoon and schedule onboarding for Thursday at 2pm. Does that work?'"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>Post-Close Actions Checklist</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="postclose-1" name="post-close" value="Send written confirmation within 24 hours">
-                            <label for="postclose-1">Send written confirmation within 24 hours</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="postclose-2" name="post-close" value="Introduce onboarding contact by name">
-                            <label for="postclose-2">Introduce onboarding contact by name</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="postclose-3" name="post-close" value="Share specific onboarding timeline with dates">
-                            <label for="postclose-3">Share specific onboarding timeline with dates</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="postclose-4" name="post-close" value="Schedule personal follow-up within first week">
-                            <label for="postclose-4">Schedule personal follow-up within first week</label>
+                    <div class="form-group">
+                        <label>Post-Close Actions Checklist</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="postclose-1" name="post-close" value="Send written confirmation within 24 hours">
+                                <label for="postclose-1">Send written confirmation within 24 hours</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="postclose-2" name="post-close" value="Introduce onboarding contact by name">
+                                <label for="postclose-2">Introduce onboarding contact by name</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="postclose-3" name="post-close" value="Share specific onboarding timeline with dates">
+                                <label for="postclose-3">Share specific onboarding timeline with dates</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="postclose-4" name="post-close" value="Schedule personal follow-up within first week">
+                                <label for="postclose-4">Schedule personal follow-up within first week</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
 
-            <div class="button-group">
-                <button class="btn-secondary" onclick="goToSection('r')">\u2190 Back to Recommend</button>
-                <button class="btn-primary" onclick="goToSection('summary')">View Closing Plan \u2192</button>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goToSection('r')">← Back to Recommend</button>
+                    <button class="btn-primary" onclick="goToSection('summary')">View Closing Plan →</button>
+                </div>
             </div>
         </section>
 
         <!-- Summary View -->
         <section id="section-summary" class="section">
             <div class="section-header">
-                <div class="section-icon">\u2713</div>
+                <div class="section-icon" style="background:var(--fresha-success);">&#10003;</div>
                 <div>
                     <h2 class="section-title">Your Closing Plan</h2>
                     <p class="section-subtitle">Structured conversation guide for closing</p>
                 </div>
             </div>
 
-            <div id="summary-content">
-                <div class="empty-state">
-                    <div class="empty-state-icon">\ud83d\udccb</div>
-                    <p>Fill in the sections above to generate your closing plan.</p>
+            <div class="section-body">
+                <div id="summary-content">
+                    <div class="empty-state">
+                        <p>Fill in the sections above to generate your closing plan.</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="button-group">
-                <button class="btn-secondary" onclick="goToSection('n')">\u2190 Back to Next Steps</button>
-                <button class="btn-outline" onclick="generateSummary()">Refresh Plan</button>
-                <button class="btn-primary" onclick="downloadPlan()">\u2b07\ufe0f Download Plan</button>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goToSection('n')">← Back to Next Steps</button>
+                    <button class="btn-outline" onclick="generateSummary()">Refresh Plan</button>
+                    <button class="btn-primary" onclick="downloadPlan()">Download Plan</button>
+                </div>
             </div>
         </section>
     </div>
@@ -783,7 +902,6 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
-            loadFromStorage();
         });
 
         function setupEventListeners() {
@@ -873,35 +991,6 @@
                     formData[section][el.id] = el.value;
                 }
             });
-
-            localStorage.setItem('earnClosingData', JSON.stringify(formData));
-        }
-
-        function loadFromStorage() {
-            const stored = localStorage.getItem('earnClosingData');
-            if (!stored) return;
-
-            const data = JSON.parse(stored);
-            Object.keys(data).forEach(section => {
-                Object.keys(data[section]).forEach(key => {
-                    const el = document.getElementById(key);
-                    if (el) {
-                        if (el.type === 'checkbox') {
-                            el.checked = data[section][key].includes(el.value);
-                        } else if (el.type === 'radio') {
-                            el.checked = el.value === data[section][key];
-                        } else {
-                            el.value = data[section][key];
-                        }
-                    }
-                });
-            });
-
-            // Restore readiness hint
-            const readinessValue = data.e['readiness'];
-            if (readinessValue && (readinessValue === '1' || readinessValue === '2')) {
-                document.getElementById('readiness-hint').classList.add('show');
-            }
         }
 
         function generateSummary() {
@@ -925,12 +1014,12 @@
             let html = '';
 
             if (!currentState && !problemCost && !desiredFuture && !recommendation && !primaryNextStep) {
-                html = '<div class="empty-state"><div class="empty-state-icon">\ud83d\udccb</div><p>Fill in the sections above to generate your closing plan.</p></div>';
+                html = '<div class="empty-state"><p>Fill in the sections above to generate your closing plan.</p></div>';
             } else {
-                html = '<div class="summary-section"><h2>\ud83d\udccb Your Closing Conversation</h2>';
+                html = '<div class="summary-section"><h2>Your Closing Conversation</h2>';
 
                 if (currentState || problemCost || desiredFuture) {
-                    html += '<div class="summary-item"><h3>\ud83e\ude9e The Gap (What You\'ll Mirror Back)</h3>';
+                    html += '<div class="summary-item"><h3>The Gap (What You\'ll Mirror Back)</h3>';
                     if (currentState) html += '<p><strong>Current State:</strong> ' + escapeHtml(currentState) + '</p>';
                     if (problemCost) html += '<p><strong>Problem & Cost:</strong> ' + escapeHtml(problemCost) + '</p>';
                     if (desiredFuture) html += '<p><strong>Desired Future:</strong> ' + escapeHtml(desiredFuture) + '</p>';
@@ -938,11 +1027,11 @@
                 }
 
                 if (recommendation) {
-                    html += '<div class="summary-item"><h3>\ud83d\udcac Your Recommendation</h3><p>' + escapeHtml(recommendation) + '</p></div>';
+                    html += '<div class="summary-item"><h3>Your Recommendation</h3><p>' + escapeHtml(recommendation) + '</p></div>';
                 }
 
                 if (anticipatedHesitation) {
-                    html += '<div class="summary-item"><h3>\ud83d\udcac Handling Hesitation</h3>';
+                    html += '<div class="summary-item"><h3>Handling Hesitation</h3>';
                     html += '<p><strong>If they say:</strong> <em>"' + escapeHtml(anticipatedHesitation) + '"</em></p>';
                     if (acknowledgeResponse) html += '<p><strong>You respond:</strong> "' + escapeHtml(acknowledgeResponse) + '"</p>';
                     if (exploreQuestion) html += '<p><strong>Then ask:</strong> "' + escapeHtml(exploreQuestion) + '"</p>';
@@ -951,9 +1040,9 @@
                 }
 
                 if (primaryNextStep) {
-                    html += '<div class="summary-item"><h3>\ud83c\udfaf Next Steps</h3><p>' + escapeHtml(primaryNextStep) + '</p>';
+                    html += '<div class="summary-item"><h3>Next Steps</h3><p>' + escapeHtml(primaryNextStep) + '</p>';
                     if (postCloseActions.length > 0) {
-                        html += '<p style="margin-top: 1rem;"><strong>Post-Close Actions:</strong></p><ul class="summary-checklist">';
+                        html += '<p style="margin-top: 12px;"><strong>Post-Close Actions:</strong></p><ul class="summary-checklist">';
                         postCloseActions.forEach(action => {
                             html += '<li>' + escapeHtml(action) + '</li>';
                         });
@@ -981,8 +1070,26 @@
 
         function resetForm() {
             if (confirm('Are you sure you want to reset all your work?')) {
-                localStorage.removeItem('earnClosingData');
-                location.reload();
+                // Clear form data
+                formData.e = {};
+                formData.a = {};
+                formData.r = {};
+                formData.n = {};
+
+                // Clear form fields
+                document.querySelectorAll('input, textarea').forEach(el => {
+                    if (el.type === 'checkbox' || el.type === 'radio') {
+                        el.checked = false;
+                    } else {
+                        el.value = '';
+                    }
+                });
+
+                // Hide readiness hint
+                document.getElementById('readiness-hint').classList.remove('show');
+
+                // Reset to first section
+                goToSection('e');
             }
         }
 
@@ -1040,6 +1147,6 @@
 
             return text;
         }
-    <\/script>
+    </script>
 </body>
 </html>

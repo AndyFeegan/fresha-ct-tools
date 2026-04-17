@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresha Sales Operating System</title>
+    <style>
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: white;
+            padding: 40px;
+        }
+        .wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(10, 10, 15, 0.78);
+            border-radius: 24px;
+            padding: 40px 48px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 56px;
+        }
+        .header-logo {
+            height: 36px;
+            width: auto;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        /* Journey row */
+        .journey-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+        }
+        .stage-group {
+            display: flex;
+            align-items: center;
+        }
+        .stage-box {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .stage-box.active {
+            transform: scale(1.05);
+        }
+        .stage-box:not(.active) {
+            opacity: 0.7;
+        }
+        .stage-card {
+            height: 72px;
+            width: 148px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        .stage-box.active .stage-card {
+            border-color: rgba(108, 92, 231, 0.6);
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+        }
+        .stage-num {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-bottom: 4px;
+        }
+        .stage-label {
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .stage-short {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: rgba(162, 155, 254, 0.5);
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        .stage-box.active .stage-short {
+            color: #a29bfe;
+        }
+        .connector {
+            width: 20px;
+            height: 2px;
+            background: rgba(255,255,255,0.15);
+            transition: background 0.3s ease;
+        }
+        .connector.passed {
+            background: rgba(108, 92, 231, 0.5);
+        }
+        /* HubSpot Pipeline Overlay */
+        .pipeline-overlay {
+            margin-top: 28px;
+            position: relative;
+        }
+        .pipeline-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .pipeline-header .hs-icon {
+            width: 28px;
+            height: 28px;
+            background: #ff7a59;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: white;
+            flex-shrink: 0;
+        }
+        .pipeline-header span {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        .pipeline-toggle {
+            margin-left: auto;
+            background: rgba(255,127,89,0.15);
+            border: 1px solid rgba(255,127,89,0.25);
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .pipeline-toggle:hover {
+            background: rgba(255,127,89,0.25);
+            color: white;
+        }
+        .pipeline-toggle.active {
+            background: rgba(255,127,89,0.3);
+            border-color: rgba(255,127,89,0.5);
+            color: white;
+        }
+        .pipeline-lanes {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .pipeline-lane-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+            color: rgba(255,127,89,0.6);
+            margin-bottom: 2px;
+        }
+        .pipeline-lane-label.deal-label {
+            color: rgba(0,189,165,0.6);
+        }
+        .pipeline-track {
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+            border-radius: 10px;
+            border: 1px solid rgba(255,127,89,0.15);
+            background: rgba(255,127,89,0.04);
+        }
+        .pipeline-track.deal-track {
+            border-color: rgba(0,189,165,0.15);
+            background: rgba(0,189,165,0.04);
+        }
+        .pipeline-phase {
+            flex: 1;
+            position: relative;
+            min-width: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .pipeline-phase-inner {
+            padding: 10px 6px;
+            text-align: center;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+        }
+        .pipeline-phase:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 10%;
+            height: 80%;
+            width: 1px;
+            background: rgba(255,255,255,0.06);
+        }
+        .pipeline-phase.active-phase {
+            background: rgba(255,127,89,0.15);
+        }
+        .pipeline-track.deal-track .pipeline-phase.active-phase {
+            background: rgba(0,189,165,0.15);
+        }
+        .pipeline-phase.active-phase .pipeline-phase-inner {
+            border-top: 2px solid #ff7a59;
+        }
+        .pipeline-track.deal-track .pipeline-phase.active-phase .pipeline-phase-inner {
+            border-top-color: #00bda5;
+        }
+        .pipeline-phase.exit-phase {
+            max-width: 90px;
+            opacity: 0.5;
+        }
+        .pipeline-phase.exit-phase .pipeline-phase-inner {
+            background: rgba(255,255,255,0.02);
+        }
+        .pipeline-type-tag {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .pipeline-type-tag.lead {
+            color: #ff7a59;
+            background: rgba(255,127,89,0.15);
+        }
+        .pipeline-type-tag.deal {
+            color: #00bda5;
+            background: rgba(0,189,165,0.15);
+        }
+        .pipeline-stage-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.3;
+        }
+        .pipeline-phase.active-phase .pipeline-stage-name {
+            color: white;
+            font-weight: 700;
+        }
+        .pipeline-phase.passed-phase {
+            opacity: 0.4;
+        }
+        .pipeline-auto {
+            font-size: 9px;
+            color: rgba(255,255,255,0.3);
+            font-style: italic;
+            line-height: 1.2;
+        }
+        .pipeline-detail-panel {
+            margin-top: 12px;
+            background: rgba(255,127,89,0.06);
+            border: 1px solid rgba(255,127,89,0.12);
+            border-radius: 10px;
+            padding: 16px 20px;
+            display: none;
+        }
+        .pipeline-detail-panel.show {
+            display: block;
+        }
+        .pipeline-detail-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ff7a59;
+            margin-bottom: 8px;
+        }
+        .pipeline-detail-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .pipeline-detail-col h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        .pipeline-detail-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .pipeline-detail-col li {
+            font-size: 12px;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.6;
+            padding-left: 14px;
+            position: relative;
+        }
+        .pipeline-detail-col li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255,127,89,0.5);
+        }
+        .pipeline-detail-col.auto li::before {
+            background: rgba(0,189,165,0.5);
+        }
+        @media (max-width: 1200px) {
+            .pipeline-stage-name { font-size: 9px; }
+            .pipeline-detail-cols { grid-template-columns: 1fr; }
+            .pipeline-phase.exit-phase { max-width: 70px; }
+        }
+        @media (max-width: 768px) {
+            .pipeline-track { flex-wrap: wrap; }
+            .pipeline-phase { min-width: 33%; }
+            .pipeline-phase.exit-phase { min-width: 33%; max-width: none; }
+            .pipeline-phase:not(:last-child)::after { display: none; }
+        }
+        /* SWAP module removed */
+        /* Breakdown panel */
+        .breakdown {
+            margin-top: 64px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+        .info-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+        }
+        .info-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-top: 12px;
+            letter-spacing: -1px;
+        }
+        .info-short {
+            color: #a29bfe;
+            letter-spacing: 0.4em;
+            margin-top: 8px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .info-desc {
+            margin-top: 24px;
+            color: rgba(255,255,255,0.6);
+            max-width: 440px;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+        .info-breakdown {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .breakdown-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(108, 92, 231, 0.15);
+            border: 1px solid rgba(108, 92, 231, 0.25);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 14px;
+        }
+        .breakdown-pill .pill-letter {
+            font-weight: 800;
+            color: #a29bfe;
+            font-size: 15px;
+        }
+        .breakdown-pill .pill-word {
+            color: rgba(255,255,255,0.85);
+            font-weight: 500;
+        }
+        .info-goal {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: rgba(108, 92, 231, 0.08);
+            border-left: 3px solid #6c5ce7;
+            border-radius: 0 8px 8px 0;
+        }
+        .goal-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #a29bfe;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .goal-text {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+        }
+        /* Tool preview */
+        .tool-preview {
+            grid-column: 1 / -1;
+            margin-top: 16px;
+            display: none;
+        }
+        .tool-preview.show {
+            display: block;
+        }
+        .tool-card {
+            background: rgba(108, 92, 231, 0.1);
+            border: 1px solid rgba(108, 92, 231, 0.25);
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 520px;
+            margin-left: auto;
+        }
+        .tool-card-info {
+            flex: 1;
+        }
+        .tool-card-tag {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 6px;
+        }
+        .tool-card-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .tool-card-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.5;
+        }
+        .tool-card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        .tool-card-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.4);
+        }
+        .tool-card-link svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        /* Footer */
+        .footer {
+            margin-top: 80px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+        }
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .journey-row { gap: 8px; }
+            .stage-card { width: 130px; height: 70px; }
+            .connector { width: 16px; }
+            .breakdown { grid-template-columns: 1fr; gap: 32px; }
+            .info-title { font-size: 32px; }
+        }
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .wrapper { padding: 24px 20px; border-radius: 16px; }
+            .header { flex-direction: column; gap: 12px; margin-bottom: 32px; }
+            .header h1 { font-size: 20px; }
+            .journey-row { flex-wrap: wrap; gap: 8px; justify-content: center; }
+            .stage-card { width: 100px; height: 60px; }
+            .stage-label { font-size: 12px; }
+            .stage-num { font-size: 10px; }
+            .connector { display: none; }
+            .info-title { font-size: 28px; }
+            .tool-card { flex-direction: column; text-align: center; }
+            .tool-card-link { width: 100%; justify-content: center; }
+            .footer { flex-direction: column; gap: 8px; text-align: center; }
+        }
+        @media print {
+            body { background: white; color: #2d3436; padding: 20px; }
+            .wrapper { background: white; backdrop-filter: none; padding: 0; }
+            .stage-card { border-color: #ddd; background: #f4f3f8 !important; color: #2d3436; }
+            .stage-box.active .stage-card { background: #6c5ce7 !important; color: white; }
+            .breakdown-card { border-color: #ddd; }
+            .info-title, .card-name { color: #2d3436; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Header -->
+        <div class="header">
+            <img class="header-logo" src="data:image/png;base64,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" alt="fresha">
+            <h1>Sales Operating System</h1>
+        </div>
+
+        <!-- Journey Row -->
+        <div class="journey-row" id="journey-row"></div>
+
+        <!-- HubSpot Pipeline Overlay -->
+        <div class="pipeline-overlay" id="pipeline-overlay">
+            <div class="pipeline-header">
+                <div class="hs-icon">H</div>
+                <span>HubSpot Pipeline</span>
+                <button class="pipeline-toggle active" id="pipeline-toggle" onclick="togglePipeline()">Visible</button>
+            </div>
+            <div id="pipeline-container">
+                <div class="pipeline-lanes">
+                    <div>
+                        <div class="pipeline-lane-label">Lead Workflow</div>
+                        <div class="pipeline-track" id="pipeline-lead-track"></div>
+                    </div>
+                    <div>
+                        <div class="pipeline-lane-label deal-label">Deal Pipeline</div>
+                        <div class="pipeline-track deal-track" id="pipeline-deal-track"></div>
+                    </div>
+                </div>
+                <div class="pipeline-detail-panel" id="pipeline-detail"></div>
+            </div>
+        </div>
+
+        <!-- SWAP module removed -->
+
+        <!-- Breakdown Panel -->
+        <div class="breakdown">
+            <div>
+                <div class="info-label" id="info-label">Stage 01</div>
+                <div class="info-title" id="info-title">Preparation</div>
+                <div class="info-short" id="info-short">D.I.A.L</div>
+                <div class="info-desc" id="info-desc"></div>
+                <div class="info-breakdown" id="info-breakdown"></div>
+                <div class="info-goal" id="info-goal"></div>
+            </div>
+            <!-- Tool preview (right side) -->
+            <div style="display:flex;align-items:flex-end;justify-content:flex-end;">
+                <div class="tool-preview" id="tool-preview">
+                    <div class="tool-card">
+                        <div class="tool-card-info">
+                            <div class="tool-card-tag">Interactive Tool</div>
+                            <div class="tool-card-name" id="tool-name"></div>
+                            <div class="tool-card-desc" id="tool-desc">Practice this framework with the interactive planner</div>
+                        </div>
+                        <a class="tool-card-link" id="tool-link" href="#" target="_blank">
+                            Open Tool
+                            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div>Fresha Sales Enablement — Core Training Programme</div>
+            <div>7 stages. 1 operating system.</div>
+        </div>
+    </div>
+
+    <script>
+        const stages = [
+            { label: "Preparation", short: "D.I.A.L", breakdown: ["Decide", "Intel", "Angle", "Land"], desc: "Plan every call with purpose. Know who you're calling, why, and what good looks like.", goal: "Walk into every call with a clear target, the right intel, a relevant angle, and a defined next step.", tool: "ct001-dial-planner.html", toolName: "CT001 — D.I.A.L Call Planner" },
+            { label: "Open", short: "O.P.E.N", breakdown: ["Observe", "Position", "Engage", "Navigate"], desc: "Earn the right to a conversation. Lead with relevance, not a pitch.", goal: "Get the prospect talking within the first 30 seconds and earn permission to continue the conversation.", tool: "ct002-open-opener.html", toolName: "CT002 — O.P.E.N Opener Builder" },
+            { label: "Discover", short: "4T", breakdown: ["Today", "Trouble", "True Cost", "Tomorrow"], desc: "Uncover the full picture. Move from surface symptoms to the real cost of inaction.", goal: "Quantify the gap between where they are now and where they want to be — in their own words.", tool: "ct003-4t-discovery.html", toolName: "CT003 — 4T Discovery Planner" },
+            { label: "Demo", short: "P.A.I.N", breakdown: ["Prime", "Align", "Impact", "Next Step"], desc: "Demo with purpose. Connect every feature back to the problem they told you about.", goal: "Show only what matters to this prospect and get them to confirm Fresha solves their problem.", tool: "ct004-pain-demo.html", toolName: "CT004 — P.A.I.N Demo Planner" },
+            { label: "Objection Handling", short: "E.A.S.E", breakdown: ["Empathise", "Assess", "Solve", "End"], desc: "Handle objections without fighting. Acknowledge, dig deeper, resolve, and move on.", goal: "Turn every objection into a deeper conversation that strengthens the case for change.", tool: "ct005-ease-objection.html", toolName: "CT005 — EASE Objection Handler" },
+            { label: "Negotiate", short: "P.A.C.E", breakdown: ["Prepare", "Anchor", "Counter", "Engage"], desc: "Trade, don't cave. Lead with value, protect your position, and close with confidence.", goal: "Protect your price by trading value — never give a concession without getting something back.", tool: "ct006-pace-negotiation.html", toolName: "CT006 — PACE Negotiation Planner" },
+            { label: "Close", short: "E.A.R.N", breakdown: ["Establish", "Affirm", "Recommend", "Next Steps"], desc: "You don't close a sale — you earn the decision. Read signals, affirm the gap, and secure commitment.", goal: "Secure a clear, time-bound commitment with a defined onboarding path.", tool: "ct007-earn-closing.html", toolName: "CT007 — EARN Closing Planner" },
+        ];
+
+        // SWAP module removed from this page
+
+        // HubSpot Lead Workflow — each stage knows which sales stage it maps to
+        const leadStages = [
+            { stage: "New", salesIdx: 0, auto: "Auto-assigned by territory",
+              youDo: ["Lead is assigned — no outreach yet", "Research the contact using D.I.A.L", "Goal: book a discovery meeting or conduct discovery on the spot (allow 30 min)"],
+              hubspotDoes: ["Lead created in Sales Workspace", "When outreach begins (call/email), auto-moves to In Progress"] },
+            { stage: "In Progress", salesIdx: 1, auto: "Auto on first outreach",
+              youDo: ["Actively reaching out — not yet connected", "Use O.P.E.N to earn the right to a conversation", "If repeated attempts with no response, move to Cold with a reason"],
+              hubspotDoes: ["When lead responds, auto-moves to Connected", "Auto-moves to Cold after 10+ attempts with no connection"] },
+            { stage: "Connected", salesIdx: 2, auto: "Auto on call outcome",
+              youDo: ["Lead has responded — qualification begins", "Complete the Qualification Playbook using 4T discovery", "Move lead to Qualified or Unqualified based on outcome"],
+              hubspotDoes: ["Triggered when call outcome logged as Connected", "Based on playbook responses, auto-moves to Qualified or Unqualified"] },
+            { stage: "Qualified", salesIdx: 3, auto: "Auto on playbook pass",
+              youDo: ["Lead passed qualification criteria", "Create a deal using the Deal Creation Form"],
+              hubspotDoes: ["Deal created and associated with lead", "Lifecycle Stage updated to Opportunity"] },
+            { stage: "Unqualified", salesIdx: -1, exit: true, auto: "Exit stage",
+              youDo: ["Provide a disqualification reason"],
+              hubspotDoes: ["Lead categorised into a re-marketing segment"] },
+            { stage: "Cold", salesIdx: -1, exit: true, auto: "Exit stage",
+              youDo: ["Provide a cold reason explaining why the lead has gone cold"],
+              hubspotDoes: ["Lead categorised into re-marketing segment", "Auto-moved to Cold after 10+ outreach attempts with no connection"] },
+        ];
+
+        // HubSpot Deal Pipeline — each stage knows which sales stage it maps to
+        const dealStages = [
+            { stage: "Full Demo Booked", salesIdx: 3, auto: "Deal created from qualified lead",
+              youDo: ["Ensure Full Demo Meeting Date property is filled", "Add estimated close date", "If demo outcome is negative, move to Closed Lost with a reason"],
+              hubspotDoes: ["Line items (subscription, terminal, setup) auto-added based on country/currency", "Full Demo Meeting Date updates automatically if meeting link changes"] },
+            { stage: "Solution Proposed", salesIdx: 4, auto: "Manual move after demo",
+              youDo: ["Move deal to Solution Proposed once you have shared your proposal with the prospect", "Update the Solution Proposed Date and expected Close Date", "Use E.A.S.E to handle any objections raised during the proposal review"],
+              hubspotDoes: ["No automation at this stage"] },
+            { stage: "VoC", salesIdx: 4, auto: "APAC enterprise only", note: true,
+              youDo: ["Flag enterprise APAC deals where there are concerns about close likelihood"],
+              hubspotDoes: ["No automation at this stage"] },
+            { stage: "Invoice Sent", salesIdx: 5, auto: "Auto on Deal Manager invoice",
+              youDo: ["Create deal in Deal Manager after solutions meeting", "Ensure contact has region, sub-region, and country code set", "Use P.A.C.E to negotiate terms and protect your price"],
+              hubspotDoes: ["Auto-moves to Invoice Sent when Deal Manager invoice generated", "Deal locked until status update from Deal Manager", "If invoice cancelled, moves back to Solution Proposed Booked"] },
+            { stage: "Package Purchased", salesIdx: 6, auto: "Auto on invoice payment",
+              youDo: ["Confirm KYC Meeting Booked Date with new partner", "Complete BDM-to-PSS Handover task (login details, KYC, payments, terminals, photography)"],
+              hubspotDoes: ["Auto-moves to Package Purchased when invoice paid", "Task generated for project preparation (5-day reminder)"] },
+            { stage: "Handover to PSS", salesIdx: 6, auto: "Auto on task completion",
+              youDo: ["PSS team reviews handover playbook details", "If rejected, redo handover task with correct info"],
+              hubspotDoes: ["Task generated for PSS Lead to review handover", "5-day reminder if task not completed", "PSS moves deal to Closed Won or back to Project Prep"] },
+            { stage: "Closed Won", salesIdx: 6, auto: "Moved by PSS",
+              youDo: ["Deal successfully closed and onboarded"],
+              hubspotDoes: ["Deal marked as won"] },
+            { stage: "Closed Lost", salesIdx: -1, exit: true, auto: "Exit stage",
+              youDo: ["Provide a closed lost reason"],
+              hubspotDoes: ["Deal categorised for reporting"] },
+        ];
+
+        let pipelineVisible = true;
+        let active = 0;
+
+        function buildJourney() {
+            const row = document.getElementById('journey-row');
+            row.innerHTML = '';
+            stages.forEach((s, i) => {
+                const group = document.createElement('div');
+                group.className = 'stage-group';
+
+                const box = document.createElement('div');
+                box.className = 'stage-box' + (i === active ? ' active' : '');
+                box.onclick = () => selectStage(i);
+                box.innerHTML = `
+                    <div class="stage-card">
+                        <div class="stage-num">${String(i + 1).padStart(2, '0')}</div>
+                        <div class="stage-label">${s.label}</div>
+                    </div>
+                    <div class="stage-short">${s.short}</div>
+                `;
+                group.appendChild(box);
+
+                if (i < stages.length - 1) {
+                    const conn = document.createElement('div');
+                    conn.className = 'connector' + (i < active ? ' passed' : '');
+                    group.appendChild(conn);
+                }
+
+                row.appendChild(group);
+            });
+        }
+
+        function updatePanel() {
+            const current = stages[active];
+            const letters = current.short.replace(/\./g, '');
+
+            document.getElementById('info-label').textContent = `Stage ${String(active + 1).padStart(2, '0')}`;
+            document.getElementById('info-title').textContent = current.label;
+            document.getElementById('info-short').textContent = current.short;
+            document.getElementById('info-desc').textContent = current.desc;
+
+            // Build breakdown pills
+            const breakdownEl = document.getElementById('info-breakdown');
+            breakdownEl.innerHTML = '';
+            current.breakdown.forEach((item, i) => {
+                const pill = document.createElement('div');
+                pill.className = 'breakdown-pill';
+                pill.innerHTML = `<span class="pill-letter">${letters[i] || (i + 1)}</span><span class="pill-word">${item}</span>`;
+                breakdownEl.appendChild(pill);
+            });
+
+            // Build goal
+            const goalEl = document.getElementById('info-goal');
+            if (current.goal) {
+                goalEl.innerHTML = `<div class="goal-label">Goal</div><div class="goal-text">${current.goal}</div>`;
+                goalEl.style.display = 'block';
+            } else {
+                goalEl.style.display = 'none';
+            }
+
+            // Update tool preview
+            const preview = document.getElementById('tool-preview');
+            if (current.tool) {
+                preview.className = 'tool-preview show';
+                document.getElementById('tool-name').textContent = current.toolName;
+                document.getElementById('tool-link').href = current.tool;
+            } else {
+                preview.className = 'tool-preview';
+            }
+        }
+
+        function selectStage(i) {
+            active = i;
+            buildJourney();
+            updatePanel();
+            buildPipeline();
+            updatePipelineDetail();
+        }
+
+        // SWAP removed
+
+        function buildPipelineLane(trackId, stagesData, type) {
+            const track = document.getElementById(trackId);
+            track.innerHTML = '';
+            stagesData.forEach((p) => {
+                const phase = document.createElement('div');
+                let cls = 'pipeline-phase';
+                if (p.exit) cls += ' exit-phase';
+                if (p.salesIdx === active) cls += ' active-phase';
+                else if (!p.exit && p.salesIdx >= 0 && p.salesIdx < active) cls += ' passed-phase';
+                phase.className = cls;
+                if (!p.exit && p.salesIdx >= 0) {
+                    phase.onclick = () => selectStage(p.salesIdx);
+                }
+                phase.innerHTML = `
+                    <div class="pipeline-phase-inner">
+                        <div class="pipeline-stage-name">${p.stage}</div>
+                        <div class="pipeline-auto">${p.auto}</div>
+                    </div>
+                `;
+                track.appendChild(phase);
+            });
+        }
+
+        function buildPipeline() {
+            buildPipelineLane('pipeline-lead-track', leadStages, 'lead');
+            buildPipelineLane('pipeline-deal-track', dealStages, 'deal');
+        }
+
+        function updatePipelineDetail() {
+            const panel = document.getElementById('pipeline-detail');
+            // Show detail for current stage
+            // Gather all active HubSpot stages for the current sales stage
+            const activeLeads = leadStages.filter(s => s.salesIdx === active);
+            const activeDeals = dealStages.filter(s => s.salesIdx === active);
+            const allActive = [...activeLeads.map(s => ({...s, type: 'Lead'})), ...activeDeals.map(s => ({...s, type: 'Deal'}))];
+
+            if (allActive.length === 0) {
+                panel.className = 'pipeline-detail-panel';
+                return;
+            }
+
+            panel.className = 'pipeline-detail-panel show';
+            panel.innerHTML = allActive.map(p => `
+                <div style="margin-bottom: ${allActive.length > 1 ? '16px' : '0'};">
+                    <div class="pipeline-detail-title">
+                        <span class="pipeline-type-tag ${p.type === 'Lead' ? 'lead' : 'deal'}">${p.type}</span>
+                        ${p.stage}${p.note ? ' <span style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:400;">(APAC enterprise only)</span>' : ''}
+                    </div>
+                    <div class="pipeline-detail-cols">
+                        <div class="pipeline-detail-col">
+                            <h4>What you do</h4>
+                            <ul>${p.youDo.map(item => `<li>${item}</li>`).join('')}</ul>
+                        </div>
+                        <div class="pipeline-detail-col auto">
+                            <h4>What HubSpot does</h4>
+                            <ul>${p.hubspotDoes.map(item => `<li>${item}</li>`).join('')}</ul>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function togglePipeline() {
+            pipelineVisible = !pipelineVisible;
+            const container = document.getElementById('pipeline-container');
+            const btn = document.getElementById('pipeline-toggle');
+            container.style.display = pipelineVisible ? 'block' : 'none';
+            btn.textContent = pipelineVisible ? 'Visible' : 'Hidden';
+            btn.className = 'pipeline-toggle' + (pipelineVisible ? ' active' : '');
+        }
+
+        // Init
+        buildJourney();
+        updatePanel();
+        buildPipeline();
+        updatePipelineDetail();
+    </script>
+</body>
+</html>

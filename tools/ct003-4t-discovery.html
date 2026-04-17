@@ -5,97 +5,983 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CT003 — 4T Discovery Question Builder</title>
     <style>
-        :root { --fresha-dark: #1a1a2e; --fresha-accent: #6c5ce7; --fresha-accent-light: #a29bfe; --fresha-bg: #f4f3f8; --color-today: #2563eb; --color-trouble: #f59e0b; --color-cost: #dc2626; --color-tomorrow: #16a34a; --text-primary: #1f2937; --text-secondary: #6b7280; --border-light: #e5e7eb; }
+        
+        :root {
+            --fresha-dark: #1a1a2e;
+            --fresha-accent: #6c5ce7;
+            --fresha-accent-light: #a29bfe;
+            --fresha-bg: #f4f3f8;
+            --fresha-white: #ffffff;
+            --fresha-text: #2d3436;
+            --fresha-muted: #636e72;
+            --fresha-border: #dfe6e9;
+            --fresha-success: #00b894;
+            --color-today: #2563eb;
+            --color-trouble: #f59e0b;
+            --color-cost: #dc2626;
+            --color-tomorrow: #16a34a;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background-color: var(--fresha-bg); color: var(--text-primary); line-height: 1.6; }
-        header { background: linear-gradient(135deg, var(--fresha-dark) 0%, #2a2d4f 100%); color: white; padding: 2rem 2rem 1.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); position: sticky; top: 0; z-index: 100; }
-        .header-content { max-width: 1200px; margin: 0 auto; }
-        .header-badge { display: inline-block; background-color: var(--fresha-accent); color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.5rem; text-transform: uppercase; }
-        h1 { font-size: 2rem; font-weight: 700; margin: 0.5rem 0; }
-        .header-subtitle { font-size: 0.95rem; opacity: 0.9; margin-top: 0.3rem; }
-        .progress-bar { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-around; gap: 1rem; background-color: white; border-bottom: 1px solid var(--border-light); position: sticky; top: 120px; z-index: 99; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
-        .progress-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer; transition: transform 0.2s; }
-        .progress-item:hover { transform: scale(1.05); }
-        .progress-dot { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; transition: all 0.3s; background-color: var(--border-light); color: var(--text-secondary); }
-        .progress-dot.active { color: white; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
-        .progress-dot.today { background-color: var(--color-today); }
-        .progress-dot.trouble { background-color: var(--color-trouble); }
-        .progress-dot.cost { background-color: var(--color-cost); }
-        .progress-dot.tomorrow { background-color: var(--color-tomorrow); }
-        .progress-dot.active.today { box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); }
-        .progress-dot.active.trouble { box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
-        .progress-dot.active.cost { box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4); }
-        .progress-dot.active.tomorrow { box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4); }
-        .progress-label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-align: center; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        .card { background-color: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); border-left: 6px solid; transition: box-shadow 0.3s; }
-        .card:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12); }
-        .card.today { border-left-color: var(--color-today); }
-        .card.trouble { border-left-color: var(--color-trouble); }
-        .card.cost { border-left-color: var(--color-cost); }
-        .card.tomorrow { border-left-color: var(--color-tomorrow); }
-        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-light); }
-        .card-icon { font-size: 2rem; line-height: 1; }
-        .card-title { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
-        .card-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem; }
-        .questions-group { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem; }
-        .question-item { display: flex; flex-direction: column; gap: 0.5rem; }
-        .question-label { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; }
-        .question-number { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: var(--fresha-accent-light); color: white; font-size: 0.75rem; font-weight: 700; }
-        textarea { width: 100%; min-height: 100px; padding: 1rem; border: 1px solid var(--border-light); border-radius: 8px; font-family: inherit; font-size: 0.95rem; resize: vertical; transition: border-color 0.2s, box-shadow 0.2s; background-color: #fafafa; }
-        textarea:focus { outline: none; border-color: var(--fresha-accent); box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1); background-color: white; }
-        textarea::placeholder { color: #9ca3af; }
-        .ted-chips { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.75rem; }
-        .chip { display: inline-block; padding: 0.5rem 1rem; background-color: var(--fresha-accent); color: white; border: none; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(108, 92, 231, 0.2); }
-        .chip:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3); }
-        .chip:active { transform: translateY(0); }
-        .question-bank { background: linear-gradient(135deg, var(--fresha-dark) 0%, #2a2d4f 100%); color: white; padding: 2rem; border-radius: 12px; margin-top: 3rem; }
-        .question-bank h2 { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
-        .question-bank-icon { font-size: 1.5rem; }
-        .question-list { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-        .question-bank-item { padding: 1rem; background-color: rgba(255, 255, 255, 0.1); border-radius: 8px; border-left: 3px solid var(--fresha-accent-light); }
-        .question-bank-item-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; margin-bottom: 0.5rem; }
-        .question-bank-item-text { font-size: 0.95rem; line-height: 1.5; min-height: 40px; }
-        .question-bank-item-text:empty::before { content: "Not yet added..."; opacity: 0.6; font-style: italic; }
-        .actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
-        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem; }
-        .btn-primary { background-color: white; color: var(--fresha-dark); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-        .btn-primary:hover { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); transform: translateY(-2px); }
-        .btn-secondary { background-color: var(--fresha-accent); color: white; }
-        .btn-secondary:hover { background-color: #5a4ac9; box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3); transform: translateY(-2px); }
-        footer { background-color: var(--fresha-dark); color: white; text-align: center; padding: 2rem; margin-top: 3rem; font-size: 0.85rem; opacity: 0.8; }
-        @media (max-width: 768px) { h1 { font-size: 1.5rem; } .progress-bar { flex-wrap: wrap; padding: 1rem; } .question-list { grid-template-columns: 1fr; } .actions { flex-direction: column; } .btn { justify-content: center; } .container { padding: 1rem; } .card { padding: 1.5rem; } }
-        .toast { position: fixed; bottom: 1rem; right: 1rem; background-color: #10b981; color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); animation: slideIn 0.3s ease-out; z-index: 1000; }
-        @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .toast.error { background-color: #ef4444; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+            background-attachment: fixed;
+            color: var(--fresha-text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #0a0a0f;
+            background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
+            color: white;
+            padding: 28px 24px 24px;
+            text-align: center;
+            z-index: 99;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #3b2d8b;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(59, 45, 139, 0.4);
+        }
+        .header-logo {
+            display: block;
+            margin: 0 auto 16px;
+            height: 24px;
+            opacity: 0.9;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .progress-bar {
+            background: var(--fresha-white);
+            position: sticky;
+            top: 0;
+            z-index: 98;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--fresha-border);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .progress-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .progress-connector {
+            width: 40px;
+            height: 2px;
+            background: var(--fresha-border);
+            align-self: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .progress-item:not(:last-child) .progress-connector {
+            display: block;
+        }
+
+        .progress-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            background: var(--fresha-border);
+            color: var(--fresha-muted);
+            transition: all 0.3s;
+        }
+
+        .progress-dot.today { background: var(--color-today); color: white; }
+        .progress-dot.trouble { background: var(--color-trouble); color: white; }
+        .progress-dot.cost { background: var(--color-cost); color: white; }
+        .progress-dot.tomorrow { background: var(--color-tomorrow); color: white; }
+
+        .progress-dot.active {
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--fresha-muted);
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .progress-label { display: none; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 16px 100px;
+        }
+
+        .card {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--fresha-border);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--fresha-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .card.today .card-icon, .card.trouble .card-icon, .card.cost .card-icon, .card.tomorrow .card-icon { background: var(--fresha-accent); color: white; }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--fresha-muted);
+        }
+
+        .card-body {
+            padding: 16px 20px 20px;
+        }
+
+        .card.today { border-left: 6px solid var(--color-today); }
+        .card.trouble { border-left: 6px solid var(--color-trouble); }
+        .card.cost { border-left: 6px solid var(--color-cost); }
+        .card.tomorrow { border-left: 6px solid var(--color-tomorrow); }
+
+        .questions-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .question-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .question-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fresha-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--fresha-accent);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 70px;
+            padding: 10px 12px;
+            border: 1px solid var(--fresha-border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--fresha-accent);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
+        }
+
+        .ted-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .chip {
+            padding: 7px 14px;
+            border-radius: 20px;
+            border: 1.5px solid var(--fresha-border);
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--fresha-white);
+            color: var(--fresha-text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            border-color: var(--fresha-accent-light);
+            color: var(--fresha-accent);
+        }
+
+        .chip.selected {
+            background: var(--fresha-accent);
+            border-color: var(--fresha-accent);
+            color: white;
+        }
+        .chip:active {
+            background: var(--fresha-accent);
+            border-color: var(--fresha-accent);
+            color: white;
+        }
+        .chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+        .question-bank {
+            background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d5e 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 30px;
+        }
+
+        .question-bank h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .question-bank-icon { font-size: 18px; }
+
+        .question-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .question-bank-item {
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            border-left: 3px solid var(--fresha-accent-light);
+        }
+
+        .question-bank-item-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            margin-bottom: 6px;
+        }
+
+        .question-bank-item-text {
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 40px;
+            opacity: 0.95;
+        }
+
+        .question-bank-item-text:empty::before {
+            content: "Not yet added...";
+            opacity: 0.5;
+            font-style: italic;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--fresha-white);
+            color: var(--fresha-text);
+            border: 1.5px solid var(--fresha-border);
+        }
+
+        .btn-primary:hover {
+            border-color: var(--fresha-accent-light);
+            color: var(--fresha-accent);
+        }
+
+        .btn-secondary {
+            background: var(--fresha-accent);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5b4dc7;
+        }
+
+        footer {
+            background-color: var(--fresha-dark);
+            color: white;
+            text-align: center;
+            padding: 24px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--fresha-dark);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        .toast.error { background: #dc2626; }
+
+        /* Vertical selector */
+        .context-bar {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--fresha-border);
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .context-bar .context-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fresha-text);
+            margin-right: 4px;
+        }
+
+        /* Step example panels */
+        .step-example {
+            background: #f8f7ff;
+            border-left: 3px solid var(--fresha-accent);
+            border-radius: 0 8px 8px 0;
+            padding: 10px 14px;
+            margin-top: 10px;
+            animation: fadeInGuide 0.3s ease;
+        }
+        @keyframes fadeInGuide {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .step-example .example-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--fresha-accent);
+            margin-bottom: 4px;
+        }
+        .step-example .example-text {
+            font-size: 13px;
+            color: var(--fresha-text);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* Training tip */
+        .training-tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            background: #fff8e6;
+            border: 1px solid #f0dfa0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #8a6d00;
+            line-height: 1.5;
+        }
+        .training-tip .tip-icon { flex-shrink: 0; font-size: 14px; }
+
+        /* Leap trap warning */
+        .warning-card {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #f5c6c6;
+        }
+        .warning-card .card-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f5c6c6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .warning-card .card-header .warn-icon {
+            width: 32px; height: 32px; border-radius: 8px; background: #fdf0f0;
+            display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+        }
+        .warning-card .card-header h3 { font-size: 14px; font-weight: 700; color: #c0392b; }
+        .warning-card .card-body { padding: 14px 20px 16px; font-size: 13px; line-height: 1.6; color: var(--fresha-muted); }
+        .warning-card .bad-ex { color: #c0392b; font-weight: 600; }
+        .warning-card .good-ex { color: #16a34a; font-weight: 600; }
+
+        /* TED explainer */
+        .ted-explainer {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .ted-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .ted-tag.wide { background: #e8f0fe; color: #2563eb; }
+        .ted-tag.deep { background: #fff3e0; color: #e17c00; }
+        .ted-tag.concrete { background: #e8f5e9; color: #16a34a; }
+
+        @media (max-width: 600px) {
+            .container { padding: 16px; }
+            .card { margin-bottom: 16px; }
+            .card-header { padding: 14px 16px 10px; }
+            .card-body { padding: 12px 16px 16px; }
+            .question-list { grid-template-columns: 1fr; }
+            .actions { justify-content: flex-start; }
+            h1 { font-size: 20px; }
+            .question-bank { padding: 16px; }
+        }
+
+        @media print {
+            .header, .progress-bar, .btn, .toast { display: none; }
+            body { background: white; }
+            .container { padding: 0; }
+            .card { box-shadow: none; }
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover { color: white; }
+        .back-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
-    <header><div class="header-content"><div class="header-badge">CT003 Discovery</div><h1>4T Question Builder</h1><p class="header-subtitle">Develop powerful discovery questions across the 4T Quadrant framework</p></div></header>
+    <div class="header">
+        <a href="sales-journey.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Sales Operating System</a>
+        <img class="header-logo" src="data:image/png;base64,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" alt="fresha">
+        <div class="header-badge">CT003 Discovery</div>
+        <h1>4T Question Builder</h1>
+        <p class="header-subtitle">Develop powerful discovery questions across the 4T Quadrant framework</p>
+    </div>
+
     <div class="progress-bar">
-        <div class="progress-item" onclick="scrollToSection('today')"><div class="progress-dot today active" data-section="today">T</div><div class="progress-label">Today</div></div>
-        <div class="progress-item" onclick="scrollToSection('trouble')"><div class="progress-dot trouble" data-section="trouble">T</div><div class="progress-label">Trouble</div></div>
-        <div class="progress-item" onclick="scrollToSection('cost')"><div class="progress-dot cost" data-section="cost">T</div><div class="progress-label">Cost</div></div>
-        <div class="progress-item" onclick="scrollToSection('tomorrow')"><div class="progress-dot tomorrow" data-section="tomorrow">T</div><div class="progress-label">Tomorrow</div></div>
+        <div class="progress-item" onclick="scrollToSection('today')">
+            <div class="progress-dot today active" data-section="today">1</div>
+            <div class="progress-label">Today</div>
+        </div>
+        <div class="progress-item" onclick="scrollToSection('trouble')">
+            <div class="progress-dot trouble" data-section="trouble">2</div>
+            <div class="progress-label">Trouble</div>
+        </div>
+        <div class="progress-item" onclick="scrollToSection('cost')">
+            <div class="progress-dot cost" data-section="cost">3</div>
+            <div class="progress-label">True Cost</div>
+        </div>
+        <div class="progress-item" onclick="scrollToSection('tomorrow')">
+            <div class="progress-dot tomorrow" data-section="tomorrow">4</div>
+            <div class="progress-label">Tomorrow</div>
+        </div>
     </div>
+
     <div class="container">
-        <div class="card today" data-section="today"><div class="card-header"><div class="card-icon">📍</div><div><div class="card-title">Today</div><div class="card-subtitle">What's happening right now?</div></div></div><div class="questions-group"><div class="question-item"><label class="question-label"><span class="question-number">1</span>Current State & Processes</label><textarea id="today-q1" placeholder="e.g. Tell me about how you currently manage your bookings day to day..."></textarea><div class="ted-chips"><button class="chip" onclick="insertTED('today-q1', 'Tell me')">Tell me...</button><button class="chip" onclick="insertTED('today-q1', 'Explain')">Explain...</button><button class="chip" onclick="insertTED('today-q1', 'Describe')">Describe...</button></div></div><div class="question-item"><label class="question-label"><span class="question-number">2</span>Workflow & Boundaries</label><textarea id="today-q2" placeholder="e.g. Walk me through what happens when a client wants to book outside your hours..."></textarea><div class="ted-chips"><button class="chip" onclick="insertTED('today-q2', 'Tell me')">Tell me...</button><button class="chip" onclick="insertTED('today-q2', 'Explain')">Explain...</button><button class="chip" onclick="insertTED('today-q2', 'Describe')">Describe...</button></div></div></div></div>
-        <div class="card trouble" data-section="trouble"><div class="card-header"><div class="card-icon">⚠️</div><div><div class="card-title">Trouble</div><div class="card-subtitle">What's broken or frustrating?</div></div></div><div class="questions-group"><div class="question-item"><label class="question-label"><span class="question-number">3</span>Key Frustrations</label><textarea id="trouble-q1" placeholder="e.g. What's the biggest frustration with your current system?"></textarea><div class="ted-chips"><button class="chip" onclick="insertTED('trouble-q1', 'Tell me')">Tell me...</button><button class="chip" onclick="insertTED('trouble-q1', 'Explain')">Explain...</button><button class="chip" onclick="insertTED('trouble-q1', 'Describe')">Describe...</button></div></div><div class="question-item"><label class="question-label"><span class="question-number">4</span>Time & Resource Loss</label><textarea id="trouble-q2" placeholder="e.g. Where do you feel you're losing time that you shouldn't be?"></textarea><div class="ted-chips"><button class="chip" onclick="insertTED('trouble-q2', 'Tell me')">Tell me...</button><button class="chip" onclick="insertTED('trouble-q2', 'Explain')">Explain...</button><button class="chip" onclick="insertTED('trouble-q2', 'Describe')">Describe...</button></div></div></div></div>
-        <div class="card cost" data-section="cost"><div class="card-header"><div class="card-icon">💰</div><div><div class="card-title">True Cost</div><div class="card-subtitle">What is the problem actually costing them?</div></div></div><div class="questions-group"><div class="question-item"><label class="question-label"><span class="question-number">5</span>Financial Impact</label><textarea id="cost-q1" placeholder="e.g. If you're losing 10 bookings a week to no-shows, what does that add up to in a month?"></textarea><div class="ted-chips"><button class="chip" onclick="insertTED('cost-q1', 'Tell me')">Tell me...</button><button class="chip" onclick="insertTED('cost-q1', 'Explain')">Explain...</button><button class="chip" onclick="insertTED('cost-q1', 'Describe')">Describe...</button></div></div><div class="question-item"><label class="question-label"><span class="question-number">6</span>Team & Operational Impact</label><textarea id="cost-q2" placeholder="e.g. What's the impact on your team when the schedule is constantly changing?"></textarea><div class="ted-chips"><button class="chip" onclick="insertTED('cost-q2', 'Tell me')">Tell me...</button><button class="chip" onclick="insertTED('cost-q2', 'Explain')">Explain...</button><button class="chip" onclick="insertTED('cost-q2', 'Describe')">Describe...</button></div></div></div></div>
-        <div class="card tomorrow" data-section="tomorrow"><div class="card-header"><div class="card-icon">🎯</div><div><div class="card-title">Tomorrow</div><div class="card-subtitle">What does their ideal future look like?</div></div></div><div class="questions-group"><div class="question-item"><label class="question-label"><span class="question-number">7</span>Vision & Goals</label><textarea id="tomorrow-q1" placeholder="e.g. If you could wave a magic wand, what would your booking process look like in six months?"></textarea><div class="ted-chips"><button class="chip" onclick="insertTED('tomorrow-q1', 'Tell me')">Tell me...</button><button class="chip" onclick="insertTED('tomorrow-q1', 'Explain')">Explain...</button><button class="chip" onclick="insertTED('tomorrow-q1', 'Describe')">Describe...</button></div></div><div class="question-item"><label class="question-label"><span class="question-number">8</span>Desired Outcomes</label><textarea id="tomorrow-q2" placeholder="e.g. What would it mean for your business if clients could book, pay, and rebook without you lifting a finger?"></textarea><div class="ted-chips"><button class="chip" onclick="insertTED('tomorrow-q2', 'Tell me')">Tell me...</button><button class="chip" onclick="insertTED('tomorrow-q2', 'Explain')">Explain...</button><button class="chip" onclick="insertTED('tomorrow-q2', 'Describe')">Describe...</button></div></div></div></div>
-        <div class="question-bank"><h2><span class="question-bank-icon">📋</span>Question Bank Summary</h2><div class="question-list"><div class="question-bank-item"><div class="question-bank-item-label">Q1 — Today: Current State</div><div class="question-bank-item-text" id="bank-today-q1"></div></div><div class="question-bank-item"><div class="question-bank-item-label">Q2 — Today: Workflow</div><div class="question-bank-item-text" id="bank-today-q2"></div></div><div class="question-bank-item"><div class="question-bank-item-label">Q3 — Trouble: Frustrations</div><div class="question-bank-item-text" id="bank-trouble-q1"></div></div><div class="question-bank-item"><div class="question-bank-item-label">Q4 — Trouble: Time Loss</div><div class="question-bank-item-text" id="bank-trouble-q2"></div></div><div class="question-bank-item"><div class="question-bank-item-label">Q5 — True Cost: Financial</div><div class="question-bank-item-text" id="bank-cost-q1"></div></div><div class="question-bank-item"><div class="question-bank-item-label">Q6 — True Cost: Team Impact</div><div class="question-bank-item-text" id="bank-cost-q2"></div></div><div class="question-bank-item"><div class="question-bank-item-label">Q7 — Tomorrow: Vision</div><div class="question-bank-item-text" id="bank-tomorrow-q1"></div></div><div class="question-bank-item"><div class="question-bank-item-label">Q8 — Tomorrow: Outcomes</div><div class="question-bank-item-text" id="bank-tomorrow-q2"></div></div></div><div class="actions"><button class="btn btn-primary" onclick="copyToClipboard()"><span>📋</span> Copy All</button><button class="btn btn-primary" onclick="printQuestions()"><span>🖨️</span> Print</button></div></div>
+        <div class="context-bar">
+            <span class="context-label">Vertical:</span>
+            <div class="chip-group" id="vertical-chips" style="margin-bottom:0;">
+                <button class="chip selected" data-vert="salon" onclick="setVertical('salon')">Salon</button>
+                <button class="chip" data-vert="barber" onclick="setVertical('barber')">Barber</button>
+                <button class="chip" data-vert="spa" onclick="setVertical('spa')">Spa</button>
+                <button class="chip" data-vert="nails" onclick="setVertical('nails')">Nails</button>
+            </div>
+        </div>
+
+        <div class="training-tip" style="margin-bottom:20px;">
+            <span class="tip-icon">Tip:</span>
+            <span><strong>TED flow:</strong> Tell me (opens wide) → Explain (goes deeper) → Describe (makes it concrete) → then close with a specific question when you need a fact. This sounds conversational, not interrogative.</span>
+        </div>
+
+        <div class="card today" data-section="today">
+            <div class="card-header">
+                <div class="card-icon">1</div>
+                <div>
+                    <div class="card-title">Today</div>
+                    <div class="card-subtitle">What's happening right now?</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="questions-group">
+                    <div class="question-item">
+                        <label class="question-label"><span class="question-number">1</span>Current State & Processes</label>
+                        <textarea id="today-q1" placeholder="e.g. Tell me about how you currently manage your bookings day to day..."></textarea>
+                        <div class="step-example" id="ex-today-q1"></div>
+                        <div class="ted-chips">
+                            <button class="chip" onclick="insertTED('today-q1', 'Tell me')">Tell me... <span class="ted-tag wide">wide</span></button>
+                            <button class="chip" onclick="insertTED('today-q1', 'Explain')">Explain... <span class="ted-tag deep">deeper</span></button>
+                            <button class="chip" onclick="insertTED('today-q1', 'Describe')">Describe... <span class="ted-tag concrete">concrete</span></button>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <label class="question-label"><span class="question-number">2</span>Workflow & Boundaries</label>
+                        <textarea id="today-q2" placeholder="e.g. Walk me through what happens when a client wants to book outside your hours..."></textarea>
+                        <div class="step-example" id="ex-today-q2"></div>
+                        <div class="ted-chips">
+                            <button class="chip" onclick="insertTED('today-q2', 'Tell me')">Tell me... <span class="ted-tag wide">wide</span></button>
+                            <button class="chip" onclick="insertTED('today-q2', 'Explain')">Explain... <span class="ted-tag deeper">deeper</span></button>
+                            <button class="chip" onclick="insertTED('today-q2', 'Describe')">Describe... <span class="ted-tag concrete">concrete</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card trouble" data-section="trouble">
+            <div class="card-header">
+                <div class="card-icon">2</div>
+                <div>
+                    <div class="card-title">Trouble</div>
+                    <div class="card-subtitle">What's broken or frustrating?</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="questions-group">
+                    <div class="question-item">
+                        <label class="question-label"><span class="question-number">3</span>Key Frustrations</label>
+                        <textarea id="trouble-q1" placeholder="e.g. What's the biggest frustration with your current system?"></textarea>
+                        <div class="step-example" id="ex-trouble-q1"></div>
+                        <div class="ted-chips">
+                            <button class="chip" onclick="insertTED('trouble-q1', 'Tell me')">Tell me... <span class="ted-tag wide">wide</span></button>
+                            <button class="chip" onclick="insertTED('trouble-q1', 'Explain')">Explain... <span class="ted-tag deep">deeper</span></button>
+                            <button class="chip" onclick="insertTED('trouble-q1', 'Describe')">Describe... <span class="ted-tag concrete">concrete</span></button>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <label class="question-label"><span class="question-number">4</span>Time & Resource Loss</label>
+                        <textarea id="trouble-q2" placeholder="e.g. Where do you feel you're losing time that you shouldn't be?"></textarea>
+                        <div class="step-example" id="ex-trouble-q2"></div>
+                        <div class="ted-chips">
+                            <button class="chip" onclick="insertTED('trouble-q2', 'Tell me')">Tell me... <span class="ted-tag wide">wide</span></button>
+                            <button class="chip" onclick="insertTED('trouble-q2', 'Explain')">Explain... <span class="ted-tag deep">deeper</span></button>
+                            <button class="chip" onclick="insertTED('trouble-q2', 'Describe')">Describe... <span class="ted-tag concrete">concrete</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card cost" data-section="cost">
+            <div class="card-header">
+                <div class="card-icon">3</div>
+                <div>
+                    <div class="card-title">True Cost</div>
+                    <div class="card-subtitle">What is the problem actually costing them?</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="questions-group">
+                    <div class="question-item">
+                        <label class="question-label"><span class="question-number">5</span>Financial Impact</label>
+                        <textarea id="cost-q1" placeholder="e.g. If you're losing 10 bookings a week to no-shows, what does that add up to in a month?"></textarea>
+                        <div class="step-example" id="ex-cost-q1"></div>
+                        <div class="ted-chips">
+                            <button class="chip" onclick="insertTED('cost-q1', 'Tell me')">Tell me... <span class="ted-tag wide">wide</span></button>
+                            <button class="chip" onclick="insertTED('cost-q1', 'Explain')">Explain... <span class="ted-tag deep">deeper</span></button>
+                            <button class="chip" onclick="insertTED('cost-q1', 'Describe')">Describe... <span class="ted-tag concrete">concrete</span></button>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <label class="question-label"><span class="question-number">6</span>Team & Operational Impact</label>
+                        <textarea id="cost-q2" placeholder="e.g. What's the impact on your team when the schedule is constantly changing?"></textarea>
+                        <div class="step-example" id="ex-cost-q2"></div>
+                        <div class="ted-chips">
+                            <button class="chip" onclick="insertTED('cost-q2', 'Tell me')">Tell me... <span class="ted-tag wide">wide</span></button>
+                            <button class="chip" onclick="insertTED('cost-q2', 'Explain')">Explain... <span class="ted-tag deep">deeper</span></button>
+                            <button class="chip" onclick="insertTED('cost-q2', 'Describe')">Describe... <span class="ted-tag concrete">concrete</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card tomorrow" data-section="tomorrow">
+            <div class="card-header">
+                <div class="card-icon">4</div>
+                <div>
+                    <div class="card-title">Tomorrow</div>
+                    <div class="card-subtitle">What does their ideal future look like?</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="questions-group">
+                    <div class="question-item">
+                        <label class="question-label"><span class="question-number">7</span>Vision & Goals</label>
+                        <textarea id="tomorrow-q1" placeholder="e.g. If you could wave a magic wand, what would your booking process look like in six months?"></textarea>
+                        <div class="step-example" id="ex-tomorrow-q1"></div>
+                        <div class="ted-chips">
+                            <button class="chip" onclick="insertTED('tomorrow-q1', 'Tell me')">Tell me... <span class="ted-tag wide">wide</span></button>
+                            <button class="chip" onclick="insertTED('tomorrow-q1', 'Explain')">Explain... <span class="ted-tag deep">deeper</span></button>
+                            <button class="chip" onclick="insertTED('tomorrow-q1', 'Describe')">Describe... <span class="ted-tag concrete">concrete</span></button>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <label class="question-label"><span class="question-number">8</span>Desired Outcomes</label>
+                        <textarea id="tomorrow-q2" placeholder="e.g. What would it mean for your business if clients could book, pay, and rebook without you lifting a finger?"></textarea>
+                        <div class="step-example" id="ex-tomorrow-q2"></div>
+                        <div class="ted-chips">
+                            <button class="chip" onclick="insertTED('tomorrow-q2', 'Tell me')">Tell me... <span class="ted-tag wide">wide</span></button>
+                            <button class="chip" onclick="insertTED('tomorrow-q2', 'Explain')">Explain... <span class="ted-tag deep">deeper</span></button>
+                            <button class="chip" onclick="insertTED('tomorrow-q2', 'Describe')">Describe... <span class="ted-tag concrete">concrete</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-card">
+            <div class="card-header">
+                <div class="warn-icon">⚠</div>
+                <h3>The Leap Trap</h3>
+            </div>
+            <div class="card-body">
+                <p style="margin-bottom:8px;">You hear a keyword and jump straight to the Fresha feature. You never find out how big the problem actually is.</p>
+                <p style="margin-bottom:6px;"><span class="bad-ex">Bad:</span> Prospect says "we have no-shows." You immediately pitch Fresha reminders. Turns out it's 3% of bookings — not worth solving.</p>
+                <p><span class="good-ex">Good:</span> Prospect says "we have no-shows." You ask: "Walk me through last week's no-shows — how many out of how many bookings?" Now you know the real size before you pitch.</p>
+            </div>
+        </div>
+
+        <div class="question-bank">
+            <h2><span class="question-bank-icon">Q</span>Question Bank Summary</h2>
+            <div class="question-list">
+                <div class="question-bank-item">
+                    <div class="question-bank-item-label">Q1 — Today: Current State</div>
+                    <div class="question-bank-item-text" id="bank-today-q1"></div>
+                </div>
+                <div class="question-bank-item">
+                    <div class="question-bank-item-label">Q2 — Today: Workflow</div>
+                    <div class="question-bank-item-text" id="bank-today-q2"></div>
+                </div>
+                <div class="question-bank-item">
+                    <div class="question-bank-item-label">Q3 — Trouble: Frustrations</div>
+                    <div class="question-bank-item-text" id="bank-trouble-q1"></div>
+                </div>
+                <div class="question-bank-item">
+                    <div class="question-bank-item-label">Q4 — Trouble: Time Loss</div>
+                    <div class="question-bank-item-text" id="bank-trouble-q2"></div>
+                </div>
+                <div class="question-bank-item">
+                    <div class="question-bank-item-label">Q5 — True Cost: Financial</div>
+                    <div class="question-bank-item-text" id="bank-cost-q1"></div>
+                </div>
+                <div class="question-bank-item">
+                    <div class="question-bank-item-label">Q6 — True Cost: Team Impact</div>
+                    <div class="question-bank-item-text" id="bank-cost-q2"></div>
+                </div>
+                <div class="question-bank-item">
+                    <div class="question-bank-item-label">Q7 — Tomorrow: Vision</div>
+                    <div class="question-bank-item-text" id="bank-tomorrow-q1"></div>
+                </div>
+                <div class="question-bank-item">
+                    <div class="question-bank-item-label">Q8 — Tomorrow: Outcomes</div>
+                    <div class="question-bank-item-text" id="bank-tomorrow-q2"></div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="copyToClipboard()">Copy All</button>
+                <button class="btn btn-primary" onclick="printQuestions()">Print</button>
+            </div>
+        </div>
     </div>
+
     <footer>CT003 — 4T Discovery Question Builder | Fresha Sales Enablement</footer>
+
     <script>
+        /* ── Vertical-specific example questions from Rise CT003 ── */
+        const verticalExamples = {
+            salon: {
+                'today-q1': 'Tell me about how you manage bookings right now — phone, walk-in, online, or a mix?',
+                'today-q2': 'Explain what happens when all the stylists are with clients and the phone keeps ringing.',
+                'trouble-q1': 'Describe a typical week of missed calls or booking frustrations.',
+                'trouble-q2': 'Tell me where you feel you\'re losing the most time on admin that isn\'t cutting hair.',
+                'cost-q1': 'If you\'re missing 15–20 calls a day on busy days, what does that add up to in a month?',
+                'cost-q2': 'What\'s the impact on your team when the schedule changes last minute from no-shows?',
+                'tomorrow-q1': 'What would change if clients could book, cancel, and rebook without calling you?',
+                'tomorrow-q2': 'Describe what a fully booked week with zero phone admin would look like for you.'
+            },
+            barber: {
+                'today-q1': 'Tell me about how you handle the mix of walk-ins and booked appointments today.',
+                'today-q2': 'Explain what happens on a Saturday when the queue gets long — do people leave?',
+                'trouble-q1': 'Describe the biggest headache with managing walk-in flow across your team.',
+                'trouble-q2': 'Tell me about the quiet days — what happens Tuesday vs Saturday in terms of bookings?',
+                'cost-q1': 'If you\'re turning away walk-ins on Saturday, how many is that a week? What\'s each one worth?',
+                'cost-q2': 'What happens to your barbers\' earnings when there\'s no visibility on who\'s busy vs idle?',
+                'tomorrow-q1': 'What would it look like if clients could see live availability and just book a slot?',
+                'tomorrow-q2': 'Tell me what would change if you could fill quiet weekdays the way Saturdays fill themselves.'
+            },
+            spa: {
+                'today-q1': 'Tell me about how you manage bookings across different service types and therapists.',
+                'today-q2': 'Explain how you handle treatment room scheduling when multiple therapists overlap.',
+                'trouble-q1': 'Describe the biggest challenge with packages — selling, tracking, or renewing them?',
+                'trouble-q2': 'Tell me about the last time a double-booking or scheduling error caused a problem.',
+                'cost-q1': 'If your team spends an hour a day on scheduling admin, what does that cost you in a month?',
+                'cost-q2': 'What\'s the impact on the client experience when booking feels manual or unreliable?',
+                'tomorrow-q1': 'What would it mean if packages, room scheduling, and payments were all in one system?',
+                'tomorrow-q2': 'Describe your ideal client journey from first booking to rebooking.'
+            },
+            nails: {
+                'today-q1': 'Tell me about how clients book with you — calls, DMs, walk-ins, or something else?',
+                'today-q2': 'Explain what happens when a client wants a specific technician but can\'t get through to book.',
+                'trouble-q1': 'Describe your no-show problem — how often does it happen and what do you do about it?',
+                'trouble-q2': 'Tell me where you\'re spending the most time that isn\'t actually doing nails.',
+                'cost-q1': 'If you have 5 no-shows a week at £30 each, what does that look like over a month?',
+                'cost-q2': 'What happens to your schedule when a no-show leaves a gap that could\'ve been filled?',
+                'tomorrow-q1': 'What would change if clients could book online and pay a deposit upfront?',
+                'tomorrow-q2': 'Tell me what your ideal week looks like — fully booked, no gaps, no admin.'
+            }
+        };
+
+        let currentVertical = 'salon';
+
+        function setVertical(vert) {
+            currentVertical = vert;
+            document.querySelectorAll('#vertical-chips .chip').forEach(c => c.classList.remove('selected'));
+            document.querySelector('[data-vert="' + vert + '"]').classList.add('selected');
+            renderExamples();
+        }
+
+        function renderExamples() {
+            const examples = verticalExamples[currentVertical];
+            Object.keys(examples).forEach(id => {
+                const el = document.getElementById('ex-' + id);
+                if (el) {
+                    el.innerHTML = '<div class="example-label">Example (' + currentVertical + ')</div><div class="example-text">"' + examples[id] + '"</div>';
+                }
+            });
+        }
+
+        // Render on load
+        renderExamples();
+
         const textareas = document.querySelectorAll('textarea');
         textareas.forEach(textarea => { textarea.addEventListener('input', updateQuestionBank); });
-        function updateQuestionBank() { const mapping = { 'today-q1': 'bank-today-q1', 'today-q2': 'bank-today-q2', 'trouble-q1': 'bank-trouble-q1', 'trouble-q2': 'bank-trouble-q2', 'cost-q1': 'bank-cost-q1', 'cost-q2': 'bank-cost-q2', 'tomorrow-q1': 'bank-tomorrow-q1', 'tomorrow-q2': 'bank-tomorrow-q2' }; Object.entries(mapping).forEach(([sourceId, targetId]) => { const source = document.getElementById(sourceId); const target = document.getElementById(targetId); if (source && target) { target.textContent = source.value; } }); updateProgressDots(); }
-        function updateProgressDots() { const sections = ['today', 'trouble', 'cost', 'tomorrow']; sections.forEach(section => { const q1 = document.getElementById(`${section}-q1`).value.trim(); const q2 = document.getElementById(`${section}-q2`).value.trim(); const dot = document.querySelector(`.progress-dot[data-section="${section}"]`); if (q1 && q2) { dot.classList.add('active'); } else { dot.classList.remove('active'); } }); }
-        function insertTED(textareaId, phrase) { const textarea = document.getElementById(textareaId); const cursorPos = textarea.selectionStart; const textBefore = textarea.value.substring(0, cursorPos); const textAfter = textarea.value.substring(cursorPos); const startOfLine = textBefore.lastIndexOf('\n') + 1; const lineStart = textBefore.substring(startOfLine).trim() === '' ? textBefore : textBefore.substring(0, startOfLine) + textBefore.substring(startOfLine).trim() + '\n'; textarea.value = lineStart + phrase + ' '; textarea.selectionStart = textarea.selectionEnd = (lineStart + phrase + ' ').length; textarea.focus(); updateQuestionBank(); }
-        function scrollToSection(section) { const element = document.querySelector(`[data-section="${section}"]`); if (element) { element.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
-        function copyToClipboard() { const questions = []; const sections = [ { label: 'Today', qs: ['today-q1', 'today-q2'] }, { label: 'Trouble', qs: ['trouble-q1', 'trouble-q2'] }, { label: 'True Cost', qs: ['cost-q1', 'cost-q2'] }, { label: 'Tomorrow', qs: ['tomorrow-q1', 'tomorrow-q2'] } ]; let questionNum = 1; sections.forEach(section => { questions.push(`\n${section.label.toUpperCase()}`); questions.push('='.repeat(40)); section.qs.forEach(id => { const text = document.getElementById(id).value.trim(); if (text) { questions.push(`Q${questionNum}. ${text}`); } questionNum++; }); }); const text = questions.join('\n'); navigator.clipboard.writeText(text).then(() => { showToast('Questions copied to clipboard!'); }).catch(() => { showToast('Failed to copy questions', 'error'); }); }
-        function printQuestions() { const printWindow = window.open('', '', 'height=600,width=800'); const questions = []; const sections = [ { label: 'Today', qs: ['today-q1', 'today-q2'] }, { label: 'Trouble', qs: ['trouble-q1', 'trouble-q2'] }, { label: 'True Cost', qs: ['cost-q1', 'cost-q2'] }, { label: 'Tomorrow', qs: ['tomorrow-q1', 'tomorrow-q2'] } ]; let questionNum = 1; sections.forEach(section => { questions.push(`<h2>${section.label}</h2>`); section.qs.forEach(id => { const text = document.getElementById(id).value.trim(); if (text) { questions.push(`<p><strong>Q${questionNum}.</strong> ${text}</p>`); } questionNum++; }); }); const html = `<!DOCTYPE html><html><head><title>CT003 — 4T Discovery Questions</title><style>body { font-family: Arial, sans-serif; margin: 2rem; } h1 { color: #1a1a2e; border-bottom: 3px solid #6c5ce7; padding-bottom: 1rem; } h2 { color: #6c5ce7; margin-top: 2rem; } p { line-height: 1.6; margin: 1rem 0; } strong { color: #1a1a2e; }</style></head><body><h1>CT003 — 4T Discovery Question Builder</h1>${questions.join('')}<p style="margin-top: 3rem; font-size: 0.9rem; color: #999;">Printed from 4T Question Builder | Fresha Sales Enablement</p></body></html>`; printWindow.document.write(html); printWindow.document.close(); setTimeout(() => printWindow.print(), 250); }
-        function showToast(message, type = 'success') { const toast = document.createElement('div'); toast.className = `toast ${type}`; toast.textContent = message; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+
+        function updateQuestionBank() {
+            const mapping = {
+                'today-q1': 'bank-today-q1',
+                'today-q2': 'bank-today-q2',
+                'trouble-q1': 'bank-trouble-q1',
+                'trouble-q2': 'bank-trouble-q2',
+                'cost-q1': 'bank-cost-q1',
+                'cost-q2': 'bank-cost-q2',
+                'tomorrow-q1': 'bank-tomorrow-q1',
+                'tomorrow-q2': 'bank-tomorrow-q2'
+            };
+
+            Object.entries(mapping).forEach(([sourceId, targetId]) => {
+                const source = document.getElementById(sourceId);
+                const target = document.getElementById(targetId);
+                if (source && target) {
+                    target.textContent = source.value;
+                }
+            });
+
+            updateProgressDots();
+        }
+
+        function updateProgressDots() {
+            const sections = ['today', 'trouble', 'cost', 'tomorrow'];
+            sections.forEach(section => {
+                const q1 = document.getElementById(`${section}-q1`).value.trim();
+                const q2 = document.getElementById(`${section}-q2`).value.trim();
+                const dot = document.querySelector(`.progress-dot[data-section="${section}"]`);
+                if (q1 && q2) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function insertTED(textareaId, phrase) {
+            const textarea = document.getElementById(textareaId);
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+            const startOfLine = textBefore.lastIndexOf('\n') + 1;
+            const lineStart = textBefore.substring(startOfLine).trim() === '' ? textBefore : textBefore.substring(0, startOfLine) + textBefore.substring(startOfLine).trim() + '\n';
+            textarea.value = lineStart + phrase + ' ';
+            textarea.selectionStart = textarea.selectionEnd = (lineStart + phrase + ' ').length;
+            textarea.focus();
+            updateQuestionBank();
+        }
+
+        function scrollToSection(section) {
+            const element = document.querySelector(`[data-section="${section}"]`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function copyToClipboard() {
+            const questions = [];
+            const sections = [
+                { label: 'Today', qs: ['today-q1', 'today-q2'] },
+                { label: 'Trouble', qs: ['trouble-q1', 'trouble-q2'] },
+                { label: 'True Cost', qs: ['cost-q1', 'cost-q2'] },
+                { label: 'Tomorrow', qs: ['tomorrow-q1', 'tomorrow-q2'] }
+            ];
+
+            let questionNum = 1;
+            sections.forEach(section => {
+                questions.push(`\n${section.label.toUpperCase()}`);
+                questions.push('='.repeat(40));
+                section.qs.forEach(id => {
+                    const text = document.getElementById(id).value.trim();
+                    if (text) {
+                        questions.push(`Q${questionNum}. ${text}`);
+                    }
+                    questionNum++;
+                });
+            });
+
+            const text = questions.join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Questions copied to clipboard!');
+            }).catch(() => {
+                showToast('Failed to copy questions', 'error');
+            });
+        }
+
+        function printQuestions() {
+            const printWindow = window.open('', '', 'height=600,width=800');
+            const questions = [];
+            const sections = [
+                { label: 'Today', qs: ['today-q1', 'today-q2'] },
+                { label: 'Trouble', qs: ['trouble-q1', 'trouble-q2'] },
+                { label: 'True Cost', qs: ['cost-q1', 'cost-q2'] },
+                { label: 'Tomorrow', qs: ['tomorrow-q1', 'tomorrow-q2'] }
+            ];
+
+            let questionNum = 1;
+            sections.forEach(section => {
+                questions.push(`<h2>${section.label}</h2>`);
+                section.qs.forEach(id => {
+                    const text = document.getElementById(id).value.trim();
+                    if (text) {
+                        questions.push(`<p><strong>Q${questionNum}.</strong> ${text}</p>`);
+                    }
+                    questionNum++;
+                });
+            });
+
+            const html = `<!DOCTYPE html><html><head><title>CT003 — 4T Discovery Questions</title><style>body { font-family: Arial, sans-serif; margin: 2rem; } h1 { color: #1a1a2e; border-bottom: 3px solid #6c5ce7; padding-bottom: 1rem; } h2 { color: #6c5ce7; margin-top: 2rem; } p { line-height: 1.6; margin: 1rem 0; } strong { color: #1a1a2e; }</style></head><body><h1>CT003 — 4T Discovery Question Builder</h1>${questions.join('')}<p style="margin-top: 3rem; font-size: 0.9rem; color: #999;">Printed from 4T Question Builder | Fresha Sales Enablement</p></body></html>`;
+            printWindow.document.write(html);
+            printWindow.document.close();
+            setTimeout(() => printWindow.print(), 250);
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
         updateProgressDots();
     </script>
 </body>

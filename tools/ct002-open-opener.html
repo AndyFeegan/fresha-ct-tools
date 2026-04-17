@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CT002 O.P.E.N. Opener Builder</title>
     <style>
+        
         * {
             margin: 0;
             padding: 0;
@@ -16,231 +17,692 @@
             --fresha-accent: #6c5ce7;
             --fresha-accent-light: #a29bfe;
             --fresha-bg: #f4f3f8;
-            --gray-light: #e8e8f0;
-            --gray-text: #666;
-            --success: #27ae60;
-            --text-dark: #2c3e50;
+            --fresha-white: #ffffff;
+            --fresha-text: #2d3436;
+            --fresha-muted: #636e72;
+            --fresha-border: #dfe6e9;
+            --fresha-success: #00b894;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background-color: var(--fresha-bg);
-            color: var(--text-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+            background-attachment: fixed;
+            color: var(--fresha-text);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         .header {
-            background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d4a 100%);
+            background: #0a0a0f;
+            background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
             color: white;
-            padding: 3rem 2rem;
+            padding: 28px 24px 24px;
             text-align: center;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .badge {
-            display: inline-block;
-            background-color: var(--fresha-accent);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            letter-spacing: 0.5px;
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #3b2d8b;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(59, 45, 139, 0.4);
+        }
+        .header-logo {
+            display: block;
+            margin: 0 auto 16px;
+            height: 24px;
+            opacity: 0.9;
         }
 
-        .header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .header p { font-size: 1.1rem; opacity: 0.9; }
+        .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+        .header h1 span { color: var(--fresha-accent-light); }
+        .header p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 480px; margin: 0 auto; }
 
         .progress-bar {
-            position: sticky; top: 0; z-index: 100; background: white;
-            padding: 1.5rem 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+            background: var(--fresha-white);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--fresha-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: var(--shadow-sm);
         }
 
-        .progress-dot { display: flex; align-items: center; gap: 0.75rem; }
-
-        .dot {
-            width: 32px; height: 32px; border-radius: 50%; background-color: var(--gray-light);
+        .progress-step { flex: 1; display: flex; align-items: center; gap: 8px; }
+        .progress-dot {
+            width: 32px; height: 32px; border-radius: 50%; background: var(--fresha-border);
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 0.9rem; color: var(--gray-text); transition: all 0.3s ease;
+            font-size: 12px; font-weight: 700; color: var(--fresha-muted);
+            transition: all 0.3s ease; flex-shrink: 0;
         }
+        .progress-dot.active { background: var(--fresha-accent); color: white; }
+        .progress-dot.done { background: var(--fresha-success); color: white; }
+        .progress-label { font-size: 12px; font-weight: 600; color: var(--fresha-muted); display: none; }
+        @media (min-width: 600px) { .progress-label { display: block; } }
+        .progress-line { height: 2px; background: var(--fresha-border); max-width: 40px; }
 
-        .dot.active { background-color: var(--fresha-accent); color: white; transform: scale(1.1); }
-        .progress-dot label { font-size: 0.9rem; font-weight: 600; color: var(--gray-text); }
-
-        .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+        .container { max-width: 720px; margin: 0 auto; padding: 20px 16px 100px; }
 
         .card {
-            background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--fresha-white); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+            margin-bottom: 20px; overflow: hidden; border: 1px solid var(--fresha-border);
+            transition: box-shadow 0.3s ease;
         }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12); }
+        .card:focus-within { box-shadow: var(--shadow-md); }
 
-        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .card-header { padding: 18px 20px 14px; border-bottom: 1px solid var(--fresha-border); display: flex; align-items: flex-start; gap: 14px; }
         .card-icon {
-            width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-size: 1.8rem; font-weight: 700; color: white;
+            width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 20px; font-weight: 800; color: white; flex-shrink: 0;
         }
-        .card-icon.o { background-color: #3498db; }
-        .card-icon.p { background-color: #e74c3c; }
-        .card-icon.e { background-color: #f39c12; }
-        .card-icon.n { background-color: #9b59b6; }
-        .card-header h2 { font-size: 1.8rem; margin-bottom: 0.25rem; }
-        .card-header p { color: var(--gray-text); font-size: 0.95rem; }
+        .card-icon.o, .card-icon.p, .card-icon.e, .card-icon.n { background: var(--fresha-accent); color: white; }
 
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); font-size: 0.95rem; }
+        .card-header h2 { font-size: 17px; font-weight: 700; margin-bottom: 2px; }
+        .card-header p { color: var(--fresha-muted); font-size: 13px; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--fresha-text); font-size: 13px; }
         .form-group input[type="text"], .form-group textarea {
-            width: 100%; padding: 0.75rem; border: 2px solid var(--gray-light); border-radius: 8px;
-            font-family: inherit; font-size: 0.95rem; transition: border-color 0.3s ease; resize: vertical; min-height: 80px;
+            width: 100%; padding: 10px 12px; border: 1px solid var(--fresha-border); border-radius: 8px;
+            font-family: inherit; font-size: 14px; transition: border-color 0.2s, box-shadow 0.2s; resize: vertical; color: var(--fresha-text);
         }
-        .form-group textarea { min-height: 100px; }
+        .form-group textarea { min-height: 70px; }
         .form-group input[type="text"]:focus, .form-group textarea:focus {
-            outline: none; border-color: var(--fresha-accent); box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+            outline: none; border-color: var(--fresha-accent); box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
         }
+        .form-group input[type="text"]::placeholder, .form-group textarea::placeholder { color: #b2bec3; }
 
-        .chip-group { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .chip-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
         .chip {
-            padding: 0.6rem 1.2rem; border: 2px solid var(--gray-light); background-color: white;
-            border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
-            transition: all 0.3s ease; color: var(--text-dark);
+            padding: 7px 14px; border: 1.5px solid var(--fresha-border); background-color: var(--fresha-white);
+            border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 13px;
+            transition: all 0.2s; color: var(--fresha-muted); user-select: none;
         }
-        .chip:hover { border-color: var(--fresha-accent); color: var(--fresha-accent); }
+        .chip:hover { border-color: var(--fresha-accent-light); color: var(--fresha-accent); }
         .chip.selected { background-color: var(--fresha-accent); border-color: var(--fresha-accent); color: white; }
 
-        .checklist { background-color: #f9f9fc; border-left: 4px solid var(--fresha-accent); padding: 1rem; border-radius: 8px; margin-top: 1rem; }
-        .checkbox-item { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.95rem; }
-        .checkbox-item:last-child { margin-bottom: 0; }
-        .checkbox-item input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--fresha-accent); }
-        .checkbox-item label { cursor: pointer; margin: 0; font-weight: 500; color: var(--text-dark); }
+        .checklist { list-style: none; }
+        .checklist li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f4; font-size: 14px; }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--fresha-accent); flex-shrink: 0; cursor: pointer; }
 
-        .action-buttons { display: flex; gap: 1rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap; }
-        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; text-align: center; }
-        .btn-primary { background-color: var(--fresha-accent); color: white; }
-        .btn-primary:hover { background-color: #5a4fc9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3); }
-        .btn-secondary { background-color: white; color: var(--fresha-accent); border: 2px solid var(--fresha-accent); }
-        .btn-secondary:hover { background-color: var(--fresha-bg); transform: translateY(-2px); }
-        .btn-small { padding: 0.5rem 1rem; font-size: 0.85rem; }
+        .card-body { padding: 16px 20px 20px; }
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); overflow-y: auto; }
-        .modal.show { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background-color: white; padding: 2rem; border-radius: 12px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--gray-light); padding-bottom: 1rem; }
-        .modal-header h2 { margin: 0; }
-        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-text); }
-        .close-btn:hover { color: var(--text-dark); }
-        .modal-section { margin-bottom: 1.5rem; }
-        .modal-section h3 { color: var(--fresha-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
-        .modal-section p { background-color: var(--fresha-bg); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--fresha-accent); line-height: 1.7; color: var(--text-dark); }
-        .modal-buttons { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap; }
-        .modal-buttons .btn { flex: 1; min-width: 140px; }
+        .actions { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+        .btn { padding: 12px 24px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; flex: 1; min-width: 140px; text-align: center; }
+        .btn-primary { background: var(--fresha-accent); color: white; }
+        .btn-primary:hover { background: #5b4dc7; }
+        .btn-secondary { background: var(--fresha-white); color: var(--fresha-text); border: 1.5px solid var(--fresha-border); }
+        .btn-secondary:hover { border-color: var(--fresha-accent-light); color: var(--fresha-accent); }
 
-        .toast { position: fixed; bottom: 2rem; right: 2rem; background-color: var(--fresha-accent); color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); z-index: 2000; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .modal { display: none; position: fixed; z-index: 100; inset: 0; background: rgba(26,26,46,0.6); align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+        .modal.show { display: flex; }
+        .modal-content { background: var(--fresha-white); border-radius: var(--radius); max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+        .modal-header { background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d5e 100%); color: white; padding: 20px 24px; border-bottom: 1px solid var(--fresha-border); }
+        .modal-header h2 { font-size: 20px; margin-bottom: 4px; }
+        .modal-header p { font-size: 13px; color: rgba(255,255,255,0.6); }
+        .modal-body { padding: 24px; }
+        .modal-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--fresha-border); }
+        .modal-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .modal-section h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--fresha-accent); margin-bottom: 8px; }
+        .modal-section p { font-size: 14px; color: var(--fresha-text); line-height: 1.7; }
+        .modal-actions { padding: 16px 24px; border-top: 1px solid var(--fresha-border); display: flex; gap: 12px; flex-wrap: wrap; }
 
-        @media (max-width: 768px) {
-            .header h1 { font-size: 1.8rem; }
-            .progress-bar { gap: 1rem; }
-            .progress-dot label { display: none; }
-            .container { padding: 1.5rem 1rem; }
-            .card { padding: 1.5rem; }
-            .action-buttons { flex-direction: column; }
-            .action-buttons .btn { width: 100%; }
-            .modal-buttons { flex-direction: column; }
-            .modal-buttons .btn { width: 100%; }
+        /* Scenario guidance panel */
+        .scenario-guidance {
+            background: #f8f7ff;
+            border: 1px solid rgba(108, 92, 231, 0.15);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-top: 12px;
+            animation: fadeInGuide 0.3s ease;
         }
-        @media print { body { background-color: white; } .header, .progress-bar, .action-buttons, .modal { display: none !important; } .card { break-inside: avoid; page-break-inside: avoid; } }
+        @keyframes fadeInGuide {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .scenario-guidance .guidance-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--fresha-accent);
+            margin-bottom: 6px;
+        }
+        .scenario-guidance .guidance-text {
+            font-size: 13px;
+            color: var(--fresha-text);
+            line-height: 1.6;
+        }
+
+        /* Step examples that appear per scenario */
+        .step-example {
+            background: #f8f7ff;
+            border-left: 3px solid var(--fresha-accent);
+            border-radius: 0 8px 8px 0;
+            padding: 10px 14px;
+            margin-top: 10px;
+            animation: fadeInGuide 0.3s ease;
+        }
+        .step-example .example-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--fresha-accent);
+            margin-bottom: 4px;
+        }
+        .step-example .example-text {
+            font-size: 13px;
+            color: var(--fresha-text);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* Training tip */
+        .training-tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            background: #fff8e6;
+            border: 1px solid #f0dfa0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #8a6d00;
+            line-height: 1.5;
+        }
+        .training-tip .tip-icon { flex-shrink: 0; font-size: 14px; }
+
+        /* Failure modes card */
+        .failure-card {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #f5c6c6;
+        }
+        .failure-card .card-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f5c6c6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .failure-card .card-header .fail-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: #fdf0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .failure-card .card-header h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #c0392b;
+        }
+        .failure-card .card-body { padding: 14px 20px 16px; }
+        .failure-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #fdf0f0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .failure-item:last-child { border-bottom: none; }
+        .failure-item .fail-label {
+            font-weight: 600;
+            color: #c0392b;
+            white-space: nowrap;
+        }
+        .failure-item .fail-desc { color: var(--fresha-muted); }
+
+        .empty-state { color: var(--fresha-muted); font-style: italic; font-size: 13px; }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--fresha-dark); color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg); z-index: 200; opacity: 0; transition: all 0.3s ease; pointer-events: none; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 600px) {
+            .progress-label { display: none !important; }
+            .container { padding: 16px 12px 100px; }
+            .card { margin-bottom: 16px; }
+        }
+
+        @media print {
+            body { background: white; }
+            .progress-bar, .actions, .modal-actions { display: none !important; }
+            .header { padding: 16px; }
+            .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .modal { position: static; display: block !important; background: none; }
+            .modal-content { max-height: none; box-shadow: none; }
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover { color: white; }
+        .back-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="badge">CT002</div>
-        <h1>Call Openers</h1>
-        <p>O.P.E.N. Opener Builder</p>
+        <a href="sales-journey.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Sales Operating System</a>
+        <img class="header-logo" src="data:image/png;base64,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" alt="fresha">
+        <div class="header-badge">CT002 — Call Opening</div>
+        <h1><span>O.P.E.N.</span> Opener Builder</h1>
+        <p>A proven framework for opening calls that breaks through the noise</p>
     </div>
+
     <div class="progress-bar">
-        <div class="progress-dot"><div class="dot active" id="dot-o">O</div><label>Orient</label></div>
-        <div class="progress-dot"><div class="dot" id="dot-p">P</div><label>Pattern</label></div>
-        <div class="progress-dot"><div class="dot" id="dot-e">E</div><label>Earn</label></div>
-        <div class="progress-dot"><div class="dot" id="dot-n">N</div><label>Navigate</label></div>
+        <div class="progress-step"><div class="progress-dot active" id="dot-o">O</div><span class="progress-label">Orient</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-step"><div class="progress-dot" id="dot-p">P</div><span class="progress-label">Pattern</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-step"><div class="progress-dot" id="dot-e">E</div><span class="progress-label">Earn</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-step"><div class="progress-dot" id="dot-n">N</div><span class="progress-label">Navigate</span></div>
     </div>
+
     <div class="container">
         <div class="card">
-            <div class="card-header"><div class="card-icon o">O</div><div><h2>Orient</h2><p>Name, company, context in under 5 seconds</p></div></div>
-            <div class="form-group"><label>Scenario Type</label><div class="chip-group"><button class="chip selected" data-scenario="cold">Cold</button><button class="chip" data-scenario="warm">Warm</button><button class="chip" data-scenario="referral">Referral</button></div></div>
-            <div class="form-group"><label for="prospect-name">Prospect Name</label><input type="text" id="prospect-name" placeholder="e.g. Sarah"></div>
-            <div class="form-group"><label for="business-name">Business Name</label><input type="text" id="business-name" placeholder="e.g. Camden Hair & Beauty"></div>
-            <div class="form-group"><label for="context-line">Context Line</label><textarea id="context-line" placeholder="e.g. I can see you're a busy salon in Camden with great reviews..."></textarea></div>
+            <div class="card-header">
+                <div class="card-icon o">O</div>
+                <div>
+                    <h2>Orient</h2>
+                    <p>Name, company, context in under 5 seconds</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Scenario Type</label>
+                    <div class="chip-group">
+                        <button class="chip selected" data-scenario="cold">Cold</button>
+                        <button class="chip" data-scenario="warm">Warm</button>
+                        <button class="chip" data-scenario="referral">Referral</button>
+                        <button class="chip" data-scenario="account">Account Mgmt</button>
+                    </div>
+                    <div class="scenario-guidance" id="scenario-guidance" style="display:none;"></div>
+                </div>
+                <div class="form-group">
+                    <label for="prospect-name">Prospect Name</label>
+                    <input type="text" id="prospect-name" placeholder="e.g. Sarah">
+                </div>
+                <div class="form-group">
+                    <label for="business-name">Business Name</label>
+                    <input type="text" id="business-name" placeholder="e.g. Camden Hair & Beauty">
+                </div>
+                <div class="form-group">
+                    <label for="context-line" id="context-label">Context Line</label>
+                    <textarea id="context-line" placeholder="e.g. We help salons move from phone bookings to online."></textarea>
+                </div>
+                <div class="step-example" id="orient-example" style="display:none;"></div>
+            </div>
         </div>
+
         <div class="card">
-            <div class="card-header"><div class="card-icon p">P</div><div><h2>Pattern Interrupt</h2><p>Break autopilot with an observation, not a pitch</p></div></div>
-            <div class="form-group"><label for="observation">Observation</label><textarea id="observation" placeholder="e.g. I noticed most of your bookings seem to come through Instagram DMs — that must take hours..."></textarea></div>
-            <div class="checklist"><div class="checkbox-item"><input type="checkbox" id="check-p1"><label for="check-p1">Uses an observation, not a pitch</label></div><div class="checkbox-item"><input type="checkbox" id="check-p2"><label for="check-p2">Breaks the pattern of a typical cold call</label></div></div>
+            <div class="card-header">
+                <div class="card-icon p">P</div>
+                <div>
+                    <h2>Pattern Interrupt</h2>
+                    <p>Break autopilot with an observation, not a pitch</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="observation">Observation</label>
+                    <textarea id="observation" placeholder="e.g. I looked at your Google listing and I think I spotted something..."></textarea>
+                </div>
+                <div class="step-example" id="pattern-example" style="display:none;"></div>
+                <ul class="checklist">
+                    <li><input type="checkbox" id="check-p1"><label for="check-p1">Something unexpected and TRUE, tied to your Intel</label></li>
+                    <li><input type="checkbox" id="check-p2"><label for="check-p2">Makes them pause and think "wait, what?"</label></li>
+                </ul>
+                <div class="training-tip">
+                    <span class="tip-icon">Warning:</span>
+                    <span>If the hook isn't real, you've burned trust in the first ten seconds. Only use what's true.</span>
+                </div>
+            </div>
         </div>
+
         <div class="card">
-            <div class="card-header"><div class="card-icon e">E</div><div><h2>Earn Time</h2><p>Ask permission to continue (and why it works)</p></div></div>
-            <div class="form-group"><label for="permission-ask">Permission Ask</label><textarea id="permission-ask" placeholder="e.g. Would it be worth 90 seconds to see if there's a quicker way to handle that?"></textarea></div>
-            <div class="checklist"><div class="checkbox-item"><input type="checkbox" id="check-e1"><label for="check-e1">Asks permission, doesn't assume it</label></div><div class="checkbox-item"><input type="checkbox" id="check-e2"><label for="check-e2">Gives a specific time commitment</label></div></div>
+            <div class="card-header">
+                <div class="card-icon e">E</div>
+                <div>
+                    <h2>Earn Time</h2>
+                    <p>Give them a reason to stay — relevant to them, not your features</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="permission-ask">Reason to Stay</label>
+                    <textarea id="permission-ask" placeholder="e.g. I noticed your reviews mention booking wait times. I think there's a quick win you're missing."></textarea>
+                </div>
+                <div class="step-example" id="earn-example" style="display:none;"></div>
+                <ul class="checklist">
+                    <li><input type="checkbox" id="check-e1"><label for="check-e1">Reason is relevant to THEM, not about your features</label></li>
+                    <li><input type="checkbox" id="check-e2"><label for="check-e2">Includes a time boundary or exit ramp</label></li>
+                </ul>
+                <div class="training-tip">
+                    <span class="tip-icon">Tip:</span>
+                    <span>Time-boundary technique: "I'll keep this to 30 seconds. If it doesn't sound relevant, I'll let you go." Giving them permission to hang up reduces resistance.</span>
+                </div>
+            </div>
         </div>
+
         <div class="card">
-            <div class="card-header"><div class="card-icon n">N</div><div><h2>Navigate</h2><p>Bridge smoothly into discovery</p></div></div>
-            <div class="form-group"><label for="bridge-discovery">Bridge to Discovery</label><textarea id="bridge-discovery" placeholder="e.g. Great — let me ask you this: how are you currently managing your appointments day to day?"></textarea></div>
+            <div class="card-header">
+                <div class="card-icon n">N</div>
+                <div>
+                    <h2>Navigate</h2>
+                    <p>Ask a question or propose a next step — hand them control</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="bridge-discovery">Your Navigate Question</label>
+                    <textarea id="bridge-discovery" placeholder="e.g. Would it be worth a quick 15-minute look at how that works?"></textarea>
+                </div>
+                <div class="step-example" id="navigate-example" style="display:none;"></div>
+                <div class="training-tip">
+                    <span class="tip-icon">Tip:</span>
+                    <span>The question should be easy to say yes to. If you don't Navigate, you monologue — and they're waiting for the moment to say no.</span>
+                </div>
+            </div>
         </div>
-        <div class="action-buttons">
+
+        <div class="failure-card">
+            <div class="card-header">
+                <div class="fail-icon">X</div>
+                <h3>Three Failure Modes to Avoid</h3>
+            </div>
+            <div class="card-body">
+                <div class="failure-item">
+                    <span class="fail-label">Apologising:</span>
+                    <span class="fail-desc">"Sorry to bother you", "I know you're busy" — signals low-value.</span>
+                </div>
+                <div class="failure-item">
+                    <span class="fail-label">Fake permission:</span>
+                    <span class="fail-desc">"Is now a bad time?" — gives them a free exit with no conversation.</span>
+                </div>
+                <div class="failure-item">
+                    <span class="fail-label">Credential dump:</span>
+                    <span class="fail-desc">"We work with ten thousand salons", "We're Fresha" — they don't care yet.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
             <button class="btn btn-primary" id="view-btn">View My Opener</button>
             <button class="btn btn-secondary" id="copy-btn">Copy to Clipboard</button>
             <button class="btn btn-secondary" id="print-btn">Print</button>
             <button class="btn btn-secondary" id="reset-btn">Start Over</button>
         </div>
     </div>
+
     <div class="modal" id="summary-modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>Your O.P.E.N. Opener</h2><button class="close-btn" onclick="closeModal()">&times;</button></div>
-            <div class="modal-section"><h3>Orient</h3><p id="modal-orient"></p></div>
-            <div class="modal-section"><h3>Pattern Interrupt</h3><p id="modal-pattern"></p></div>
-            <div class="modal-section"><h3>Earn Time</h3><p id="modal-earn"></p></div>
-            <div class="modal-section"><h3>Navigate</h3><p id="modal-navigate"></p></div>
-            <div class="modal-section" style="margin-top: 2rem; border-top: 2px solid var(--gray-light); padding-top: 1.5rem;"><h3>Full Script</h3><p id="modal-script"></p></div>
-            <div class="modal-buttons"><button class="btn btn-primary" id="modal-copy-btn">Copy Full Script</button><button class="btn btn-secondary" id="modal-print-btn">Print</button></div>
+            <div class="modal-header">
+                <h2>Your O.P.E.N. Opener</h2>
+                <p id="modal-scenario-label"></p>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>Orient</h3>
+                    <p id="modal-orient"></p>
+                </div>
+                <div class="modal-section">
+                    <h3>Pattern Interrupt</h3>
+                    <p id="modal-pattern"></p>
+                </div>
+                <div class="modal-section">
+                    <h3>Earn Time</h3>
+                    <p id="modal-earn"></p>
+                </div>
+                <div class="modal-section">
+                    <h3>Navigate</h3>
+                    <p id="modal-navigate"></p>
+                </div>
+                <div class="modal-section" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--fresha-border);">
+                    <h3>Full Script</h3>
+                    <p id="modal-script"></p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="modal-copy-btn">Copy Full Script</button>
+                <button class="btn btn-secondary" id="modal-print-btn">Print</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
         </div>
     </div>
+
+    <div class="toast" id="toast">Copied to clipboard!</div>
+
     <script>
         const data = { scenario: 'cold', prospectName: '', businessName: '', contextLine: '', observation: '', permissionAsk: '', bridgeDiscovery: '' };
-        document.querySelectorAll('[data-scenario]').forEach(btn => { btn.addEventListener('click', function() { document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('selected')); this.classList.add('selected'); data.scenario = this.dataset.scenario; updateProgress(); }); });
+
+        /* ── Scenario-specific content from Rise CT002 ── */
+        const scenarioContent = {
+            cold: {
+                guidance: 'Cold outbound: all four steps are essential. You have no relationship — you need to earn every second.',
+                orient: '"Hi Sarah, it\'s Jamie from Fresha. We help salons move from phone bookings to online."',
+                pattern: '"I\'m calling because I looked at your Google listing and I think I spotted something." Or: "I looked at your reviews and I noticed a pattern you probably don\'t want to ignore."',
+                earn: '"I noticed your reviews mention booking wait times. I think there\'s a quick win you\'re missing."',
+                navigate: '"Would it be worth a quick 15-minute look at how that works?"'
+            },
+            warm: {
+                guidance: 'Warm inbound: you can compress Orient and Pattern Interrupt — they already know why you\'re calling. Focus on Earn Time and Navigate.',
+                orient: '"Hi Sarah, it\'s Jamie from Fresha. Marcus at Glow & Go referred me."',
+                pattern: '"Marcus told me you\'re about to hire two new stylists. That\'s when the booking chaos gets real." Or: "I\'ve just worked with three salons in your area. All had the same problem."',
+                earn: '"I think there\'s a quick win here based on what Marcus described — I\'ll keep this to 30 seconds."',
+                navigate: '"Does that sound like something worth exploring?"'
+            },
+            referral: {
+                guidance: 'Referral: Orient gets the referrer\'s name. Pattern Interrupt is optional — they trust the referrer. Earn Time and Navigate are essential.',
+                orient: '"Hi Sarah, Marcus said you\'d be worth a conversation about bookings."',
+                pattern: '"Marcus said you\'re the person who actually cares about the numbers. I think that\'s why this matters."',
+                earn: '"Most salons I work with in your area had the same bottleneck Marcus described. It\'s usually a quick fix."',
+                navigate: '"Would Thursday work for a quick conversation with your manager?"'
+            },
+            account: {
+                guidance: 'Account management: they already know you and Fresha. Orient is a check-in, not a cold intro. Pattern Interrupt comes from their account data or usage. Focus on value they\'re leaving on the table and a specific next step.',
+                orient: '"Hi Sarah, it\'s Jamie — your Fresha account manager. Just checking in on Radiance."',
+                pattern: '"I was looking at your booking data this morning and I noticed something. You\'re only using about 40% of your online slots — the rest are still phone-only."',
+                earn: '"Salons like yours that switch the remaining slots to online typically cut no-shows by a third. I think there\'s a quick win sitting in your setup."',
+                navigate: '"Would it be worth 15 minutes this week to walk through the setup together?"'
+            }
+        };
+
+        function showScenarioContent(scenario) {
+            const content = scenarioContent[scenario];
+
+            // Guidance panel in Orient
+            const guidanceEl = document.getElementById('scenario-guidance');
+            guidanceEl.innerHTML = `<div class="guidance-label">${scenario} call approach</div><div class="guidance-text">${content.guidance}</div>`;
+            guidanceEl.style.display = 'block';
+
+            // Step examples
+            showStepExample('orient-example', 'Example Orient', content.orient);
+            showStepExample('pattern-example', 'Example Pattern Interrupt', content.pattern);
+            showStepExample('earn-example', 'Example Earn Time', content.earn);
+            showStepExample('navigate-example', 'Example Navigate', content.navigate);
+        }
+
+        function showStepExample(id, label, text) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.innerHTML = `<div class="example-label">${label}</div><div class="example-text">${text}</div>`;
+                el.style.display = 'block';
+            }
+        }
+
+        document.querySelectorAll('[data-scenario]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                data.scenario = this.dataset.scenario;
+                showScenarioContent(data.scenario);
+                updateContextHint(data.scenario);
+                updateProgress();
+            });
+        });
+
+        // Update context label/placeholder per scenario
+        const contextHints = {
+            cold: { label: 'Context Line (one line — what you do)', placeholder: 'e.g. We help salons move from phone bookings to online.' },
+            warm: { label: 'Context Line (who referred or how they know you)', placeholder: 'e.g. Marcus at Glow & Go referred me.' },
+            referral: { label: 'Context Line (referrer\'s name and the hook)', placeholder: 'e.g. Marcus said you\'d be worth a conversation about bookings.' },
+            account: { label: 'Context Line (reason for the check-in)', placeholder: 'e.g. Just checking in on Radiance — I spotted something in your booking data.' }
+        };
+
+        function updateContextHint(scenario) {
+            const hint = contextHints[scenario];
+            document.getElementById('context-label').textContent = hint.label;
+            document.getElementById('context-line').placeholder = hint.placeholder;
+        }
+
+        // Show default scenario content on load
+        showScenarioContent('cold');
+        updateContextHint('cold');
+
         document.getElementById('prospect-name').addEventListener('input', (e) => { data.prospectName = e.target.value; updateProgress(); });
         document.getElementById('business-name').addEventListener('input', (e) => { data.businessName = e.target.value; updateProgress(); });
         document.getElementById('context-line').addEventListener('input', (e) => { data.contextLine = e.target.value; updateProgress(); });
         document.getElementById('observation').addEventListener('input', (e) => { data.observation = e.target.value; updateProgress(); });
         document.getElementById('permission-ask').addEventListener('input', (e) => { data.permissionAsk = e.target.value; updateProgress(); });
         document.getElementById('bridge-discovery').addEventListener('input', (e) => { data.bridgeDiscovery = e.target.value; updateProgress(); });
+
         function updateProgress() {
             const oComplete = data.prospectName && data.businessName && data.contextLine;
             const pComplete = data.observation && document.getElementById('check-p1').checked && document.getElementById('check-p2').checked;
             const eComplete = data.permissionAsk && document.getElementById('check-e1').checked && document.getElementById('check-e2').checked;
             const nComplete = data.bridgeDiscovery;
+
             document.getElementById('dot-o').classList.toggle('active', oComplete);
             document.getElementById('dot-p').classList.toggle('active', pComplete);
             document.getElementById('dot-e').classList.toggle('active', eComplete);
             document.getElementById('dot-n').classList.toggle('active', nComplete);
         }
-        function generateOrient() { if (!data.prospectName || !data.businessName) return ''; return `Hi ${data.prospectName}, this is [Your Name] from Fresha. I'm calling because I came across ${data.businessName} — ${data.contextLine}`; }
+
+        function generateOrient() {
+            if (!data.prospectName) return '';
+            const name = data.prospectName;
+            const biz = data.businessName;
+            const ctx = data.contextLine;
+            if (data.scenario === 'referral') {
+                return `Hi ${name}, ${ctx || 'I was referred to you.'}`;
+            }
+            if (data.scenario === 'account') {
+                return `Hi ${name}, it's [Your Name] — your Fresha account manager. ${ctx || (biz ? 'Just checking in on ' + biz + '.' : '')}`;
+            }
+            if (!biz) return '';
+            if (ctx) {
+                return `Hi ${name}, it's [Your Name] from Fresha. ${ctx}`;
+            }
+            return `Hi ${name}, it's [Your Name] from Fresha. I came across ${biz}.`;
+        }
+
         function generatePattern() { return data.observation || ''; }
         function generateEarn() { return data.permissionAsk || ''; }
         function generateNavigate() { return data.bridgeDiscovery || ''; }
-        function generateFullScript() { return [generateOrient(), generatePattern(), generateEarn(), generateNavigate()].filter(p => p).join(' '); }
-        function openModal() { document.getElementById('modal-orient').textContent = generateOrient(); document.getElementById('modal-pattern').textContent = generatePattern(); document.getElementById('modal-earn').textContent = generateEarn(); document.getElementById('modal-navigate').textContent = generateNavigate(); document.getElementById('modal-script').textContent = generateFullScript(); document.getElementById('summary-modal').classList.add('show'); }
-        function closeModal() { document.getElementById('summary-modal').classList.remove('show'); }
+
+        function generateFullScript() {
+            return [generateOrient(), generatePattern(), generateEarn(), generateNavigate()].filter(p => p).join(' ');
+        }
+
+        function openModal() {
+            const scenarioLabels = { cold: 'Cold Outbound', warm: 'Warm Inbound', referral: 'Referral', account: 'Account Management' };
+            document.getElementById('modal-scenario-label').textContent = scenarioLabels[data.scenario] + ' Opener';
+            document.getElementById('modal-orient').textContent = generateOrient();
+            document.getElementById('modal-pattern').textContent = generatePattern();
+            document.getElementById('modal-earn').textContent = generateEarn();
+            document.getElementById('modal-navigate').textContent = generateNavigate();
+            document.getElementById('modal-script').textContent = generateFullScript();
+            document.getElementById('summary-modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('summary-modal').classList.remove('show');
+        }
+
         document.getElementById('view-btn').addEventListener('click', openModal);
-        function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => { showToast('Copied to clipboard!'); }); }
-        document.getElementById('copy-btn').addEventListener('click', () => { const structured = `ORIENT:\n${generateOrient()}\n\nPATTERN INTERRUPT:\n${generatePattern()}\n\nEARN TIME:\n${generateEarn()}\n\nNAVIGATE:\n${generateNavigate()}\n\nFULL SCRIPT:\n${generateFullScript()}`; copyToClipboard(structured); });
-        document.getElementById('modal-copy-btn').addEventListener('click', () => { copyToClipboard(generateFullScript()); });
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => { showToast('Copied to clipboard!'); });
+        }
+
+        document.getElementById('copy-btn').addEventListener('click', () => {
+            const structured = `ORIENT:\n${generateOrient()}\n\nPATTERN INTERRUPT:\n${generatePattern()}\n\nEARN TIME:\n${generateEarn()}\n\nNAVIGATE:\n${generateNavigate()}\n\nFULL SCRIPT:\n${generateFullScript()}`;
+            copyToClipboard(structured);
+        });
+
+        document.getElementById('modal-copy-btn').addEventListener('click', () => {
+            copyToClipboard(generateFullScript());
+        });
+
         document.getElementById('print-btn').addEventListener('click', () => { window.print(); });
         document.getElementById('modal-print-btn').addEventListener('click', () => { window.print(); });
-        document.getElementById('reset-btn').addEventListener('click', () => { if (confirm('Are you sure? This will clear all your inputs.')) { Object.keys(data).forEach(key => { data[key] = key === 'scenario' ? 'cold' : ''; }); document.getElementById('prospect-name').value = ''; document.getElementById('business-name').value = ''; document.getElementById('context-line').value = ''; document.getElementById('observation').value = ''; document.getElementById('permission-ask').value = ''; document.getElementById('bridge-discovery').value = ''; document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('selected')); document.querySelector('[data-scenario="cold"]').classList.add('selected'); document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false); updateProgress(); showToast('Form reset'); } });
-        function showToast(message) { const toast = document.createElement('div'); toast.className = 'toast'; toast.textContent = message; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
-        document.getElementById('summary-modal').addEventListener('click', (e) => { if (e.target.id === 'summary-modal') closeModal(); });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            if (confirm('Are you sure? This will clear all your inputs.')) {
+                Object.keys(data).forEach(key => { data[key] = key === 'scenario' ? 'cold' : ''; });
+                document.getElementById('prospect-name').value = '';
+                document.getElementById('business-name').value = '';
+                document.getElementById('context-line').value = '';
+                document.getElementById('observation').value = '';
+                document.getElementById('permission-ask').value = '';
+                document.getElementById('bridge-discovery').value = '';
+                document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('selected'));
+                document.querySelector('[data-scenario="cold"]').classList.add('selected');
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                showScenarioContent('cold');
+                updateContextHint('cold');
+                updateProgress();
+                showToast('Form reset');
+            }
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        document.getElementById('summary-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'summary-modal') closeModal();
+        });
+
         updateProgress();
     </script>
 </body>

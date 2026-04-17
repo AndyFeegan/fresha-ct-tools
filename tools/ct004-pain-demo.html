@@ -5,88 +5,882 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CT004 — P.A.I.N. Demo Planner</title>
     <style>
+        
+        :root {
+            --fresha-dark: #1a1a2e;
+            --fresha-accent: #6c5ce7;
+            --fresha-accent-light: #a29bfe;
+            --fresha-bg: #f4f3f8;
+            --fresha-white: #ffffff;
+            --fresha-text: #2d3436;
+            --fresha-muted: #636e72;
+            --fresha-border: #dfe6e9;
+            --fresha-success: #00b894;
+            --color-blue-purple: #5f6eb5;
+            --color-green: #27ae60;
+            --color-orange: #e67e22;
+            --color-red: #e74c3c;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --fresha-dark: #1a1a2e; --fresha-accent: #6c5ce7; --fresha-accent-light: #a29bfe; --fresha-bg: #f4f3f8; --color-blue-purple: #5f6eb5; --color-green: #27ae60; --color-orange: #e67e22; --color-red: #e74c3c; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: var(--fresha-bg); color: var(--fresha-dark); line-height: 1.6; }
-        .header { background: linear-gradient(135deg, var(--fresha-dark) 0%, var(--fresha-accent) 100%); color: white; padding: 2rem 2rem 1.5rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
-        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-        .header-left h1 { font-size: 2rem; margin-bottom: 0.25rem; font-weight: 600; }
-        .header-badge { display: inline-block; background: rgba(255, 255, 255, 0.2); padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .progress-bar { position: sticky; top: 0; background: white; border-bottom: 2px solid var(--fresha-accent-light); padding: 1rem 0; z-index: 100; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
-        .progress-bar-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; gap: 1.5rem; }
-        .progress-label { font-size: 0.85rem; font-weight: 600; color: var(--fresha-dark); }
-        .progress-dots { display: flex; gap: 0.75rem; }
-        .progress-dot { width: 24px; height: 24px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; }
-        .progress-dot.active { background: var(--fresha-accent); color: white; border-color: var(--fresha-accent); }
-        .progress-dot.completed { background: var(--color-green); color: white; border-color: var(--color-green); }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        .section { background: white; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); scroll-margin-top: 120px; }
-        .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--fresha-bg); }
-        .section-icon { font-size: 1.8rem; }
-        .section-title { font-size: 1.4rem; font-weight: 600; color: var(--fresha-dark); }
-        .section-subtitle { font-size: 0.9rem; color: #666; margin-left: 2.8rem; margin-top: -0.8rem; margin-bottom: 1rem; }
-        #section-prime .section-header { border-bottom-color: var(--color-blue-purple); }
-        .prime-intro { background: #f0f4ff; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border-left: 4px solid var(--color-blue-purple); font-size: 0.95rem; }
-        #section-align .section-header { border-bottom-color: var(--color-green); }
-        #section-impact .section-header { border-bottom-color: var(--color-orange); }
-        #section-next .section-header { border-bottom-color: var(--color-red); }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--fresha-dark); font-size: 0.95rem; }
-        .form-group input[type="text"], .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s; }
-        .form-group input[type="text"]:focus, .form-group textarea:focus { outline: none; border-color: var(--fresha-accent); box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1); }
-        .form-group textarea { resize: vertical; min-height: 70px; }
-        .placeholder-hint { font-size: 0.8rem; color: #999; margin-top: 0.25rem; font-style: italic; }
-        .align-row { background: #fafafa; padding: 1.5rem; border-radius: 6px; margin-bottom: 1.5rem; border-left: 4px solid var(--color-green); }
-        .align-row-label { font-weight: 600; font-size: 0.85rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid #ddd; }
-        .align-row-pain { background: white; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem; border: 1px solid #ddd; font-size: 0.9rem; color: var(--fresha-dark); font-style: italic; }
-        .impact-row { background: #fafafa; padding: 1.5rem; border-radius: 6px; margin-bottom: 1.5rem; border-left: 4px solid var(--color-orange); }
-        .impact-row-label { font-weight: 600; font-size: 0.85rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid #ddd; }
-        .impact-row-feature { background: white; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem; border: 1px solid #ddd; font-size: 0.9rem; color: var(--fresha-dark); font-style: italic; }
-        .empty-state { text-align: center; padding: 2rem; background: #fafafa; border-radius: 6px; color: #999; font-size: 0.95rem; }
-        .summary-section { background: linear-gradient(135deg, var(--fresha-dark) 0%, var(--fresha-accent) 100%); color: white; padding: 2rem; border-radius: 8px; margin-top: 2rem; }
-        .summary-section h2 { font-size: 1.3rem; margin-bottom: 1.5rem; font-weight: 600; }
-        .summary-item { background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 4px solid var(--fresha-accent-light); }
-        .summary-item-title { font-weight: 600; margin-bottom: 0.5rem; font-size: 0.95rem; }
-        .summary-item-content { font-size: 0.9rem; line-height: 1.5; opacity: 0.95; }
-        .button-group { display: flex; gap: 1rem; margin-top: 2rem; }
-        button { padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .btn-primary { background: var(--fresha-accent); color: white; }
-        .btn-primary:hover { background: #5a4ec4; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3); }
-        .btn-secondary { background: var(--fresha-bg); color: var(--fresha-dark); border: 1px solid var(--fresha-accent-light); }
-        .btn-secondary:hover { background: var(--fresha-accent-light); color: white; }
-        @media (max-width: 768px) { .header-content { flex-direction: column; text-align: center; } .header-left h1 { font-size: 1.5rem; } .container { padding: 1rem; } .section { padding: 1.5rem; } .progress-bar-content { padding: 0 1rem; flex-wrap: wrap; } .button-group { flex-direction: column; } button { width: 100%; } }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+            background-attachment: fixed;
+            color: var(--fresha-text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #0a0a0f;
+            background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
+            color: white;
+            padding: 28px 24px 24px;
+            text-align: center;
+            z-index: 99;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #3b2d8b;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(59, 45, 139, 0.4);
+        }
+        .header-logo {
+            display: block;
+            margin: 0 auto 16px;
+            height: 24px;
+            opacity: 0.9;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .progress-bar {
+            background: var(--fresha-white);
+            position: sticky;
+            top: 0;
+            z-index: 98;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--fresha-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .progress-bar-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--fresha-muted);
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .progress-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            background: var(--fresha-border);
+            color: var(--fresha-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: var(--fresha-accent);
+            color: white;
+        }
+
+        .progress-dot.completed {
+            background: var(--fresha-success);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .progress-label { display: none; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 16px 100px;
+        }
+
+        .section {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--fresha-border);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--fresha-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            background: var(--fresha-accent);
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: var(--fresha-muted);
+        }
+
+        .section-body {
+            padding: 16px 20px 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fresha-text);
+            margin-bottom: 6px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--fresha-border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--fresha-accent);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .placeholder-hint {
+            font-size: 12px;
+            color: var(--fresha-muted);
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        .intro-box {
+            background: rgba(95, 110, 181, 0.08);
+            padding: 14px 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--color-blue-purple);
+            margin-bottom: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .align-row {
+            background: #fafafa;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--color-green);
+        }
+
+        .align-row-label {
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--fresha-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+
+        .align-row-pain {
+            background: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid var(--fresha-border);
+            font-size: 14px;
+            color: var(--fresha-text);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .impact-row {
+            background: #fafafa;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--color-orange);
+        }
+
+        .impact-row-label {
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--fresha-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+
+        .impact-row-feature {
+            background: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid var(--fresha-border);
+            font-size: 14px;
+            color: var(--fresha-text);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 24px;
+            background: #fafafa;
+            border-radius: 8px;
+            color: var(--fresha-muted);
+            font-size: 14px;
+        }
+
+        /* Training tip */
+        .training-tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            background: #fff8e6;
+            border: 1px solid #f0dfa0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #8a6d00;
+            line-height: 1.5;
+        }
+        .training-tip .tip-icon { flex-shrink: 0; font-size: 14px; }
+
+        /* Warning card */
+        .warning-card {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #f5c6c6;
+        }
+        .warning-card .wc-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f5c6c6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .warning-card .warn-icon {
+            width: 32px; height: 32px; border-radius: 8px; background: #fdf0f0;
+            display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+        }
+        .warning-card .wc-header h3 { font-size: 14px; font-weight: 700; color: #c0392b; }
+        .warning-card .wc-body { padding: 14px 20px 16px; font-size: 13px; line-height: 1.6; color: var(--fresha-muted); }
+        .warning-card .bad-ex { color: #c0392b; font-weight: 600; }
+        .warning-card .good-ex { color: #16a34a; font-weight: 600; }
+
+        /* Prime script preview */
+        .prime-preview {
+            background: #f0eeff;
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-top: 12px;
+        }
+        .prime-preview .preview-label {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--fresha-accent); margin-bottom: 6px;
+        }
+        .prime-preview .preview-text {
+            font-size: 13px; color: var(--fresha-text); line-height: 1.6; font-style: italic;
+        }
+
+        /* Mid-demo pivot */
+        .pivot-card {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #d4e6f1;
+        }
+        .pivot-card .pv-header {
+            padding: 14px 20px; border-bottom: 1px solid #d4e6f1;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .pivot-card .pv-icon {
+            width: 32px; height: 32px; border-radius: 8px; background: #eaf2f8;
+            display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+        }
+        .pivot-card .pv-header h3 { font-size: 14px; font-weight: 700; color: #2980b9; }
+        .pivot-card .pv-body { padding: 14px 20px 16px; font-size: 13px; line-height: 1.6; color: var(--fresha-muted); }
+
+        .summary-section {
+            background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d5e 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 30px;
+        }
+
+        .summary-section h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .summary-item {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--fresha-accent-light);
+        }
+
+        .summary-item-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .summary-item-content {
+            font-size: 13px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--fresha-accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5b4dc7;
+        }
+
+        .btn-secondary {
+            background: var(--fresha-white);
+            color: var(--fresha-text);
+            border: 1.5px solid var(--fresha-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--fresha-accent-light);
+            color: var(--fresha-accent);
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 16px; }
+            .section { margin-bottom: 16px; }
+            .section-header { padding: 14px 16px 10px; }
+            .section-body { padding: 12px 16px 16px; }
+            .actions { flex-direction: column; }
+            .btn { width: 100%; }
+            h1 { font-size: 20px; }
+        }
+
+        @media print {
+            .header, .progress-bar, .btn, .summary-section { display: none; }
+            body { background: white; }
+            .container { padding: 0; }
+            .section { box-shadow: none; }
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover { color: white; }
+        .back-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
-    <div class="header"><div class="header-content"><div class="header-left"><div class="header-badge">CT004 — GAP Demo</div><h1>P.A.I.N. Demo Planner</h1></div></div></div>
-    <div class="progress-bar"><div class="progress-bar-content"><span class="progress-label">Demo Plan Progress:</span><div class="progress-dots"><div class="progress-dot active" data-section="prime">P</div><div class="progress-dot" data-section="align">A</div><div class="progress-dot" data-section="impact">I</div><div class="progress-dot" data-section="next">N</div></div></div></div>
-    <div class="container">
-        <div class="section" id="section-prime"><div class="section-header"><span class="section-icon">🔄</span><div><h2 class="section-title">P — Prime</h2><p class="section-subtitle">Reconnect to discovered pain using the prospect's own words</p></div></div><div class="prime-intro"><strong>Reconnect to the pain they told you.</strong> Show you understand their world. Use their exact language, not Fresha jargon.</div><div class="form-group"><label for="prospect-name">Prospect name & business</label><input type="text" id="prospect-name" placeholder="e.g. Sarah at Bloom Hair Salon"></div><div class="form-group"><label for="pain-1">Pain point 1 — what they told you</label><textarea id="pain-1" placeholder="e.g. 'We lose about 15 bookings a week because clients can't book outside hours'"></textarea><div class="placeholder-hint">Use their exact words</div></div><div class="form-group"><label for="pain-2">Pain point 2</label><textarea id="pain-2" placeholder="e.g. 'No-shows are killing us — we had 8 last week alone'"></textarea><div class="placeholder-hint">Optional if there's another pain point</div></div><div class="form-group"><label for="pain-3">Pain point 3 (optional)</label><textarea id="pain-3" placeholder="e.g. 'My receptionist spends half her day on the phone taking bookings'"></textarea><div class="placeholder-hint">Leave empty if not relevant</div></div></div>
-        <div class="section" id="section-align"><div class="section-header"><span class="section-icon">🔗</span><div><h2 class="section-title">A — Align</h2><p class="section-subtitle">Map Fresha features to their specific pains, not generic benefits</p></div></div><div id="align-rows-container"><div class="empty-state">Enter pain points in the Prime section above to see alignment fields here</div></div></div>
-        <div class="section" id="section-impact"><div class="section-header"><span class="section-icon">📊</span><div><h2 class="section-title">I — Impact</h2><p class="section-subtitle">Quantify value in numbers the prospect cares about</p></div></div><div id="impact-rows-container"><div class="empty-state">Enter pain points in the Prime section above to see impact fields here</div></div><div class="form-group" style="margin-top: 2rem;"><label for="total-value">Total estimated annual value</label><input type="text" id="total-value" placeholder="e.g. £17,500+" value=""><div class="placeholder-hint">Sum of value recovered across all pain points</div></div></div>
-        <div class="section" id="section-next"><div class="section-header"><span class="section-icon">🚀</span><div><h2 class="section-title">N — Next Step</h2><p class="section-subtitle">Close with a clear, specific commitment</p></div></div><div class="form-group"><label for="next-step">Recommended next step</label><textarea id="next-step" placeholder="e.g. 'I'll get your account set up this afternoon and we'll schedule onboarding for Thursday at 2pm'"></textarea><div class="placeholder-hint">Be specific about time, action, and who's doing what</div></div><div class="form-group"><label for="fallback-step">Fallback next step</label><textarea id="fallback-step" placeholder="e.g. 'Let me send you a link to try the booking page yourself — I'll call you Thursday to walk through any questions'"></textarea><div class="placeholder-hint">If they need more time or want to explore alone</div></div></div>
-        <div class="summary-section"><h2>📋 Your Demo Plan</h2><div id="summary-content"><div class="empty-state" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);">Build your plan in the sections above. Your summary will appear here.</div></div></div>
-        <div class="button-group"><button class="btn-primary" onclick="generateSummary()">Generate Full Plan</button><button class="btn-secondary" onclick="clearAll()">Start Over</button></div>
+    <div class="header">
+        <a href="sales-journey.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Sales Operating System</a>
+        <img class="header-logo" src="data:image/png;base64,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" alt="fresha">
+        <div class="header-badge">CT004 — P.A.I.N. Demo</div>
+        <h1>P.A.I.N. Demo Planner</h1>
+        <p class="header-subtitle">Plan a focused, prospect-centric demo that closes</p>
     </div>
+
+    <div class="progress-bar">
+        <div class="progress-bar-content">
+            <span class="progress-label">Demo Plan Progress:</span>
+            <div class="progress-dots">
+                <div class="progress-dot active" data-section="prime">P</div>
+                <div class="progress-dot" data-section="align">A</div>
+                <div class="progress-dot" data-section="impact">I</div>
+                <div class="progress-dot" data-section="next">N</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="warning-card">
+            <div class="wc-header">
+                <div class="warn-icon">⚠</div>
+                <h3>Feature Tour vs P.A.I.N. Demo</h3>
+            </div>
+            <div class="wc-body">
+                <p style="margin-bottom:8px;"><span class="bad-ex">Feature tour:</span> "Here's the calendar. You can drag and drop. Colour-code by stylist. Filter by service type." The prospect thinks: "Cool. But does this solve my problem?"</p>
+                <p><span class="good-ex">P.A.I.N. demo:</span> "You said your biggest pain is capturing bookings when the phone is ringing. Look at this booking page — clients see real-time availability and book instantly. No phone call. No voicemail." The prospect thinks: "That's me in there."</p>
+            </div>
+        </div>
+
+        <div class="section" id="section-prime">
+            <div class="section-header">
+                <div class="section-icon">P</div>
+                <div>
+                    <div class="section-title">Prime</div>
+                    <div class="section-subtitle">Reconnect to discovered pain using the prospect's own words</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="intro-box">
+                    <strong>Reconnect to the pain they told you.</strong> Show you understand their world. Use their exact language, not Fresha jargon.
+                </div>
+
+                <div class="form-group">
+                    <label for="prospect-name">Prospect name & business</label>
+                    <input type="text" id="prospect-name" placeholder="e.g. Sarah at Bloom Hair Salon">
+                </div>
+
+                <div class="form-group">
+                    <label for="pain-1">Pain point 1 — what they told you</label>
+                    <textarea id="pain-1" placeholder="e.g. 'We lose about 15 bookings a week because clients can't book outside hours'"></textarea>
+                    <div class="placeholder-hint">Use their exact words</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pain-2">Pain point 2</label>
+                    <textarea id="pain-2" placeholder="e.g. 'No-shows are killing us — we had 8 last week alone'"></textarea>
+                    <div class="placeholder-hint">Optional if there's another pain point</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pain-3">Pain point 3 (optional)</label>
+                    <textarea id="pain-3" placeholder="e.g. 'My receptionist spends half her day on the phone taking bookings'"></textarea>
+                    <div class="placeholder-hint">Leave empty if not relevant</div>
+                </div>
+                <div class="prime-preview" id="prime-preview" style="display:none;">
+                    <div class="preview-label">Your Prime Script (auto-generated)</div>
+                    <div class="preview-text" id="prime-script-text"></div>
+                </div>
+                <div class="training-tip">
+                    <span class="tip-icon">Tip:</span>
+                    <span>Prime proves you listened. It sets boundaries on what you're showing and gets buy-in on the problems before you show solutions. Use their exact words, not Fresha jargon.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-align">
+            <div class="section-header">
+                <div class="section-icon">A</div>
+                <div>
+                    <div class="section-title">Align</div>
+                    <div class="section-subtitle">Map Fresha features to their specific pains, not generic benefits</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="training-tip" style="margin-top:0; margin-bottom:14px;">
+                    <span class="tip-icon">Tip:</span>
+                    <span><strong>Show 3 features maximum.</strong> Depth beats breadth. One feature shown well beats ten features clicked through. The order is always: pain first, then the feature, then what you say.</span>
+                </div>
+                <div id="align-rows-container">
+                    <div class="empty-state">Enter pain points in the Prime section above to see alignment fields here</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-impact">
+            <div class="section-header">
+                <div class="section-icon">I</div>
+                <div>
+                    <div class="section-title">Impact</div>
+                    <div class="section-subtitle">Quantify value in numbers the prospect cares about</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div id="impact-rows-container">
+                    <div class="empty-state">Enter pain points in the Prime section above to see impact fields here</div>
+                </div>
+
+                <div class="training-tip" style="margin-top:14px;">
+                    <span class="tip-icon">Tip:</span>
+                    <span><strong>Do the maths live.</strong> Connect Impact to the True Cost from discovery. Example: "15 missed bookings × £40 average = £600/week = £31,200/year. Fresha pays for itself in the first month." Use their numbers, not yours.</span>
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="total-value">Total estimated annual value</label>
+                    <input type="text" id="total-value" placeholder="e.g. £17,500+" value="">
+                    <div class="placeholder-hint">Sum of value recovered across all pain points</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-next">
+            <div class="section-header">
+                <div class="section-icon">N</div>
+                <div>
+                    <div class="section-title">Next Step</div>
+                    <div class="section-subtitle">Close with a clear, specific commitment</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="form-group">
+                    <label for="next-step">Recommended next step</label>
+                    <textarea id="next-step" placeholder="e.g. 'I'll get your account set up this afternoon and we'll schedule onboarding for Thursday at 2pm'"></textarea>
+                    <div class="placeholder-hint">Be specific about time, action, and who's doing what</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fallback-step">Fallback next step</label>
+                    <textarea id="fallback-step" placeholder="e.g. 'Let me send you a link to try the booking page yourself — I'll call you Thursday to walk through any questions'"></textarea>
+                    <div class="placeholder-hint">If they need more time or want to explore alone</div>
+                </div>
+                <div class="training-tip">
+                    <span class="tip-icon">Tip:</span>
+                    <span>Never end a demo with nothing booked. Even if it's just another conversation. Be specific: day, time, action, and who's doing what.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="pivot-card">
+            <div class="pv-header">
+                <div class="pv-icon">↩</div>
+                <h3>The Mid-Demo Pivot</h3>
+            </div>
+            <div class="pv-body">
+                <p style="margin-bottom:8px;"><strong>Signals:</strong> short answers, no questions, "hm" instead of "oh interesting." If the prospect isn't leaning in, your discovery was thin.</p>
+                <p><strong>The fix:</strong> pause the demo, go back to discovery. "Sarah, I want to make sure I'm showing you the right stuff. When you think about the booking problem, is the pain more about missing calls or about rescheduling cancellations?" Listen. Then come back to the demo. A mid-demo pivot isn't a failure — it's a correction.</p>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h2>Your Demo Plan</h2>
+            <div id="summary-content">
+                <div class="empty-state" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);">Build your plan in the sections above. Your summary will appear here.</div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="generateSummary()">Generate Full Plan</button>
+                <button class="btn btn-secondary" onclick="clearAll()">Start Over</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const progressDots = document.querySelectorAll('.progress-dot');
         const sections = ['prime', 'align', 'impact', 'next'];
+
         window.addEventListener('scroll', updateProgressBar);
-        function updateProgressBar() { sections.forEach(section => { const dot = document.querySelector(`[data-section="${section}"]`); const sectionEl = document.getElementById(`section-${section}`); const rect = sectionEl.getBoundingClientRect(); if (rect.top < window.innerHeight / 2) { progressDots.forEach(d => d.classList.remove('active')); dot.classList.add('active'); } }); updateCompletion(); }
-        function updateCompletion() { const pain1 = document.getElementById('pain-1').value.trim(); const alignFilled = hasAlignmentFilled(); const impactFilled = hasImpactFilled(); const nextStepFilled = document.getElementById('next-step').value.trim(); if (pain1) document.querySelector('[data-section="prime"]').classList.add('completed'); if (alignFilled) document.querySelector('[data-section="align"]').classList.add('completed'); if (impactFilled) document.querySelector('[data-section="impact"]').classList.add('completed'); if (nextStepFilled) document.querySelector('[data-section="next"]').classList.add('completed'); }
-        document.getElementById('pain-1').addEventListener('input', renderAlignmentRows);
-        document.getElementById('pain-2').addEventListener('input', renderAlignmentRows);
-        document.getElementById('pain-3').addEventListener('input', renderAlignmentRows);
+
+        function updateProgressBar() {
+            sections.forEach(section => {
+                const dot = document.querySelector(`[data-section="${section}"]`);
+                const sectionEl = document.getElementById(`section-${section}`);
+                const rect = sectionEl.getBoundingClientRect();
+
+                if (rect.top < window.innerHeight / 2) {
+                    progressDots.forEach(d => d.classList.remove('active'));
+                    dot.classList.add('active');
+                }
+            });
+
+            updateCompletion();
+        }
+
+        function updateCompletion() {
+            const pain1 = document.getElementById('pain-1').value.trim();
+            const alignFilled = hasAlignmentFilled();
+            const impactFilled = hasImpactFilled();
+            const nextStepFilled = document.getElementById('next-step').value.trim();
+
+            if (pain1) document.querySelector('[data-section="prime"]').classList.add('completed');
+            if (alignFilled) document.querySelector('[data-section="align"]').classList.add('completed');
+            if (impactFilled) document.querySelector('[data-section="impact"]').classList.add('completed');
+            if (nextStepFilled) document.querySelector('[data-section="next"]').classList.add('completed');
+        }
+
+        document.getElementById('pain-1').addEventListener('input', () => { renderAlignmentRows(); renderPrimeScript(); });
+        document.getElementById('pain-2').addEventListener('input', () => { renderAlignmentRows(); renderPrimeScript(); });
+        document.getElementById('pain-3').addEventListener('input', () => { renderAlignmentRows(); renderPrimeScript(); });
+        document.getElementById('prospect-name').addEventListener('input', renderPrimeScript);
         document.getElementById('pain-1').addEventListener('input', updateCompletion);
         document.getElementById('next-step').addEventListener('input', updateCompletion);
-        function getPainPoints() { return [document.getElementById('pain-1').value.trim(), document.getElementById('pain-2').value.trim(), document.getElementById('pain-3').value.trim()].filter(p => p); }
-        function renderAlignmentRows() { const pains = getPainPoints(); const container = document.getElementById('align-rows-container'); if (pains.length === 0) { container.innerHTML = '<div class="empty-state">Enter pain points in the Prime section above to see alignment fields here</div>'; renderImpactRows(); return; } let html = ''; pains.forEach((pain, index) => { const fieldId = `align-feature-${index}`; const sayId = `align-say-${index}`; html += `<div class="align-row"><div class="align-row-label">Pain Point ${index + 1} Alignment</div><div class="align-row-pain">${escapeHtml(pain)}</div><div class="form-group"><label for="${fieldId}">Feature to show</label><textarea id="${fieldId}" class="align-feature" placeholder="e.g. 24/7 online booking page"></textarea><div class="placeholder-hint">What Fresha feature solves this pain?</div></div><div class="form-group"><label for="${sayId}">What to say</label><textarea id="${sayId}" class="align-say" placeholder="e.g. 'You mentioned clients can't book outside hours — let me show you the booking page your clients would see...'"></textarea><div class="placeholder-hint">Bridge from their pain to the feature demo</div></div></div>`; }); container.innerHTML = html; document.querySelectorAll('.align-feature, .align-say').forEach(field => { field.addEventListener('input', () => { renderImpactRows(); updateCompletion(); }); }); renderImpactRows(); }
-        function renderImpactRows() { const pains = getPainPoints(); const container = document.getElementById('impact-rows-container'); if (pains.length === 0) { container.innerHTML = '<div class="empty-state">Enter pain points in the Prime section above to see impact fields here</div>'; return; } let html = ''; pains.forEach((pain, index) => { const valueId = `impact-value-${index}`; const feature = document.getElementById(`align-feature-${index}`)?.value || ''; html += `<div class="impact-row"><div class="impact-row-label">Impact: Pain Point ${index + 1}</div><div class="impact-row-feature">${escapeHtml(feature || '(Feature not yet entered)')}</div><div class="form-group"><label for="${valueId}">Value statement</label><textarea id="${valueId}" class="impact-value" placeholder="e.g. 'If you recover even half those 15 lost bookings at £45 average, that's an extra £337 a week — over £17,500 a year'"></textarea><div class="placeholder-hint">Quantify the benefit in their terms</div></div></div>`; }); container.innerHTML = html; document.querySelectorAll('.impact-value').forEach(field => { field.addEventListener('input', updateCompletion); }); }
-        function hasAlignmentFilled() { const pains = getPainPoints(); return pains.length > 0 && document.querySelectorAll('.align-feature').length > 0 && Array.from(document.querySelectorAll('.align-feature')).some(f => f.value.trim()); }
-        function hasImpactFilled() { return document.querySelectorAll('.impact-value').length > 0 && Array.from(document.querySelectorAll('.impact-value')).some(f => f.value.trim()); }
-        function generateSummary() { const prospectName = document.getElementById('prospect-name').value.trim() || 'Your prospect'; const pains = getPainPoints(); if (pains.length === 0) { alert('Please enter at least one pain point in the Prime section.'); return; } let html = ''; html += `<div class="summary-item"><div class="summary-item-title">📌 Prospect</div><div class="summary-item-content">${escapeHtml(prospectName)}</div></div>`; pains.forEach((pain, index) => { const feature = document.getElementById(`align-feature-${index}`)?.value.trim() || '(feature not entered)'; const say = document.getElementById(`align-say-${index}`)?.value.trim() || ''; const impact = document.getElementById(`impact-value-${index}`)?.value.trim() || '(impact not quantified)'; html += `<div class="summary-item"><div class="summary-item-title">Pain ${index + 1}</div><div class="summary-item-content"><strong>Their pain:</strong> ${escapeHtml(pain)}<br><br><strong>What you'll show:</strong> ${escapeHtml(feature)}<br><br><strong>Bridge:</strong> "${escapeHtml(say)}"<br><br><strong>Value:</strong> ${escapeHtml(impact)}</div></div>`; }); const totalValue = document.getElementById('total-value').value.trim(); if (totalValue) { html += `<div class="summary-item"><div class="summary-item-title">💰 Total Annual Value</div><div class="summary-item-content" style="font-size: 1.1rem; font-weight: 600;">${escapeHtml(totalValue)}</div></div>`; } const nextStep = document.getElementById('next-step').value.trim(); const fallback = document.getElementById('fallback-step').value.trim(); if (nextStep || fallback) { let nextHtml = '<div class="summary-item"><div class="summary-item-title">🎯 Next Steps</div><div class="summary-item-content">'; if (nextStep) nextHtml += `<strong>Primary:</strong> ${escapeHtml(nextStep)}<br><br>`; if (fallback) nextHtml += `<strong>Fallback:</strong> ${escapeHtml(fallback)}`; nextHtml += '</div></div>'; html += nextHtml; } document.getElementById('summary-content').innerHTML = html; document.querySelector('.summary-section').scrollIntoView({ behavior: 'smooth' }); }
-        function clearAll() { if (confirm('Clear all fields and start over?')) { document.getElementById('prospect-name').value = ''; document.getElementById('pain-1').value = ''; document.getElementById('pain-2').value = ''; document.getElementById('pain-3').value = ''; document.getElementById('total-value').value = ''; document.getElementById('next-step').value = ''; document.getElementById('fallback-step').value = ''; document.getElementById('summary-content').innerHTML = '<div class="empty-state" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);">Build your plan in the sections above. Your summary will appear here.</div>'; renderAlignmentRows(); updateProgressBar(); document.getElementById('pain-1').focus(); } }
-        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+        function renderPrimeScript() {
+            const name = document.getElementById('prospect-name').value.trim();
+            const pains = getPainPoints();
+            const preview = document.getElementById('prime-preview');
+            const textEl = document.getElementById('prime-script-text');
+
+            if (pains.length === 0) {
+                preview.style.display = 'none';
+                return;
+            }
+
+            const firstName = name ? name.split(' ')[0].split(' at ')[0] : '[Name]';
+            let painList = '';
+            if (pains.length === 1) {
+                painList = pains[0];
+            } else if (pains.length === 2) {
+                painList = pains[0] + ', and ' + pains[1];
+            } else {
+                painList = pains.slice(0, -1).join(', ') + ', and ' + pains[pains.length - 1];
+            }
+
+            textEl.textContent = `"${firstName}, before I show you anything, let me make sure I've got this right. From our conversation, your biggest challenges are: ${painList}. I want to focus the next few minutes on those. Does that sound right?"`;
+            preview.style.display = 'block';
+        }
+
+        function getPainPoints() {
+            return [
+                document.getElementById('pain-1').value.trim(),
+                document.getElementById('pain-2').value.trim(),
+                document.getElementById('pain-3').value.trim()
+            ].filter(p => p);
+        }
+
+        function renderAlignmentRows() {
+            const pains = getPainPoints();
+            const container = document.getElementById('align-rows-container');
+
+            if (pains.length === 0) {
+                container.innerHTML = '<div class="empty-state">Enter pain points in the Prime section above to see alignment fields here</div>';
+                renderImpactRows();
+                return;
+            }
+
+            let html = '';
+            pains.forEach((pain, index) => {
+                const fieldId = `align-feature-${index}`;
+                const sayId = `align-say-${index}`;
+                html += `
+                    <div class="align-row">
+                        <div class="align-row-label">Pain Point ${index + 1} Alignment</div>
+                        <div class="align-row-pain">${escapeHtml(pain)}</div>
+                        <div class="form-group">
+                            <label for="${fieldId}">Feature to show</label>
+                            <textarea id="${fieldId}" class="align-feature" placeholder="e.g. 24/7 online booking page"></textarea>
+                            <div class="placeholder-hint">What Fresha feature solves this pain?</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="${sayId}">What to say</label>
+                            <textarea id="${sayId}" class="align-say" placeholder="e.g. 'You mentioned clients can't book outside hours — let me show you the booking page your clients would see...'"></textarea>
+                            <div class="placeholder-hint">Bridge from their pain to the feature demo</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.querySelectorAll('.align-feature, .align-say').forEach(field => {
+                field.addEventListener('input', () => {
+                    renderImpactRows();
+                    updateCompletion();
+                });
+            });
+
+            renderImpactRows();
+        }
+
+        function renderImpactRows() {
+            const pains = getPainPoints();
+            const container = document.getElementById('impact-rows-container');
+
+            if (pains.length === 0) {
+                container.innerHTML = '<div class="empty-state">Enter pain points in the Prime section above to see impact fields here</div>';
+                return;
+            }
+
+            let html = '';
+            pains.forEach((pain, index) => {
+                const valueId = `impact-value-${index}`;
+                const feature = document.getElementById(`align-feature-${index}`)?.value || '';
+                html += `
+                    <div class="impact-row">
+                        <div class="impact-row-label">Impact: Pain Point ${index + 1}</div>
+                        <div class="impact-row-feature">${escapeHtml(feature || '(Feature not yet entered)')}</div>
+                        <div class="form-group">
+                            <label for="${valueId}">Value statement</label>
+                            <textarea id="${valueId}" class="impact-value" placeholder="e.g. 'If you recover even half those 15 lost bookings at £45 average, that's an extra £337 a week — over £17,500 a year'"></textarea>
+                            <div class="placeholder-hint">Quantify the benefit in their terms</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.querySelectorAll('.impact-value').forEach(field => {
+                field.addEventListener('input', updateCompletion);
+            });
+        }
+
+        function hasAlignmentFilled() {
+            const pains = getPainPoints();
+            return pains.length > 0 && document.querySelectorAll('.align-feature').length > 0 && Array.from(document.querySelectorAll('.align-feature')).some(f => f.value.trim());
+        }
+
+        function hasImpactFilled() {
+            return document.querySelectorAll('.impact-value').length > 0 && Array.from(document.querySelectorAll('.impact-value')).some(f => f.value.trim());
+        }
+
+        function generateSummary() {
+            const prospectName = document.getElementById('prospect-name').value.trim() || 'Your prospect';
+            const pains = getPainPoints();
+
+            if (pains.length === 0) {
+                alert('Please enter at least one pain point in the Prime section.');
+                return;
+            }
+
+            let html = '';
+            html += `<div class="summary-item"><div class="summary-item-title">Prospect</div><div class="summary-item-content">${escapeHtml(prospectName)}</div></div>`;
+
+            pains.forEach((pain, index) => {
+                const feature = document.getElementById(`align-feature-${index}`)?.value.trim() || '(feature not entered)';
+                const say = document.getElementById(`align-say-${index}`)?.value.trim() || '';
+                const impact = document.getElementById(`impact-value-${index}`)?.value.trim() || '(impact not quantified)';
+
+                html += `<div class="summary-item"><div class="summary-item-title">Pain ${index + 1}</div><div class="summary-item-content"><strong>Their pain:</strong> ${escapeHtml(pain)}<br><br><strong>What you'll show:</strong> ${escapeHtml(feature)}<br><br><strong>Bridge:</strong> "${escapeHtml(say)}"<br><br><strong>Value:</strong> ${escapeHtml(impact)}</div></div>`;
+            });
+
+            const totalValue = document.getElementById('total-value').value.trim();
+            if (totalValue) {
+                html += `<div class="summary-item"><div class="summary-item-title">Total Annual Value</div><div class="summary-item-content" style="font-size: 1.1rem; font-weight: 600;">${escapeHtml(totalValue)}</div></div>`;
+            }
+
+            const nextStep = document.getElementById('next-step').value.trim();
+            const fallback = document.getElementById('fallback-step').value.trim();
+
+            if (nextStep || fallback) {
+                let nextHtml = '<div class="summary-item"><div class="summary-item-title">Next Steps</div><div class="summary-item-content">';
+                if (nextStep) nextHtml += `<strong>Primary:</strong> ${escapeHtml(nextStep)}<br><br>`;
+                if (fallback) nextHtml += `<strong>Fallback:</strong> ${escapeHtml(fallback)}`;
+                nextHtml += '</div></div>';
+                html += nextHtml;
+            }
+
+            document.getElementById('summary-content').innerHTML = html;
+            document.querySelector('.summary-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function clearAll() {
+            if (confirm('Clear all fields and start over?')) {
+                document.getElementById('prospect-name').value = '';
+                document.getElementById('pain-1').value = '';
+                document.getElementById('pain-2').value = '';
+                document.getElementById('pain-3').value = '';
+                document.getElementById('total-value').value = '';
+                document.getElementById('next-step').value = '';
+                document.getElementById('fallback-step').value = '';
+                document.getElementById('summary-content').innerHTML = '<div class="empty-state" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);">Build your plan in the sections above. Your summary will appear here.</div>';
+                renderAlignmentRows();
+                updateProgressBar();
+                document.getElementById('pain-1').focus();
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         updateProgressBar();
     </script>
 </body>

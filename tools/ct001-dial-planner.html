@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>D.I.A.L. Planner — Pre-Call Preparation</title>
 <style>
+        
   :root {
     --fresha-dark: #1a1a2e;
     --fresha-accent: #6c5ce7;
@@ -15,7 +16,6 @@
     --fresha-muted: #636e72;
     --fresha-border: #dfe6e9;
     --fresha-success: #00b894;
-    --fresha-warning: #fdcb6e;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
     --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
@@ -24,59 +24,39 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--fresha-bg);
-    color: var(--fresha-text);
-    line-height: 1.6;
-    min-height: 100vh;
-  }<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>D.I.A.L. Planner — Pre-Call Preparation</title>
-<style>
-  :root {
-    --fresha-dark: #1a1a2e;
-    --fresha-accent: #6c5ce7;
-    --fresha-accent-light: #a29bfe;
-    --fresha-bg: #f4f3f8;
-    --fresha-white: #ffffff;
-    --fresha-text: #2d3436;
-    --fresha-muted: #636e72;
-    --fresha-border: #dfe6e9;
-    --fresha-success: #00b894;
-    --fresha-warning: #fdcb6e;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-    --radius: 12px;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--fresha-bg);
+    background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+    background-attachment: fixed;
     color: var(--fresha-text);
     line-height: 1.6;
     min-height: 100vh;
   }
   .header {
-    background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d5e 100%);
+    background: #0a0a0f;
+    background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
     color: white;
     padding: 28px 24px 24px;
     text-align: center;
   }
   .header-badge {
-    display: inline-block;
-    background: rgba(108, 92, 231, 0.3);
-    border: 1px solid rgba(108, 92, 231, 0.5);
-    color: var(--fresha-accent-light);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #3b2d8b;
+    color: #ffffff;
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 20px;
-    margin-bottom: 12px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(59, 45, 139, 0.4);
+  }
+  .header-logo {
+    display: block;
+    margin: 0 auto 16px;
+    height: 24px;
+    opacity: 0.9;
   }
   .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
   .header h1 span { color: var(--fresha-accent-light); }
@@ -95,7 +75,7 @@
   }
   .progress-step { flex: 1; display: flex; align-items: center; gap: 8px; }
   .progress-dot {
-    width: 28px; height: 28px; border-radius: 50%; background: var(--fresha-border);
+    width: 32px; height: 32px; border-radius: 50%; background: var(--fresha-border);
     display: flex; align-items: center; justify-content: center;
     font-size: 12px; font-weight: 700; color: var(--fresha-muted);
     transition: all 0.3s ease; flex-shrink: 0;
@@ -104,8 +84,8 @@
   .progress-dot.done { background: var(--fresha-success); color: white; }
   .progress-label { font-size: 12px; font-weight: 600; color: var(--fresha-muted); display: none; }
   @media (min-width: 600px) { .progress-label { display: block; } }
-  .progress-line { flex: 1; height: 2px; background: var(--fresha-border); max-width: 40px; }
-  .container { max-width: 680px; margin: 0 auto; padding: 20px 16px 100px; }
+  .progress-line { height: 2px; background: var(--fresha-border); max-width: 40px; }
+  .container { max-width: 720px; margin: 0 auto; padding: 20px 16px 100px; }
   .dial-card {
     background: var(--fresha-white); border-radius: var(--radius); box-shadow: var(--shadow-sm);
     margin-bottom: 20px; overflow: hidden; border: 1px solid var(--fresha-border);
@@ -113,11 +93,8 @@
   }
   .dial-card:focus-within { box-shadow: var(--shadow-md); border-color: var(--fresha-accent-light); }
   .card-header { padding: 18px 20px 14px; border-bottom: 1px solid var(--fresha-border); display: flex; align-items: flex-start; gap: 14px; }
-  .card-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-  .card-icon.decide { background: #eef0fb; color: #5b4dc7; }
-  .card-icon.intel { background: #eafaf5; color: #00a881; }
-  .card-icon.angle { background: #fff5e5; color: #e17c00; }
-  .card-icon.land { background: #fce4ec; color: #d63031; }
+  .card-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; flex-shrink: 0; }
+  .card-icon.decide, .card-icon.intel, .card-icon.angle, .card-icon.land { background: var(--fresha-accent); color: white; }
   .card-title-group h2 { font-size: 17px; font-weight: 700; margin-bottom: 2px; }
   .card-title-group h2 .letter { color: var(--fresha-accent); font-size: 19px; }
   .card-subtitle { font-size: 13px; color: var(--fresha-muted); }
@@ -146,6 +123,16 @@
   }
   .chip:hover { border-color: var(--fresha-accent-light); color: var(--fresha-accent); }
   .chip.selected { background: var(--fresha-accent); border-color: var(--fresha-accent); color: white; }
+  .hook-examples { display: none; background: #f8f7fd; border: 1px solid var(--fresha-accent-light); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; animation: fadeIn 0.25s ease; }
+  .hook-examples.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .hook-examples-title { font-size: 13px; font-weight: 700; color: var(--fresha-accent); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .hook-examples-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 500px) { .hook-examples-grid { grid-template-columns: 1fr; } }
+  .hook-example-item { background: var(--fresha-white); border-radius: 6px; padding: 10px 12px; border-left: 3px solid var(--fresha-accent-light); }
+  .hook-example-vertical { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--fresha-accent); margin-bottom: 3px; }
+  .hook-example-text { font-size: 12px; color: var(--fresha-text); line-height: 1.5; }
+  .hook-tip { font-size: 12px; color: var(--fresha-muted); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--fresha-border); font-style: italic; }
   .checklist { list-style: none; }
   .checklist li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f4; font-size: 14px; }
   .checklist li:last-child { border-bottom: none; }
@@ -184,10 +171,25 @@
     .summary-overlay { position: static; display: block !important; background: none; }
     .summary-card { max-height: none; box-shadow: none; }
   }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    transition: color 0.2s ease;
+  }
+  .back-link:hover { color: white; }
+  .back-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 </head>
 <body>
 <div class="header">
+  <a href="sales-journey.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Sales Operating System</a>
+  <img class="header-logo" src="data:image/png;base64,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" alt="fresha">
   <div class="header-badge">CT001 — Cold Calling</div>
   <h1><span>D.I.A.L.</span> Planner</h1>
   <p>Pre-call preparation tool. Fill in each step before you pick up the phone.</p>
@@ -204,15 +206,22 @@
 <div class="container">
   <div class="dial-card" id="card-decide">
     <div class="card-header">
-      <div class="card-icon decide">🎯</div>
+      <div class="card-icon decide">D</div>
       <div class="card-title-group">
-        <h2><span class="letter">D</span> — Decide</h2>
+        <h2>Decide</h2>
         <div class="card-subtitle">Right vertical, right timing, right person</div>
       </div>
     </div>
     <div class="card-body">
       <div class="field-group">
-        <label class="field-label">Business name</label>
+        <label class="field-label">Call type</label>
+        <div class="chip-group" id="call-type-chips">
+          <div class="chip selected" data-calltype="new" onclick="setCallType('new')">New Business</div>
+          <div class="chip" data-calltype="account" onclick="setCallType('account')">Account Mgmt</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label" id="label-business">Business name</label>
         <input type="text" id="d-business" placeholder="e.g. Glow Beauty Studio" data-track="d">
       </div>
       <div class="field-group">
@@ -224,7 +233,7 @@
         <input type="text" id="d-contact" placeholder="e.g. Sarah Chen — Owner" data-track="d">
       </div>
       <div class="field-group">
-        <label class="field-label">Why now? <span class="field-hint">What makes this the right time to call?</span></label>
+        <label class="field-label" id="label-timing">Why now? <span class="field-hint" id="hint-timing">What makes this the right time to call?</span></label>
         <textarea id="d-timing" rows="2" placeholder="e.g. Just opened second location, busy season coming up, currently using pen-and-paper booking…" data-track="d"></textarea>
       </div>
       <div class="field-group">
@@ -239,36 +248,36 @@
   </div>
   <div class="dial-card" id="card-intel">
     <div class="card-header">
-      <div class="card-icon intel">🔍</div>
+      <div class="card-icon intel">I</div>
       <div class="card-title-group">
-        <h2><span class="letter">I</span> — Intel</h2>
-        <div class="card-subtitle">60-second scan: Google, website, reviews, socials</div>
+        <h2>Intel</h2>
+        <div class="card-subtitle" id="intel-subtitle">60-second scan: Google, website, reviews, socials</div>
       </div>
     </div>
     <div class="card-body">
       <div class="field-group">
-        <label class="field-label">Google / website findings</label>
+        <label class="field-label" id="label-i-google">Google / website findings</label>
         <textarea id="i-google" rows="2" placeholder="e.g. 4.3 stars on Google, 120+ reviews, website has no online booking link…" data-track="i"></textarea>
       </div>
       <div class="field-group">
-        <label class="field-label">Reviews snapshot <span class="field-hint">Any pain points or praise?</span></label>
+        <label class="field-label" id="label-i-reviews">Reviews snapshot <span class="field-hint">Any pain points or praise?</span></label>
         <textarea id="i-reviews" rows="2" placeholder="e.g. Recurring complaint: hard to get an appointment. Praise: amazing staff" data-track="i"></textarea>
       </div>
       <div class="field-group">
-        <label class="field-label">Social media / other intel</label>
+        <label class="field-label" id="label-i-social">Social media / other intel</label>
         <textarea id="i-social" rows="2" placeholder="e.g. Active on Instagram, 2k followers, posting promotions manually…" data-track="i"></textarea>
       </div>
       <div class="field-group">
-        <label class="field-label">Current booking method <span class="field-hint">How do they manage appointments today?</span></label>
+        <label class="field-label" id="label-i-booking">Current booking method <span class="field-hint">How do they manage appointments today?</span></label>
         <input type="text" id="i-booking" placeholder="e.g. Phone only, another platform, pen-and-paper" data-track="i">
       </div>
     </div>
   </div>
   <div class="dial-card" id="card-angle">
     <div class="card-header">
-      <div class="card-icon angle">💡</div>
+      <div class="card-icon angle">A</div>
       <div class="card-title-group">
-        <h2><span class="letter">A</span> — Angle</h2>
+        <h2>Angle</h2>
         <div class="card-subtitle">Choose your hook: efficiency, growth, reputation, or control</div>
       </div>
     </div>
@@ -276,11 +285,12 @@
       <div class="field-group">
         <label class="field-label">Primary hook</label>
         <div class="chip-group" id="angle-chips">
-          <div class="chip" data-value="Efficiency" onclick="selectChip(this)">⚡ Efficiency</div>
-          <div class="chip" data-value="Growth" onclick="selectChip(this)">📈 Growth</div>
-          <div class="chip" data-value="Reputation" onclick="selectChip(this)">⭐ Reputation</div>
-          <div class="chip" data-value="Control" onclick="selectChip(this)">🎛️ Control</div>
+          <div class="chip" data-value="Efficiency" onclick="selectChip(this)">Efficiency</div>
+          <div class="chip" data-value="Growth" onclick="selectChip(this)">Growth</div>
+          <div class="chip" data-value="Reputation" onclick="selectChip(this)">Reputation</div>
+          <div class="chip" data-value="Control" onclick="selectChip(this)">Control</div>
         </div>
+        <div class="hook-examples" id="hook-examples"></div>
       </div>
       <div class="field-group">
         <label class="field-label">Why this angle? <span class="field-hint">Link it back to your Intel</span></label>
@@ -294,19 +304,19 @@
   </div>
   <div class="dial-card" id="card-land">
     <div class="card-header">
-      <div class="card-icon land">🚩</div>
+      <div class="card-icon land">L</div>
       <div class="card-title-group">
-        <h2><span class="letter">L</span> — Land</h2>
+        <h2>Land</h2>
         <div class="card-subtitle">Set a specific, defensible call objective</div>
       </div>
     </div>
     <div class="card-body">
       <div class="field-group">
-        <label class="field-label">Call objective <span class="field-hint">What specific outcome are you going for?</span></label>
+        <label class="field-label" id="label-l-obj">Call objective <span class="field-hint">What specific outcome are you going for?</span></label>
         <textarea id="l-objective" rows="2" placeholder="e.g. Book a 15-minute demo for Thursday at 2pm" data-track="l"></textarea>
       </div>
       <div class="field-group">
-        <label class="field-label">Fallback objective <span class="field-hint">If the primary doesn't land, what's your Plan B?</span></label>
+        <label class="field-label" id="label-l-fall">Fallback objective <span class="field-hint">If the primary doesn't land, what's your Plan B?</span></label>
         <textarea id="l-fallback" rows="2" placeholder="e.g. Get their email to send a 2-minute Fresha overview video" data-track="l"></textarea>
       </div>
       <div class="field-group">
@@ -367,7 +377,7 @@
       if (f.type === 'checkbox') { if (f.checked) filled[s]++; }
       else if (f.value && f.value.trim()) { filled[s]++; }
     });
-    const angleSelected = document.querySelector('.chip.selected');
+    const angleSelected = document.querySelector('#angle-chips .chip.selected');
     totals.a++;
     if (angleSelected) filled.a++;
     ['d', 'i', 'a', 'l'].forEach(s => {
@@ -383,9 +393,153 @@
     el.addEventListener('input', updateProgress);
     el.addEventListener('change', updateProgress);
   });
+  const hookExamples = {
+    Efficiency: {
+      items: [
+        { vertical: 'Salon', text: 'Phone-only booking bottleneck — clients can\'t book outside hours, receptionist spends half the day on the phone instead of serving walk-ins.' },
+        { vertical: 'Barber', text: 'Walk-in flow chaos — no way to predict busy vs quiet days. Team standing idle or turning people away.' },
+        { vertical: 'Spa', text: 'Staff scheduling across service types — manual rota juggling, double-bookings on treatment rooms, peak-time stress.' },
+        { vertical: 'Nails', text: 'Walk-in vs appointment imbalance — spending hours fielding calls and DMs instead of doing nails.' }
+      ],
+      tip: 'Best when Intel shows manual processes, phone-only booking, or "too busy to answer" signals in reviews.'
+    },
+    Growth: {
+      items: [
+        { vertical: 'Salon', text: 'Empty chairs mid-week — fully booked Saturday, ghost town Tuesday. No visibility to fill gaps or promote quiet slots.' },
+        { vertical: 'Barber', text: 'Weekday vs weekend unpredictability — no way to drive bookings into slow periods or upsell add-on services.' },
+        { vertical: 'Spa', text: 'Package management — no easy way to sell, track, or renew treatment packages. Leaving upsell revenue on the table.' },
+        { vertical: 'Nails', text: 'Upsell opportunity — clients book a basic mani but never see the gel or nail art menu. No prompt at booking.' }
+      ],
+      tip: 'Best when Intel shows the business is good but leaving money on the table — quiet days, no online presence, limited upsell.'
+    },
+    Reputation: {
+      items: [
+        { vertical: 'Salon', text: 'Reviews mention long waits — "love the stylist, hate the 2-week wait." Great quality undermined by availability.' },
+        { vertical: 'Barber', text: 'Clients love the cut but can\'t get in — Google reviews praise the work, complain about the queue or phone going to voicemail.' },
+        { vertical: 'Spa', text: 'Premium experience, unprofessional booking — clients expect luxury but get "call us back" or Instagram DM booking.' },
+        { vertical: 'Nails', text: 'High no-show rate dragging the schedule — loyal clients impacted when no-shows leave empty gaps they could\'ve filled.' }
+      ],
+      tip: 'Best when Intel shows strong reviews but recurring complaints about booking experience, availability, or no-shows.'
+    },
+    Control: {
+      items: [
+        { vertical: 'Salon', text: 'Cancellation rate killing revenue — no deposit system, no automated reminders. 8 no-shows last week = £360 gone.' },
+        { vertical: 'Barber', text: 'Team capacity blind spot — owner doesn\'t know which barbers are fully booked vs half-empty. No dashboard, no data.' },
+        { vertical: 'Spa', text: 'Multi-location inconsistency — each branch runs differently. Owner can\'t see what\'s happening without phoning each site.' },
+        { vertical: 'Nails', text: 'No-show rate with no leverage — clients ghost appointments. No deposit, no penalty, no visibility on repeat offenders.' }
+      ],
+      tip: 'Best when Intel shows the business is running without data — no deposits, no reminders, no visibility on cancellations or team performance.'
+    }
+  };
+  const hookExamplesAccount = {
+    Efficiency: {
+      icon: '⚡',
+      items: [
+        { vertical: 'Salon', text: 'Only 40% of services are bookable online — the rest still come through phone. Switching the remaining slots could save 5+ hours a week.' },
+        { vertical: 'Barber', text: 'Appointment reminders are turned off — no-show rate is 3x the average. One toggle cuts that in half.' },
+        { vertical: 'Spa', text: 'Staff rota is still managed in a spreadsheet — Fresha\'s team scheduling is set up but not activated.' },
+        { vertical: 'Nails', text: 'Deposit feature isn\'t enabled — enabling it would cut last-minute cancellations and protect revenue.' }
+      ],
+      tip: 'Best when account data shows underused features, high no-show rates, or manual workarounds for things Fresha already handles.'
+    },
+    Growth: {
+      items: [
+        { vertical: 'Salon', text: 'Booking page gets traffic but conversion rate is below average — tweaking the service menu and photos could lift it 20%.' },
+        { vertical: 'Barber', text: 'No promotions set up for quiet days — Fresha\'s marketing tools could fill empty Tuesday/Wednesday slots.' },
+        { vertical: 'Spa', text: 'Packages aren\'t listed on the booking page — clients can\'t self-serve into higher-value purchases.' },
+        { vertical: 'Nails', text: 'Repeat booking rate is low — automated rebooking prompts could bring clients back 2 weeks sooner on average.' }
+      ],
+      tip: 'Best when account data shows revenue plateaus, low rebooking, unused marketing features, or conversion gaps.'
+    },
+    Reputation: {
+      items: [
+        { vertical: 'Salon', text: 'Auto-review requests are off — turning them on typically adds 3-5 new Google reviews per month.' },
+        { vertical: 'Barber', text: 'Booking page has no photos or team bios — first impressions are hurting conversion from search.' },
+        { vertical: 'Spa', text: 'Client satisfaction has dipped in recent reviews — could be linked to the manual booking errors we\'re seeing in the data.' },
+        { vertical: 'Nails', text: 'Cancellation rate is creating gaps visible on the public booking page — looks like empty availability, not a busy studio.' }
+      ],
+      tip: 'Best when account data shows declining reviews, low review volume, or public booking page issues hurting perception.'
+    },
+    Control: {
+      items: [
+        { vertical: 'Salon', text: 'Owner has 3 locations but only checks reports on one — Fresha\'s multi-location dashboard gives a single view across all sites.' },
+        { vertical: 'Barber', text: 'No visibility on individual barber performance — utilisation data is available but the reports aren\'t set up.' },
+        { vertical: 'Spa', text: 'Revenue reporting is done manually in Excel — Fresha\'s built-in reports already track everything they need.' },
+        { vertical: 'Nails', text: 'No deposit or cancellation policy enforced — owner is absorbing the cost of no-shows without realising the total impact.' }
+      ],
+      tip: 'Best when account data shows the owner lacks visibility — no reports configured, no multi-location view, no cancellation policy in place.'
+    }
+  };
+
+  let currentCallType = 'new';
+
+  function setCallType(type) {
+    currentCallType = type;
+    document.querySelectorAll('#call-type-chips .chip').forEach(c => c.classList.remove('selected'));
+    document.querySelector('[data-calltype="' + type + '"]').classList.add('selected');
+
+    if (type === 'account') {
+      document.getElementById('intel-subtitle').textContent = 'Check account data: usage, adoption, support history';
+      // Decide labels
+      document.getElementById('label-business').textContent = 'Account name';
+      document.getElementById('d-business').placeholder = 'e.g. Radiance Hair Studio (existing Fresha customer)';
+      document.getElementById('label-timing').innerHTML = 'Why now? <span class="field-hint">What triggered this check-in?</span>';
+      document.getElementById('d-timing').placeholder = 'e.g. Usage dropped last month, renewal coming up, new feature they haven\'t activated…';
+      // Intel labels
+      document.getElementById('label-i-google').textContent = 'Account health / usage data';
+      document.getElementById('i-google').placeholder = 'e.g. 60% online booking adoption, 12% no-show rate, reminders turned off…';
+      document.getElementById('label-i-reviews').innerHTML = 'Feature adoption gaps <span class="field-hint">What are they not using?</span>';
+      document.getElementById('i-reviews').placeholder = 'e.g. Deposits not enabled, marketing tools unused, no team scheduling set up…';
+      document.getElementById('label-i-social').textContent = 'Recent support tickets / feedback';
+      document.getElementById('i-social').placeholder = 'e.g. Raised a ticket about calendar sync last week, asked about multi-location…';
+      document.getElementById('label-i-booking').innerHTML = 'Current plan / spend <span class="field-hint">What\'s their Fresha setup?</span>';
+      document.getElementById('i-booking').placeholder = 'e.g. Free plan, 3 team members, 1 location, no marketplace listing';
+      // Land labels
+      document.getElementById('label-l-obj').innerHTML = 'Call objective <span class="field-hint">What specific outcome are you going for?</span>';
+      document.getElementById('l-objective').placeholder = 'e.g. Get them to activate deposits and auto-reminders by end of week';
+      document.getElementById('label-l-fall').innerHTML = 'Fallback objective <span class="field-hint">If the primary doesn\'t land?</span>';
+      document.getElementById('l-fallback').placeholder = 'e.g. Book a 15-min screen share to walk through the feature together';
+    } else {
+      document.getElementById('intel-subtitle').textContent = '60-second scan: Google, website, reviews, socials';
+      // Restore new business labels
+      document.getElementById('label-business').textContent = 'Business name';
+      document.getElementById('d-business').placeholder = 'e.g. Glow Beauty Studio';
+      document.getElementById('label-timing').innerHTML = 'Why now? <span class="field-hint">What makes this the right time to call?</span>';
+      document.getElementById('d-timing').placeholder = 'e.g. Just opened second location, busy season coming up, currently using pen-and-paper booking…';
+      document.getElementById('label-i-google').textContent = 'Google / website findings';
+      document.getElementById('i-google').placeholder = 'e.g. 4.3 stars on Google, 120+ reviews, website has no online booking link…';
+      document.getElementById('label-i-reviews').innerHTML = 'Reviews snapshot <span class="field-hint">Any pain points or praise?</span>';
+      document.getElementById('i-reviews').placeholder = 'e.g. Recurring complaint: hard to get an appointment. Praise: amazing staff';
+      document.getElementById('label-i-social').textContent = 'Social media / other intel';
+      document.getElementById('i-social').placeholder = 'e.g. Active on Instagram, 2k followers, posting promotions manually…';
+      document.getElementById('label-i-booking').innerHTML = 'Current booking method <span class="field-hint">How do they manage appointments today?</span>';
+      document.getElementById('i-booking').placeholder = 'e.g. Phone only, another platform, pen-and-paper';
+      document.getElementById('label-l-obj').innerHTML = 'Call objective <span class="field-hint">What specific outcome are you going for?</span>';
+      document.getElementById('l-objective').placeholder = 'e.g. Book a 15-minute demo for Thursday at 2pm';
+      document.getElementById('label-l-fall').innerHTML = 'Fallback objective <span class="field-hint">If the primary doesn\'t land, what\'s your Plan B?</span>';
+      document.getElementById('l-fallback').placeholder = 'e.g. Get their email to send a 2-minute Fresha overview video';
+    }
+
+    // Re-render hook examples if one is selected
+    const selectedChip = document.querySelector('#angle-chips .chip.selected');
+    if (selectedChip) selectChip(selectedChip);
+  }
+
   function selectChip(chip) {
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#angle-chips .chip').forEach(c => c.classList.remove('selected'));
     chip.classList.add('selected');
+    const hook = chip.dataset.value;
+    const panel = document.getElementById('hook-examples');
+    const examples = currentCallType === 'account' ? hookExamplesAccount : hookExamples;
+    const data = examples[hook];
+    if (data) {
+      panel.innerHTML = '<div class="hook-examples-title">' + hook + ' — angle examples by vertical</div>'
+        + '<div class="hook-examples-grid">'
+        + data.items.map(item => '<div class="hook-example-item"><div class="hook-example-vertical">' + item.vertical + '</div><div class="hook-example-text">' + item.text + '</div></div>').join('')
+        + '</div>'
+        + '<div class="hook-tip">' + data.tip + '</div>';
+      panel.classList.add('visible');
+    }
     updateProgress();
   }
   function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
@@ -394,8 +548,9 @@
     const overlay = document.getElementById('summary-overlay');
     const body = document.getElementById('summary-body');
     const bline = document.getElementById('summary-business-line');
-    bline.textContent = business + (val('d-contact') ? ' \u2014 ' + val('d-contact') : '');
-    const angleChip = document.querySelector('.chip.selected');
+    const typeLabel = currentCallType === 'account' ? 'Account Management' : 'New Business';
+    bline.textContent = typeLabel + ' — ' + business + (val('d-contact') ? ' \u2014 ' + val('d-contact') : '');
+    const angleChip = document.querySelector('#angle-chips .chip.selected');
     const angleName = angleChip ? angleChip.dataset.value : '';
     const checklist = [];
     if (document.getElementById('chk-vertical').checked) checklist.push('Vertical confirmed');
@@ -431,9 +586,10 @@
   function closeSummaryBtn() { document.getElementById('summary-overlay').classList.remove('visible'); }
   function copyPlan() {
     const business = val('d-business') || 'Unnamed Business';
-    const angleChip = document.querySelector('.chip.selected');
+    const angleChip = document.querySelector('#angle-chips .chip.selected');
     const angleName = angleChip ? angleChip.dataset.value : 'Not selected';
-    let text = 'D.I.A.L. PLAN \u2014 ' + business + '\n' + '='.repeat(40) + '\n\n';
+    const typeLabel = currentCallType === 'account' ? 'Account Management' : 'New Business';
+    let text = 'D.I.A.L. PLAN (' + typeLabel + ') \u2014 ' + business + '\n' + '='.repeat(40) + '\n\n';
     text += 'DECIDE\nBusiness: ' + (val('d-business') || '\u2014') + '\nVertical: ' + (val('d-vertical') || '\u2014') + '\nContact: ' + (val('d-contact') || '\u2014') + '\nWhy now: ' + (val('d-timing') || '\u2014') + '\n\n';
     text += 'INTEL\nGoogle/Web: ' + (val('i-google') || '\u2014') + '\nReviews: ' + (val('i-reviews') || '\u2014') + '\nSocial: ' + (val('i-social') || '\u2014') + '\nCurrent booking: ' + (val('i-booking') || '\u2014') + '\n\n';
     text += 'ANGLE\nHook: ' + angleName + '\nWhy: ' + (val('a-why') || '\u2014') + '\nOpener: ' + (val('a-opener') || '\u2014') + '\n\n';
@@ -447,7 +603,9 @@
     document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
     document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
     document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#angle-chips .chip').forEach(c => c.classList.remove('selected'));
+    document.getElementById('hook-examples').classList.remove('visible');
+    setCallType('new');
     updateProgress();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }

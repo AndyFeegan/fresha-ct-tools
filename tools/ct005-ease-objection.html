@@ -5,91 +5,1155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CT005 — Objection Handling | EASE Objection Handler</title>
     <style>
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --fresha-dark: #1a1a2e; --fresha-accent: #6c5ce7; --fresha-accent-light: #a29bfe; --fresha-bg: #f4f3f8; --fresha-white: #ffffff; --fresha-text: #2d2d3d; --fresha-border: #e5e5f0; --ease-empathy: #8b5cf6; --ease-assess: #14b8a6; --ease-solve: #f59e0b; --ease-end: #10b981; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: var(--fresha-bg); color: var(--fresha-text); line-height: 1.6; }
-        header { background: linear-gradient(135deg, var(--fresha-dark) 0%, var(--fresha-accent) 100%); color: var(--fresha-white); padding: 2rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
-        .header-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-        .header-badge { display: inline-block; background: rgba(255, 255, 255, 0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .header-subtitle { opacity: 0.95; font-size: 1rem; }
-        .progress-container { background: var(--fresha-white); padding: 1.5rem 2rem; border-bottom: 2px solid var(--fresha-border); position: sticky; top: 100px; z-index: 99; max-width: 1200px; margin: 0 auto; }
-        .progress-label { font-size: 0.875rem; font-weight: 600; color: var(--fresha-text); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .progress-dots { display: flex; gap: 2rem; justify-content: flex-start; }
-        .progress-item { display: flex; align-items: center; gap: 0.75rem; }
-        .progress-dot { width: 32px; height: 32px; border-radius: 50%; border: 3px solid var(--fresha-border); background: var(--fresha-white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem; transition: all 0.3s ease; }
-        .progress-item.completed .progress-dot { border-color: var(--fresha-accent); background: var(--fresha-accent); color: var(--fresha-white); }
-        .progress-item.active .progress-dot { border-color: var(--fresha-accent); background: var(--fresha-accent-light); color: var(--fresha-white); box-shadow: 0 0 0 4px rgba(162, 155, 254, 0.2); }
-        .progress-text { font-size: 0.875rem; font-weight: 500; color: var(--fresha-text); }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        .objection-section { background: var(--fresha-white); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; border: 2px solid var(--fresha-border); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
-        .section-title { font-size: 1.25rem; font-weight: 700; color: var(--fresha-dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .section-title-icon { font-size: 1.5rem; }
-        .chips-container { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
-        .chip { padding: 0.75rem 1.25rem; border: 2px solid var(--fresha-border); border-radius: 20px; background: var(--fresha-white); cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--fresha-text); transition: all 0.2s ease; }
-        .chip:hover { border-color: var(--fresha-accent); background: var(--fresha-accent-light); color: var(--fresha-white); }
-        .chip.selected { border-color: var(--fresha-accent); background: var(--fresha-accent); color: var(--fresha-white); }
-        textarea, input[type="text"] { width: 100%; padding: 1rem; border: 2px solid var(--fresha-border); border-radius: 8px; font-family: inherit; font-size: 0.95rem; color: var(--fresha-text); resize: vertical; min-height: 80px; transition: border-color 0.2s ease; }
-        textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--fresha-accent); background: rgba(108, 92, 231, 0.02); }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-label { display: block; font-size: 0.95rem; font-weight: 600; color: var(--fresha-text); margin-bottom: 0.5rem; }
-        .form-hint { font-size: 0.85rem; color: #999; margin-top: 0.3rem; font-style: italic; }
-        .ease-section { background: var(--fresha-white); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; border-left: 5px solid; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
-        .ease-section.empathise { border-left-color: var(--ease-empathy); background: linear-gradient(to right, rgba(139, 92, 246, 0.02), transparent); }
-        .ease-section.assess { border-left-color: var(--ease-assess); background: linear-gradient(to right, rgba(20, 184, 166, 0.02), transparent); }
-        .ease-section.solve { border-left-color: var(--ease-solve); background: linear-gradient(to right, rgba(245, 158, 11, 0.02), transparent); }
-        .ease-section.end { border-left-color: var(--ease-end); background: linear-gradient(to right, rgba(16, 185, 129, 0.02), transparent); }
-        .ease-section.empathise .section-title-icon { color: var(--ease-empathy); }
-        .ease-section.assess .section-title-icon { color: var(--ease-assess); }
-        .ease-section.solve .section-title-icon { color: var(--ease-solve); }
-        .ease-section.end .section-title-icon { color: var(--ease-end); }
-        .checklist { background: rgba(0, 0, 0, 0.02); border-radius: 8px; padding: 1.25rem; margin-top: 1.5rem; }
-        .checklist-title { font-size: 0.9rem; font-weight: 600; color: var(--fresha-text); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .checklist-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.9rem; }
-        .checklist-item:last-child { margin-bottom: 0; }
-        .checkbox-custom { width: 20px; height: 20px; border: 2px solid var(--fresha-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; margin-top: 2px; transition: all 0.2s ease; }
-        .checklist-item input[type="checkbox"]:checked + .checkbox-custom { background: var(--fresha-accent); border-color: var(--fresha-accent); }
-        .checklist-item input[type="checkbox"]:checked + .checkbox-custom::after { content: '✓'; color: var(--fresha-white); font-weight: bold; font-size: 0.9rem; }
-        .checklist-item input[type="checkbox"] { display: none; }
-        .checklist-label { cursor: pointer; flex: 1; color: var(--fresha-text); }
-        .summary-section { background: var(--fresha-dark); color: var(--fresha-white); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
-        .summary-section h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; }
-        .summary-flow { display: grid; gap: 1.5rem; }
-        .summary-step { background: rgba(255, 255, 255, 0.1); border-left: 4px solid var(--fresha-accent); padding: 1rem; border-radius: 6px; }
-        .summary-step-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--fresha-accent-light); }
-        .summary-step-content { font-size: 0.95rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9); white-space: pre-wrap; word-break: break-word; }
-        .summary-empty { text-align: center; padding: 2rem; opacity: 0.7; }
-        .button-group { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
-        button { padding: 0.875rem 1.5rem; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-primary { background: var(--fresha-accent); color: var(--fresha-white); }
-        .btn-primary:hover { background: #5a4ab8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3); }
-        .btn-secondary { background: var(--fresha-border); color: var(--fresha-text); }
-        .btn-secondary:hover { background: #ddd9f0; }
-        @media (max-width: 768px) { .container { padding: 1rem; } h1 { font-size: 1.5rem; } .progress-dots { gap: 1rem; } .progress-dot { width: 28px; height: 28px; font-size: 0.7rem; } .progress-text { display: none; } .chips-container { gap: 0.75rem; } .chip { font-size: 0.85rem; padding: 0.6rem 1rem; } .button-group { flex-direction: column; } button { width: 100%; } }
+        :root {
+            --fresha-dark: #1a1a2e;
+            --fresha-accent: #6c5ce7;
+            --fresha-accent-light: #a29bfe;
+            --fresha-bg: #f4f3f8;
+            --fresha-white: #ffffff;
+            --fresha-text: #2d3436;
+            --fresha-muted: #636e72;
+            --fresha-border: #dfe6e9;
+            --fresha-success: #00b894;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --ease-empathy: #8b5cf6;
+            --ease-assess: #14b8a6;
+            --ease-solve: #f59e0b;
+            --ease-end: #10b981;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+            background-attachment: fixed;
+            color: var(--fresha-text);
+            line-height: 1.6;
+        }
+        .header {
+            background: #0a0a0f;
+            background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
+            color: var(--fresha-white);
+            padding: 28px 24px 24px;
+            text-align: center;
+        }
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #3b2d8b;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(59, 45, 139, 0.4);
+        }
+        .header-logo {
+            display: block;
+            margin: 0 auto 16px;
+            height: 24px;
+            opacity: 0.9;
+        }
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+        .header h1 .framework-letter {
+            color: var(--fresha-accent-light);
+        }
+        .header-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.65);
+            margin: 0;
+        }
+        .progress-bar {
+            background: var(--fresha-white);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--fresha-border);
+            box-shadow: var(--shadow-sm);
+        }
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .progress-connector {
+            height: 2px;
+            background: var(--fresha-border);
+            max-width: 40px;
+            width: 40px;
+            flex-shrink: 0;
+        }
+        .progress-item:last-child .progress-connector {
+            display: none;
+        }
+        .progress-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            background: var(--fresha-border);
+            color: var(--fresha-muted);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .progress-item.completed .progress-dot {
+            background: var(--fresha-success);
+            color: var(--fresha-white);
+        }
+        .progress-item.active .progress-dot {
+            background: var(--fresha-accent);
+            color: var(--fresha-white);
+        }
+        .progress-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--fresha-muted);
+            display: inline-block;
+            margin-left: 4px;
+        }
+        @media (max-width: 600px) {
+            .progress-label {
+                display: none;
+            }
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 16px 100px;
+        }
+        .objection-section {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--fresha-border);
+            box-shadow: var(--shadow-sm);
+        }
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--fresha-text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title .framework-letter {
+            color: var(--fresha-accent);
+        }
+        .section-title-icon {
+            font-size: 20px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .chip {
+            padding: 7px 14px;
+            border: 1.5px solid var(--fresha-border);
+            border-radius: 20px;
+            background: var(--fresha-white);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--fresha-text);
+            transition: all 0.2s ease;
+        }
+        .chip:hover {
+            border-color: var(--fresha-accent-light);
+            color: var(--fresha-accent);
+        }
+        .chip.selected {
+            border-color: var(--fresha-accent);
+            background: var(--fresha-accent);
+            color: var(--fresha-white);
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--fresha-border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--fresha-text);
+            resize: vertical;
+            min-height: 70px;
+            transition: border-color 0.2s ease;
+        }
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--fresha-accent);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fresha-text);
+            margin-bottom: 6px;
+        }
+        .form-hint {
+            font-size: 12px;
+            color: var(--fresha-muted);
+            margin-top: 4px;
+            font-weight: 400;
+        }
+        .ease-section {
+            background: var(--fresha-white);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--fresha-border);
+            border-left: 5px solid;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        .ease-section.empathise {
+            border-left-color: var(--ease-empathy);
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.02), transparent);
+        }
+        .ease-section.assess {
+            border-left-color: var(--ease-assess);
+            background: linear-gradient(to right, rgba(20, 184, 166, 0.02), transparent);
+        }
+        .ease-section.solve {
+            border-left-color: var(--ease-solve);
+            background: linear-gradient(to right, rgba(245, 158, 11, 0.02), transparent);
+        }
+        .ease-section.end {
+            border-left-color: var(--ease-end);
+            background: linear-gradient(to right, rgba(16, 185, 129, 0.02), transparent);
+        }
+        .section-title-icon { color: white; background: var(--fresha-accent); width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; }
+        .checklist {
+            list-style: none;
+            margin-top: 16px;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f4;
+            font-size: 14px;
+        }
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--fresha-accent);
+            cursor: pointer;
+        }
+        .checklist-label {
+            cursor: pointer;
+            flex: 1;
+            color: var(--fresha-text);
+        }
+        .summary-section {
+            background: linear-gradient(135deg, var(--fresha-dark) 0%, #2d2d5e 100%);
+            color: var(--fresha-white);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .summary-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .summary-flow {
+            display: grid;
+            gap: 12px;
+        }
+        .summary-step {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--fresha-accent);
+            padding: 12px 16px;
+            border-radius: 8px;
+        }
+        .summary-step-title {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--fresha-accent-light);
+        }
+        .summary-step-content {
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .summary-empty {
+            text-align: center;
+            padding: 24px;
+            opacity: 0.7;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: var(--fresha-accent);
+            color: var(--fresha-white);
+        }
+        .btn-primary:hover {
+            background: #5b4dc7;
+        }
+        .btn-secondary {
+            background: var(--fresha-white);
+            color: var(--fresha-text);
+            border: 1.5px solid var(--fresha-border);
+        }
+        .btn-secondary:hover {
+            border-color: var(--fresha-accent-light);
+            color: var(--fresha-accent);
+        }
+        .section-description {
+            font-size: 13px;
+            color: var(--fresha-muted);
+            margin-bottom: 16px;
+        }
+
+        /* ── Training enhancements ── */
+        .warning-card {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-left: 4px solid #e53e3e;
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            animation: fadeInGuide 0.3s ease;
+        }
+        .warning-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #c53030;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .warning-card p {
+            font-size: 13px;
+            color: #742a2a;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+        .warning-card .bad-example {
+            background: rgba(229, 62, 62, 0.08);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 6px 0;
+            font-size: 13px;
+            color: #9b2c2c;
+        }
+        .warning-card .good-example {
+            background: rgba(56, 161, 105, 0.08);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 6px 0;
+            font-size: 13px;
+            color: #276749;
+        }
+        .training-tip {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #166534;
+            line-height: 1.5;
+            animation: fadeInGuide 0.3s ease;
+        }
+        .training-tip strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #15803d;
+        }
+        .mindset-card {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border: 1px solid #c7d2fe;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeInGuide 0.3s ease;
+        }
+        .mindset-card h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #4338ca;
+            margin-bottom: 8px;
+        }
+        .mindset-card p {
+            font-size: 14px;
+            color: #4338ca;
+            line-height: 1.5;
+        }
+        .surface-real-card {
+            background: var(--fresha-white);
+            border: 1px solid var(--fresha-border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            display: none;
+            animation: fadeInGuide 0.3s ease;
+        }
+        .surface-real-card.visible {
+            display: block;
+        }
+        .surface-real-card h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--fresha-text);
+            margin-bottom: 10px;
+        }
+        .surface-real-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .surface-label {
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 60px;
+            text-align: center;
+        }
+        .real-label {
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 60px;
+            text-align: center;
+        }
+        .surface-real-text {
+            font-size: 13px;
+            color: var(--fresha-text);
+        }
+        .worked-example {
+            background: #fafafa;
+            border: 1px solid var(--fresha-border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            display: none;
+            animation: fadeInGuide 0.3s ease;
+        }
+        .worked-example.visible {
+            display: block;
+        }
+        .worked-example h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--fresha-accent);
+            margin-bottom: 12px;
+        }
+        .worked-step {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .worked-step:last-child { margin-bottom: 0; }
+        .worked-step-label {
+            font-weight: 700;
+            flex-shrink: 0;
+            width: 70px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding-top: 2px;
+        }
+        .worked-step-label.e-label { color: var(--ease-empathy); }
+        .worked-step-label.a-label { color: var(--ease-assess); }
+        .worked-step-label.s-label { color: var(--ease-solve); }
+        .worked-step-label.end-label { color: var(--ease-end); }
+        .worked-step-text {
+            color: var(--fresha-text);
+        }
+        .step-example {
+            background: #f8f7ff;
+            border: 1px solid #e8e5fc;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 10px;
+            display: none;
+            animation: fadeInGuide 0.3s ease;
+        }
+        .step-example.visible {
+            display: block;
+        }
+        .step-example p {
+            font-size: 13px;
+            color: var(--fresha-text);
+            line-height: 1.5;
+            margin-bottom: 4px;
+        }
+        .step-example p:last-child { margin-bottom: 0; }
+        .step-example .example-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--fresha-accent);
+            margin-bottom: 6px;
+        }
+        .loop-back-card {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 4px solid #f59e0b;
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-top: 12px;
+            animation: fadeInGuide 0.3s ease;
+        }
+        .loop-back-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .loop-back-card p {
+            font-size: 13px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+        .spot-mistakes {
+            background: var(--fresha-white);
+            border: 1px solid var(--fresha-border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .spot-mistakes h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--fresha-text);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .mistake-item {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .mistake-item:last-child { margin-bottom: 0; }
+        .mistake-item:hover { box-shadow: var(--shadow-sm); }
+        .mistake-scenario {
+            font-size: 13px;
+            color: #742a2a;
+            line-height: 1.5;
+            font-style: italic;
+        }
+        .mistake-reveal {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #fed7d7;
+        }
+        .mistake-reveal.visible { display: block; }
+        .mistake-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .mistake-label.error { color: #c53030; }
+        .mistake-label.fix { color: #276749; }
+        .mistake-fix {
+            font-size: 13px;
+            color: #276749;
+            line-height: 1.5;
+            background: rgba(56, 161, 105, 0.08);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 6px;
+        }
+        .mistake-error-text {
+            font-size: 13px;
+            color: #9b2c2c;
+            line-height: 1.5;
+        }
+        @keyframes fadeInGuide {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 16px; }
+            .header h1 { font-size: 20px; }
+            .progress-dots { gap: 4px; }
+            .progress-connector { max-width: 24px; width: 24px; }
+            .progress-dot { width: 28px; height: 28px; font-size: 11px; }
+            .progress-label { display: none; }
+            .chips-container { gap: 6px; }
+            .chip { font-size: 12px; padding: 6px 12px; }
+            .button-group { flex-direction: column; }
+            button { width: 100%; }
+            .surface-real-row { flex-direction: column; gap: 4px; align-items: flex-start; }
+        }
+        @media print {
+            .progress-bar, .button-group { display: none !important; }
+            .ease-section, .objection-section, .summary-section { box-shadow: none; border: 1px solid var(--fresha-border); }
+            body { background-color: var(--fresha-white); }
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover { color: white; }
+        .back-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
-    <header><div class="header-content"><div class="header-badge">CT005 Programme</div><h1>Objection Handling</h1><p class="header-subtitle">EASE Objection Handler — Master handling objections with the EASE framework</p></div></header>
-    <div class="progress-container"><div class="progress-label">Framework Progress</div><div class="progress-dots"><div class="progress-item" id="progress-e"><div class="progress-dot">E</div><span class="progress-text">Empathise</span></div><div class="progress-item" id="progress-a"><div class="progress-dot">A</div><span class="progress-text">Assess</span></div><div class="progress-item" id="progress-s"><div class="progress-dot">S</div><span class="progress-text">Solve</span></div><div class="progress-item" id="progress-e2"><div class="progress-dot">E</div><span class="progress-text">End</span></div></div></div>
+    <div class="header">
+        <a href="sales-journey.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Sales Operating System</a>
+        <img class="header-logo" src="data:image/png;base64,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" alt="fresha">
+        <div class="header-badge">CT005 PROGRAMME</div>
+        <h1><span class="framework-letter">E</span>.<span class="framework-letter">A</span>.<span class="framework-letter">S</span>.<span class="framework-letter">E</span>. Objection Handler</h1>
+        <p class="header-subtitle">Turn objections into information — find the real concern and solve it</p>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-dots">
+            <div class="progress-item" id="progress-e">
+                <div class="progress-dot">E</div>
+                <span class="progress-label">Empathise</span>
+            </div>
+            <div class="progress-connector"></div>
+            <div class="progress-item" id="progress-a">
+                <div class="progress-dot">A</div>
+                <span class="progress-label">Assess</span>
+            </div>
+            <div class="progress-connector"></div>
+            <div class="progress-item" id="progress-s">
+                <div class="progress-dot">S</div>
+                <span class="progress-label">Solve</span>
+            </div>
+            <div class="progress-connector"></div>
+            <div class="progress-item" id="progress-e2">
+                <div class="progress-dot">E</div>
+                <span class="progress-label">End</span>
+            </div>
+        </div>
+    </div>
     <div class="container">
-        <div class="objection-section"><h2 class="section-title"><span class="section-title-icon">🎯</span>The Objection</h2><p style="margin-bottom: 1rem; font-size: 0.95rem; color: #666;">Select a common objection or type the exact one you heard:</p><div class="chips-container"><div class="chip" onclick="selectObjection('Too expensive')">Too expensive</div><div class="chip" onclick="selectObjection('Already have a system')">Already have a system</div><div class="chip" onclick="selectObjection('Bad timing')">Bad timing</div><div class="chip" onclick="selectObjection('Need to ask my partner')">Need to ask my partner</div><div class="chip" onclick="selectObjection('Send me info')">Send me info</div></div><div class="form-group"><label class="form-label">Custom Objection</label><textarea id="objectionInput" placeholder="Or type the exact objection you heard..."></textarea><p class="form-hint">Leave blank to use one of the common objections above</p></div></div>
-        <div class="ease-section empathise"><h2 class="section-title"><span class="section-title-icon">💜</span>E — Empathise</h2><p style="margin-bottom: 1.5rem; font-size: 0.95rem; color: #666;">Acknowledge the concern without agreeing or dismissing</p><div class="form-group"><label class="form-label">Your Response</label><textarea id="empathiseResponse" placeholder="e.g. 'I completely understand — price is always something to consider carefully, especially when you're already running a busy salon.'"></textarea></div><div class="checklist"><div class="checklist-title">Have you...</div><div class="checklist-item"><input type="checkbox" id="check-e1"><div class="checkbox-custom"></div><label class="checklist-label" for="check-e1">Acknowledged without agreeing</label></div><div class="checklist-item"><input type="checkbox" id="check-e2"><div class="checkbox-custom"></div><label class="checklist-label" for="check-e2">Didn't dismiss or counter-argue</label></div><div class="checklist-item"><input type="checkbox" id="check-e3"><div class="checkbox-custom"></div><label class="checklist-label" for="check-e3">Lowered defensiveness</label></div></div></div>
-        <div class="ease-section assess"><h2 class="section-title"><span class="section-title-icon">🔍</span>A — Assess</h2><p style="margin-bottom: 1.5rem; font-size: 0.95rem; color: #666;">Find the real concern underneath the surface objection</p><div class="form-group"><label class="form-label">Probing Question</label><textarea id="assessQuestion" placeholder="e.g. 'When you say too expensive — is it the monthly cost overall, or is it more about whether the return justifies it?'"></textarea></div><div class="form-group"><label class="form-label">What's the Real Concern?</label><textarea id="assessConcern" placeholder="e.g. They're worried about ROI, not the absolute price"></textarea></div></div>
-        <div class="ease-section solve"><h2 class="section-title"><span class="section-title-icon">💡</span>S — Solve</h2><p style="margin-bottom: 1.5rem; font-size: 0.95rem; color: #666;">Address with evidence, not argument</p><div class="form-group"><label class="form-label">Evidence / Solution</label><textarea id="solveEvidence" placeholder="e.g. 'Our salons typically recover the monthly cost in the first week through reduced no-shows alone. Sarah at Glow Studio saved £800 in her first month.'"></textarea></div><div class="form-group"><label class="form-label">Proof Type</label><div class="chips-container"><div class="chip" onclick="selectProofType(this, 'Case study')">Case study</div><div class="chip" onclick="selectProofType(this, 'Data point')">Data point</div><div class="chip" onclick="selectProofType(this, 'Social proof')">Social proof</div><div class="chip" onclick="selectProofType(this, 'ROI calculation')">ROI calculation</div></div></div><input type="hidden" id="proofType"></div>
-        <div class="ease-section end"><h2 class="section-title"><span class="section-title-icon">✅</span>E — End</h2><p style="margin-bottom: 1.5rem; font-size: 0.95rem; color: #666;">Move forward with a clear next step</p><div class="form-group"><label class="form-label">Closing Check</label><textarea id="endClosing" placeholder="e.g. 'With that addressed, does the plan still feel like the right fit for solving the booking gaps you mentioned?'"></textarea></div><div class="form-group"><label class="form-label">Next Step</label><textarea id="endNextStep" placeholder="e.g. 'Great — shall I get your trial set up this afternoon?'"></textarea></div></div>
-        <div class="summary-section"><h3>📋 Objection Handling Flow</h3><div class="summary-flow" id="summaryFlow"><div class="summary-empty">Your objection-handling flow will appear here as you fill in the sections above</div></div></div>
-        <div class="button-group"><button class="btn-primary" onclick="generateSummary()">Generate Script</button><button class="btn-secondary" onclick="clearAll()">Clear All</button></div>
+
+        <!-- Mindset card -->
+        <div class="mindset-card">
+            <h4>Objections are information, not attacks</h4>
+            <p>When a prospect objects, they're telling you what they need to hear before they can say yes. Your job is to find the real concern underneath.</p>
+        </div>
+
+        <!-- Objection selector -->
+        <div class="objection-section">
+            <h2 class="section-title">The Objection</h2>
+            <p class="section-description">Select a common objection or type the exact one you heard:</p>
+            <div class="chips-container" id="objection-chips">
+                <div class="chip" onclick="selectObjection('Too expensive')">Too expensive</div>
+                <div class="chip" onclick="selectObjection('Already have a system')">Already have a system</div>
+                <div class="chip" onclick="selectObjection('Bad timing')">Bad timing</div>
+                <div class="chip" onclick="selectObjection('Need to ask my partner')">Need to ask my partner</div>
+                <div class="chip" onclick="selectObjection('Send me info')">Send me info</div>
+            </div>
+
+            <!-- Surface vs Real concern card (appears on chip select) -->
+            <div class="surface-real-card" id="surfaceRealCard">
+                <h4>What's really going on?</h4>
+                <div class="surface-real-row">
+                    <span class="surface-label">Surface</span>
+                    <span class="surface-real-text" id="surfaceText"></span>
+                </div>
+                <div class="surface-real-row">
+                    <span class="real-label">Real</span>
+                    <span class="surface-real-text" id="realText"></span>
+                </div>
+            </div>
+
+            <!-- Worked example (appears on chip select) -->
+            <div class="worked-example" id="workedExample">
+                <h4 id="workedExampleTitle">Worked Example</h4>
+                <div id="workedExampleContent"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Custom Objection</label>
+                <textarea id="objectionInput" placeholder="Or type the exact objection you heard..."></textarea>
+                <p class="form-hint">Leave blank to use one of the common objections above</p>
+            </div>
+        </div>
+
+        <!-- E — Empathise -->
+        <div class="ease-section empathise">
+            <h2 class="section-title"><span class="section-title-icon">E</span> Empathise</h2>
+            <p class="section-description">Acknowledge the concern without agreeing or dismissing</p>
+            <div class="form-group">
+                <label class="form-label">Your Response</label>
+                <textarea id="empathiseResponse" placeholder="e.g. 'I completely understand — price is always something to consider carefully, especially when you're already running a busy salon.'"></textarea>
+            </div>
+            <div class="step-example" id="empathiseExample"></div>
+            <ul class="checklist">
+                <li class="checklist-title" style="list-style: none; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--fresha-text); margin-bottom: 8px; padding: 0;">Have you...</li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="check-e1">
+                    <label class="checklist-label" for="check-e1">Acknowledged without agreeing</label>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="check-e2">
+                    <label class="checklist-label" for="check-e2">Didn't dismiss or counter-argue</label>
+                </li>
+                <li class="checklist-item">
+                    <input type="checkbox" id="check-e3">
+                    <label class="checklist-label" for="check-e3">Lowered defensiveness</label>
+                </li>
+            </ul>
+
+            <!-- But Trap warning -->
+            <div class="warning-card">
+                <h4>The "But" Trap</h4>
+                <p>Saying "I understand, <strong>but</strong>..." erases everything you just empathised with. The prospect hears: "I don't really care what you think."</p>
+                <div class="bad-example">✗ "I understand, but let me show you the ROI..."</div>
+                <div class="good-example">✓ "That makes total sense. Can I ask — when you say too expensive, is it the monthly cost or more about whether the return justifies it?"</div>
+            </div>
+
+            <div class="training-tip">
+                <strong>Training Tip</strong>
+                Match their energy. If they sound frustrated, slow down. If they sound unsure, be warm. The goal is to make them feel heard before you ask anything.
+            </div>
+        </div>
+
+        <!-- A — Assess -->
+        <div class="ease-section assess">
+            <h2 class="section-title"><span class="section-title-icon">A</span> Assess</h2>
+            <p class="section-description">Find the real concern underneath the surface objection</p>
+            <div class="form-group">
+                <label class="form-label">Probing Question</label>
+                <textarea id="assessQuestion" placeholder="e.g. 'When you say too expensive — is it the monthly cost overall, or is it more about whether the return justifies it?'"></textarea>
+            </div>
+            <div class="step-example" id="assessExample"></div>
+            <div class="form-group">
+                <label class="form-label">What's the Real Concern?</label>
+                <textarea id="assessConcern" placeholder="e.g. They're worried about ROI, not the absolute price"></textarea>
+            </div>
+            <div class="training-tip">
+                <strong>Training Tip</strong>
+                If you're not sure you've found the real concern, ask one more question. It's better to spend 30 seconds here than to Solve the wrong problem and lose the deal.
+            </div>
+        </div>
+
+        <!-- S — Solve -->
+        <div class="ease-section solve">
+            <h2 class="section-title"><span class="section-title-icon">S</span> Solve</h2>
+            <p class="section-description">Address the real concern with evidence, not argument</p>
+            <div class="form-group">
+                <label class="form-label">Evidence / Solution</label>
+                <textarea id="solveEvidence" placeholder="e.g. 'Our salons typically recover the monthly cost in the first week through reduced no-shows alone. Sarah at Glow Studio saved &pound;800 in her first month.'"></textarea>
+            </div>
+            <div class="step-example" id="solveExample"></div>
+            <div class="form-group">
+                <label class="form-label">Proof Type</label>
+                <div class="chips-container" id="proof-chips">
+                    <div class="chip" onclick="selectProofType(this, 'Case study')">Case study</div>
+                    <div class="chip" onclick="selectProofType(this, 'Data point')">Data point</div>
+                    <div class="chip" onclick="selectProofType(this, 'Social proof')">Social proof</div>
+                    <div class="chip" onclick="selectProofType(this, 'ROI calculation')">ROI calculation</div>
+                </div>
+            </div>
+            <input type="hidden" id="proofType">
+
+            <!-- Loop-back technique -->
+            <div class="loop-back-card">
+                <h4>The Loop-Back Technique</h4>
+                <p>If the prospect re-objects after your Solve (e.g. "Yeah but it's still a lot of money..."), don't re-solve. Go back to <strong>Assess</strong> — you haven't found the real concern yet. Ask: "Help me understand — what would 'worth it' look like for you?"</p>
+            </div>
+
+            <div class="training-tip">
+                <strong>Training Tip</strong>
+                Solve the <em>real</em> concern, not the surface objection. If they said "too expensive" but the real concern is ROI, show them the maths — don't offer a discount.
+            </div>
+        </div>
+
+        <!-- E — End -->
+        <div class="ease-section end">
+            <h2 class="section-title"><span class="section-title-icon">E</span> End</h2>
+            <p class="section-description">Check the objection is resolved, then move forward with a clear next step</p>
+            <div class="form-group">
+                <label class="form-label">Closing Check</label>
+                <textarea id="endClosing" placeholder="e.g. 'Does that address your concern about the cost?'"></textarea>
+            </div>
+            <div class="step-example" id="endExample"></div>
+            <div class="form-group">
+                <label class="form-label">Next Step</label>
+                <textarea id="endNextStep" placeholder="e.g. 'Great — shall I get your trial set up this afternoon?'"></textarea>
+            </div>
+            <div class="training-tip">
+                <strong>Training Tip</strong>
+                Always end with a booked next step. "I'll send you some info" is not a next step — it's a dead end. Book a time, set up a trial, schedule a follow-up call.
+            </div>
+        </div>
+
+        <!-- Spot the Mistake -->
+        <div class="spot-mistakes">
+            <h3>Spot the Mistake</h3>
+            <p style="font-size: 13px; color: var(--fresha-muted); margin-bottom: 14px;">Click each scenario to reveal what went wrong and how to fix it.</p>
+
+            <div class="mistake-item" onclick="toggleMistake(this)">
+                <div class="mistake-scenario">"That's too expensive." — "I understand, but if you look at the ROI, it actually pays for itself in the first month..."</div>
+                <div class="mistake-reveal">
+                    <div class="mistake-label error">Mistake: Argued instead of empathising</div>
+                    <div class="mistake-error-text">Jumped straight from Empathise to Solve. Skipped Assess entirely — never found out what "too expensive" actually means to this prospect.</div>
+                    <div class="mistake-fix"><span class="mistake-label fix">Better</span> "That's a fair concern — cost matters. Can I ask: is it the monthly fee that feels high, or is it more about whether you'd see a return on it?"</div>
+                </div>
+            </div>
+
+            <div class="mistake-item" onclick="toggleMistake(this)">
+                <div class="mistake-scenario">"We already use [competitor]." — "Tell me about that — what do you like about them?" — "It does most of what we need." — "Well, Fresha has online booking, payments, marketing tools..."</div>
+                <div class="mistake-reveal">
+                    <div class="mistake-label error">Mistake: Skipped Assess, jumped to feature dump</div>
+                    <div class="mistake-error-text">The Assess question was good, but the answer ("does most of what we need") wasn't explored. What's the "most"? What's missing? The rep moved to Solve without finding the real concern — switching risk.</div>
+                    <div class="mistake-fix"><span class="mistake-label fix">Better</span> "So it does most of what you need — what's the bit it doesn't cover? And if that gap costs you clients or time, how does that feel?"</div>
+                </div>
+            </div>
+
+            <div class="mistake-item" onclick="toggleMistake(this)">
+                <div class="mistake-scenario">"It's not the right time." — "I totally get it, things are busy. Let me just set up a trial and you can look when you're ready." — [prospect never looks]</div>
+                <div class="mistake-reveal">
+                    <div class="mistake-label error">Mistake: Ended without a real next step</div>
+                    <div class="mistake-error-text">The rep empathised and skipped straight to End — no Assess (what's taking priority?), no Solve (how Fresha fits around it). "Look when you're ready" is not a commitment.</div>
+                    <div class="mistake-fix"><span class="mistake-label fix">Better</span> "Totally understand — what's taking priority right now?" Then solve around it: "Most of our clients set it up in 20 minutes during a quiet afternoon. Could we book a slot next Thursday to do it together?"</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-section">
+            <h3>Objection Handling Flow</h3>
+            <div class="summary-flow" id="summaryFlow">
+                <div class="summary-empty">Your objection-handling flow will appear here as you fill in the sections above</div>
+            </div>
+        </div>
+        <div class="button-group">
+            <button class="btn-primary" onclick="generateSummary()">Generate Script</button>
+            <button class="btn-secondary" onclick="copyScript()">Copy to Clipboard</button>
+            <button class="btn-secondary" onclick="clearAll()">Clear All</button>
+        </div>
     </div>
     <script>
-        function selectObjection(objection) { document.getElementById('objectionInput').value = objection; document.querySelectorAll('.objection-section .chip').forEach(chip => { chip.classList.toggle('selected', chip.textContent.trim() === objection); }); }
-        function selectProofType(element, type) { document.querySelectorAll('.solve .chip').forEach(chip => chip.classList.remove('selected')); element.classList.add('selected'); document.getElementById('proofType').value = type; }
-        function updateProgress() { const eHas = document.getElementById('empathiseResponse').value.trim().length > 0; const aHas = document.getElementById('assessQuestion').value.trim().length > 0 && document.getElementById('assessConcern').value.trim().length > 0; const sHas = document.getElementById('solveEvidence').value.trim().length > 0; const endHas = document.getElementById('endClosing').value.trim().length > 0 && document.getElementById('endNextStep').value.trim().length > 0; updateDot('progress-e', eHas); updateDot('progress-a', aHas); updateDot('progress-s', sHas); updateDot('progress-e2', endHas); }
-        function updateDot(id, has) { const el = document.getElementById(id); if (has) { el.classList.add('completed'); el.classList.remove('active'); } else { el.classList.remove('completed'); } }
-        function generateSummary() { const obj = document.getElementById('objectionInput').value.trim() || 'Objection not specified'; const emp = document.getElementById('empathiseResponse').value.trim(); const aq = document.getElementById('assessQuestion').value.trim(); const ac = document.getElementById('assessConcern').value.trim(); const sol = document.getElementById('solveEvidence').value.trim(); const pt = document.getElementById('proofType').value; const ec = document.getElementById('endClosing').value.trim(); const en = document.getElementById('endNextStep').value.trim(); const sf = document.getElementById('summaryFlow'); let html = `<div class="summary-step" style="border-left-color: #6c5ce7;"><div class="summary-step-title">🎯 Objection Received</div><div class="summary-step-content">${obj}</div></div>`; if (emp) html += `<div class="summary-step"><div class="summary-step-title">💜 You (Empathise)</div><div class="summary-step-content">${emp}</div></div>`; if (aq) html += `<div class="summary-step"><div class="summary-step-title">🔍 You (Assess)</div><div class="summary-step-content">${aq}</div></div>`; if (ac) html += `<div class="summary-step" style="border-left-color: #14b8a6; opacity: 0.85;"><div class="summary-step-title">Real Concern Identified</div><div class="summary-step-content">${ac}</div></div>`; if (sol) html += `<div class="summary-step"><div class="summary-step-title">💡 You (Solve) ${pt ? '— ' + pt : ''}</div><div class="summary-step-content">${sol}</div></div>`; if (ec) html += `<div class="summary-step"><div class="summary-step-title">✅ You (Closing Check)</div><div class="summary-step-content">${ec}</div></div>`; if (en) html += `<div class="summary-step"><div class="summary-step-title">Next Step</div><div class="summary-step-content">${en}</div></div>`; sf.innerHTML = html || '<div class="summary-empty">No content to display</div>'; }
-        function clearAll() { document.getElementById('objectionInput').value = ''; document.getElementById('empathiseResponse').value = ''; document.querySelectorAll('#check-e1, #check-e2, #check-e3').forEach(cb => cb.checked = false); document.getElementById('assessQuestion').value = ''; document.getElementById('assessConcern').value = ''; document.getElementById('solveEvidence').value = ''; document.getElementById('proofType').value = ''; document.getElementById('endClosing').value = ''; document.getElementById('endNextStep').value = ''; document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('selected')); document.getElementById('summaryFlow').innerHTML = '<div class="summary-empty">Your objection-handling flow will appear here as you fill in the sections above</div>'; updateProgress(); }
-        ['objectionInput','empathiseResponse','assessQuestion','assessConcern','solveEvidence','endClosing','endNextStep'].forEach(id => { document.getElementById(id).addEventListener('input', updateProgress); });
-        document.querySelectorAll('#check-e1, #check-e2, #check-e3').forEach(cb => { cb.addEventListener('change', updateProgress); });
-        document.querySelectorAll('.checklist-label').forEach(label => { label.addEventListener('click', function(e) { if (e.target !== this.querySelector('input')) { this.closest('.checklist-item').querySelector('input').click(); } }); });
+        // ── Surface vs Real concern mapping ──
+        const objectionData = {
+            'Too expensive': {
+                surface: '"Too expensive"',
+                real: "They don't see the value yet — or they're comparing to the wrong thing",
+                empathise: "That makes total sense — you've got to be careful where you invest, especially when you're already juggling costs.",
+                assess: "When you say too expensive — is it the monthly fee itself, or is it more about whether you'd see a return that justifies it?",
+                solve: "Most of our partners recover the subscription cost in the first week through fewer no-shows alone. Sarah at Glow Studio was losing about 15 appointments a month to no-shows — that stopped within two weeks of going live with automated reminders.",
+                end: "Does that change how the cost feels? If so, shall we get your trial running this afternoon so you can see the no-show impact yourself?",
+                workedTitle: "Worked Example: Price Objection"
+            },
+            'Already have a system': {
+                surface: '"Already have a system"',
+                real: "Switching feels risky — they fear disruption, data loss, or having to retrain the team",
+                empathise: "That makes sense — if something's working, why change it? Nobody wants the hassle of a switch for no reason.",
+                assess: "What would you say it does really well? And is there anything it doesn't quite cover that you've learned to work around?",
+                solve: "Most of our partners who switched said the same thing — the old system worked 'well enough'. But once they saw what 'well enough' was actually costing them in workarounds and missed revenue, the switch made sense. And we handle the migration for you — client data, appointment history, everything comes across.",
+                end: "Does knowing we handle the migration take some of the risk out of it? Shall I show you exactly how the switch works — it takes about 20 minutes?",
+                workedTitle: "Worked Example: Incumbent System"
+            },
+            'Bad timing': {
+                surface: '"Not the right time"',
+                real: "Something else has their attention — or they don't see enough urgency to act now",
+                empathise: "I hear you — there's never a perfect time when you're running a busy business.",
+                assess: "What's taking priority right now? Is it a seasonal thing, or is there something specific going on?",
+                solve: "That's exactly why most of our partners start now rather than later — the setup takes about 20 minutes, and once it's running, it saves time rather than adding to your plate. If you're heading into a busy season, that's when automated reminders and online booking earn their keep.",
+                end: "Could we carve out 20 minutes next Thursday to get you set up before things get busier? That way it's working for you when you need it most.",
+                workedTitle: "Worked Example: Timing Objection"
+            },
+            'Need to ask my partner': {
+                surface: '"Need to ask my partner"',
+                real: "They're not confident enough in the value to champion it internally — or they genuinely need buy-in",
+                empathise: "Of course — big decisions should be made together. Makes total sense.",
+                assess: "What do you think their main question will be? Is it likely to be about the cost, the features, or just the idea of changing how you do things?",
+                solve: "Most partners tell us the biggest question is 'what does it actually save us?' — I can send you a one-page summary showing the time and cost savings based on businesses your size. Or, even better, I could jump on a quick 10-minute call with both of you to answer questions directly.",
+                end: "Shall I set up that 10-minute call with both of you? When would be a good time this week?",
+                workedTitle: "Worked Example: Partner Decision"
+            },
+            'Send me info': {
+                surface: '"Just send me some info"',
+                real: "They want to get off the call — you haven't earned enough interest to continue the conversation",
+                empathise: "Sure, I can absolutely do that.",
+                assess: "So I send you the right thing — what specifically would be most useful? Is it pricing, how it works for a business like yours, or something else?",
+                solve: "I'll put that together for you. Honestly though, the info works best when I can tailor it to your setup — a 10-minute walkthrough would show you more than any PDF. That way you can see exactly how it fits your business.",
+                end: "How about I send the info now and we book a quick 10-minute slot for Thursday? That way you've got the details and I can answer any questions live.",
+                workedTitle: "Worked Example: Send Me Info"
+            }
+        };
+
+        let selectedObjection = null;
+
+        function selectObjection(objection) {
+            selectedObjection = objection;
+            document.getElementById('objectionInput').value = objection;
+            document.querySelectorAll('#objection-chips .chip').forEach(chip => {
+                chip.classList.toggle('selected', chip.textContent.trim() === objection);
+            });
+
+            const data = objectionData[objection];
+            if (data) {
+                // Show surface vs real
+                const card = document.getElementById('surfaceRealCard');
+                document.getElementById('surfaceText').textContent = data.surface;
+                document.getElementById('realText').textContent = data.real;
+                card.classList.add('visible');
+
+                // Show worked example
+                const we = document.getElementById('workedExample');
+                document.getElementById('workedExampleTitle').textContent = data.workedTitle;
+                document.getElementById('workedExampleContent').innerHTML =
+                    '<div class="worked-step"><span class="worked-step-label e-label">Empathise</span><span class="worked-step-text">' + escHtml(data.empathise) + '</span></div>' +
+                    '<div class="worked-step"><span class="worked-step-label a-label">Assess</span><span class="worked-step-text">' + escHtml(data.assess) + '</span></div>' +
+                    '<div class="worked-step"><span class="worked-step-label s-label">Solve</span><span class="worked-step-text">' + escHtml(data.solve) + '</span></div>' +
+                    '<div class="worked-step"><span class="worked-step-label end-label">End</span><span class="worked-step-text">' + escHtml(data.end) + '</span></div>';
+                we.classList.add('visible');
+
+                // Show step examples
+                showStepExamples(data);
+            }
+        }
+
+        function showStepExamples(data) {
+            // Empathise example
+            const empEx = document.getElementById('empathiseExample');
+            empEx.innerHTML = '<div class="example-label">Example for this objection</div><p>"' + escHtml(data.empathise) + '"</p>';
+            empEx.classList.add('visible');
+
+            // Assess example
+            const assEx = document.getElementById('assessExample');
+            assEx.innerHTML = '<div class="example-label">Example probing question</div><p>"' + escHtml(data.assess) + '"</p>';
+            assEx.classList.add('visible');
+
+            // Solve example
+            const solEx = document.getElementById('solveExample');
+            solEx.innerHTML = '<div class="example-label">Example evidence</div><p>"' + escHtml(data.solve) + '"</p>';
+            solEx.classList.add('visible');
+
+            // End example
+            const endEx = document.getElementById('endExample');
+            endEx.innerHTML = '<div class="example-label">Example close</div><p>"' + escHtml(data.end) + '"</p>';
+            endEx.classList.add('visible');
+        }
+
+        function escHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function selectProofType(element, type) {
+            document.querySelectorAll('#proof-chips .chip').forEach(chip => chip.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('proofType').value = type;
+        }
+
+        function toggleMistake(el) {
+            const reveal = el.querySelector('.mistake-reveal');
+            reveal.classList.toggle('visible');
+        }
+
+        function updateProgress() {
+            const eHas = document.getElementById('empathiseResponse').value.trim().length > 0;
+            const aHas = document.getElementById('assessQuestion').value.trim().length > 0 && document.getElementById('assessConcern').value.trim().length > 0;
+            const sHas = document.getElementById('solveEvidence').value.trim().length > 0;
+            const endHas = document.getElementById('endClosing').value.trim().length > 0 && document.getElementById('endNextStep').value.trim().length > 0;
+            updateDot('progress-e', eHas);
+            updateDot('progress-a', aHas);
+            updateDot('progress-s', sHas);
+            updateDot('progress-e2', endHas);
+        }
+
+        function updateDot(id, has) {
+            const el = document.getElementById(id);
+            if (has) {
+                el.classList.add('completed');
+                el.classList.remove('active');
+            } else {
+                el.classList.remove('completed');
+            }
+        }
+
+        function generateSummary() {
+            const obj = document.getElementById('objectionInput').value.trim() || 'Objection not specified';
+            const emp = document.getElementById('empathiseResponse').value.trim();
+            const aq = document.getElementById('assessQuestion').value.trim();
+            const ac = document.getElementById('assessConcern').value.trim();
+            const sol = document.getElementById('solveEvidence').value.trim();
+            const pt = document.getElementById('proofType').value;
+            const ec = document.getElementById('endClosing').value.trim();
+            const en = document.getElementById('endNextStep').value.trim();
+            const sf = document.getElementById('summaryFlow');
+
+            let html = '<div class="summary-step" style="border-left-color: #6c5ce7;"><div class="summary-step-title">Objection Received</div><div class="summary-step-content">' + escHtml(obj) + '</div></div>';
+            if (emp) html += '<div class="summary-step"><div class="summary-step-title">E You (Empathise)</div><div class="summary-step-content">' + escHtml(emp) + '</div></div>';
+            if (aq) html += '<div class="summary-step"><div class="summary-step-title">A You (Assess)</div><div class="summary-step-content">' + escHtml(aq) + '</div></div>';
+            if (ac) html += '<div class="summary-step" style="border-left-color: #14b8a6; opacity: 0.85;"><div class="summary-step-title">Real Concern Identified</div><div class="summary-step-content">' + escHtml(ac) + '</div></div>';
+            if (sol) html += '<div class="summary-step"><div class="summary-step-title">S You (Solve) ' + (pt ? '— ' + escHtml(pt) : '') + '</div><div class="summary-step-content">' + escHtml(sol) + '</div></div>';
+            if (ec) html += '<div class="summary-step"><div class="summary-step-title">E You (Closing Check)</div><div class="summary-step-content">' + escHtml(ec) + '</div></div>';
+            if (en) html += '<div class="summary-step"><div class="summary-step-title">Next Step</div><div class="summary-step-content">' + escHtml(en) + '</div></div>';
+            sf.innerHTML = html || '<div class="summary-empty">No content to display</div>';
+        }
+
+        function copyScript() {
+            const obj = document.getElementById('objectionInput').value.trim() || 'Objection not specified';
+            const emp = document.getElementById('empathiseResponse').value.trim();
+            const aq = document.getElementById('assessQuestion').value.trim();
+            const ac = document.getElementById('assessConcern').value.trim();
+            const sol = document.getElementById('solveEvidence').value.trim();
+            const pt = document.getElementById('proofType').value;
+            const ec = document.getElementById('endClosing').value.trim();
+            const en = document.getElementById('endNextStep').value.trim();
+
+            let text = 'EASE OBJECTION HANDLER\n';
+            text += '=======================\n\n';
+            text += 'OBJECTION: ' + obj + '\n\n';
+            if (emp) text += 'E — EMPATHISE:\n' + emp + '\n\n';
+            if (aq) text += 'A — ASSESS (Question):\n' + aq + '\n\n';
+            if (ac) text += 'A — ASSESS (Real Concern):\n' + ac + '\n\n';
+            if (sol) text += 'S — SOLVE' + (pt ? ' (' + pt + ')' : '') + ':\n' + sol + '\n\n';
+            if (ec) text += 'E — END (Closing Check):\n' + ec + '\n\n';
+            if (en) text += 'E — END (Next Step):\n' + en + '\n';
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.btn-secondary');
+                const orig = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#00b894';
+                btn.style.color = '#fff';
+                btn.style.borderColor = '#00b894';
+                setTimeout(() => {
+                    btn.textContent = orig;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                    btn.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        function clearAll() {
+            selectedObjection = null;
+            document.getElementById('objectionInput').value = '';
+            document.getElementById('empathiseResponse').value = '';
+            document.querySelectorAll('#check-e1, #check-e2, #check-e3').forEach(cb => cb.checked = false);
+            document.getElementById('assessQuestion').value = '';
+            document.getElementById('assessConcern').value = '';
+            document.getElementById('solveEvidence').value = '';
+            document.getElementById('proofType').value = '';
+            document.getElementById('endClosing').value = '';
+            document.getElementById('endNextStep').value = '';
+            document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('selected'));
+            document.getElementById('summaryFlow').innerHTML = '<div class="summary-empty">Your objection-handling flow will appear here as you fill in the sections above</div>';
+            // Hide dynamic panels
+            document.getElementById('surfaceRealCard').classList.remove('visible');
+            document.getElementById('workedExample').classList.remove('visible');
+            document.querySelectorAll('.step-example').forEach(el => { el.classList.remove('visible'); el.innerHTML = ''; });
+            updateProgress();
+        }
+
+        // ── Event listeners ──
+        ['objectionInput','empathiseResponse','assessQuestion','assessConcern','solveEvidence','endClosing','endNextStep'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateProgress);
+        });
+        document.querySelectorAll('#check-e1, #check-e2, #check-e3').forEach(cb => {
+            cb.addEventListener('change', updateProgress);
+        });
+        document.querySelectorAll('.checklist-label').forEach(label => {
+            label.addEventListener('click', function(e) {
+                if (e.target !== this.querySelector('input')) {
+                    this.closest('.checklist-item').querySelector('input').click();
+                }
+            });
+        });
     </script>
 </body>
 </html>
