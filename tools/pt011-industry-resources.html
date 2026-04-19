@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresha &#8212; Industry Resource Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fresha-dark: #1a1a2e;
+    --fresha-accent: #6c5ce7;
+    --fresha-accent-light: #a29bfe;
+    --fresha-accent-bg: #ede9fe;
+    --fresha-bg: #f4f3f8;
+    --surface: #FFFFFF;
+    --surface-hover: #FAFAF8;
+    --ink: #1A1A1A;
+    --ink-muted: #636e72;
+    --ink-faint: #A39E98;
+    --border: #dfe6e9;
+    --tag-bg: #ede9fe;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+    --shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #0a0a0f;
+    background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
+    padding: 28px 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #3b2d8b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-right: 14px;
+    box-shadow: 0 2px 8px rgba(59, 45, 139, 0.4);
+  }
+
+  .header-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+
+  .header h1 span {
+    color: var(--fresha-accent-light);
+    font-weight: 600;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 360px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.5);
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 16px 10px 42px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 40px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .search-input::placeholder { color: rgba(255,255,255,0.5); }
+  .search-input:focus {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(108, 92, 231, 0.6);
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 24px;
+    color: rgba(255,255,255,0.8);
+    font-size: 13px;
+  }
+
+  .stats-bar strong { color: #fff; font-weight: 600; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 32px 60px;
+  }
+
+  /* Industry Grid */
+  .industry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  .industry-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .industry-card:hover {
+    border-color: var(--fresha-accent-light);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .industry-card.active {
+    border-color: var(--fresha-accent);
+    background: var(--fresha-accent-bg);
+    box-shadow: 0 4px 24px rgba(108, 92, 231, 0.15);
+  }
+
+  .industry-card.active .card-icon {
+    background: var(--fresha-accent);
+    color: #fff;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--tag-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  .card-meta {
+    font-size: 12px;
+    color: var(--ink-muted);
+    display: flex;
+    gap: 12px;
+  }
+
+  .card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Detail Panel */
+  .detail-panel {
+    display: none;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    animation: slideUp 0.25s ease;
+  }
+
+  .detail-panel.visible { display: block; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .detail-header {
+    padding: 24px 28px;
+    background: #0a0a0f;
+    background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
+    color: #fff;
+  }
+
+  .detail-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .detail-header p {
+    font-size: 14px;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+
+  .detail-body { padding: 24px 28px; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--fresha-accent);
+    margin-bottom: 12px;
+  }
+
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .resource-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--fresha-bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+  }
+
+  .resource-item:hover {
+    border-color: var(--fresha-accent-light);
+    background: var(--fresha-accent-bg);
+  }
+
+  .resource-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  .resource-name {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  .resource-note {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.4;
+  }
+
+  .resource-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .tag-essential { background: #FDECEA; color: #C62828; }
+  .tag-common { background: #FFF3E0; color: #E65100; }
+  .tag-optional { background: #ede9fe; color: #5b21b6; }
+
+  .talk-track {
+    background: linear-gradient(135deg, #ede9fe, #e0d4fc);
+    border: 1px solid rgba(108, 92, 231, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    margin-top: 4px;
+  }
+
+  .talk-track h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #5b21b6;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .talk-track p {
+    font-size: 13px;
+    color: #4c1d95;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-muted);
+  }
+
+  .empty-state .big-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state h3 { font-size: 16px; margin-bottom: 4px; color: var(--ink); }
+  .empty-state p { font-size: 14px; }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  .close-btn {
+    float: right;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+
+  .close-btn:hover { background: rgba(108, 92, 231, 0.4); }
+
+  .fresha-footer {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .header { padding: 20px 16px; }
+    .header-inner { flex-direction: column; align-items: flex-start; }
+    .search-wrap { max-width: 100%; }
+    .container { padding: 20px 16px 40px; }
+    .industry-grid { grid-template-columns: 1fr; }
+    .resource-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title-wrap">
+      <span class="header-badge">PT011</span>
+      <h1>Fresha <span>Industry Resource Guide</span></h1>
+    </div>
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input class="search-input" type="text" placeholder="Search industries or resources..." id="searchInput">
+    </div>
+    <div class="stats-bar">
+      <span><strong id="industryCount">0</strong> industries</span>
+      <span><strong id="resourceCount">0</strong> resources</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="industry-grid" id="industryGrid"></div>
+  <div class="detail-panel" id="detailPanel"></div>
+</div>
+
+<div class="fresha-footer">fresha &#8212; Industry Resource Guide &#183; PT011</div>
+
+<script>
+const DATA = [
+  {
+    id: "hair-salon",
+    name: "Hair Salon",
+    icon: "&#128135;",
+    description: "Full-service hair salons offering cuts, colour, styling, and treatments.",
+    talkTrack: "Ask about the number of styling stations &#8212; it&#8217;s the best indicator of capacity and booking complexity. Salons with colour services need longer appointment slots and more wash stations.",
+    resources: [
+      { name: "Styling Chair", icon: "&#128186;", note: "1 per stylist &#8212; core bookable unit", priority: "essential" },
+      { name: "Wash Station", icon: "&#128703;", note: "Usually 1 per 2-3 chairs, shared resource", priority: "essential" },
+      { name: "Colour Mixing Station", icon: "&#127912;", note: "Dedicated area for colour prep", priority: "common" },
+      { name: "Blow-Dry Station", icon: "&#128168;", note: "May be separate from cutting chairs", priority: "common" },
+      { name: "Mirror/Workstation", icon: "&#129694;", note: "1 per styling chair", priority: "essential" },
+      { name: "Hood Dryer", icon: "&#9832;&#65039;", note: "For processing colour/treatments", priority: "common" },
+      { name: "Reception Desk", icon: "&#128421;&#65039;", note: "Check-in &amp; checkout point", priority: "essential" },
+      { name: "Waiting Area", icon: "&#128715;&#65039;", note: "3-6 seats typical for walk-in buffer", priority: "optional" }
+    ]
+  },
+  {
+    id: "barbershop",
+    name: "Barbershop",
+    icon: "&#9986;&#65039;",
+    description: "Men&#8217;s grooming &#8212; cuts, fades, beard trims, hot towel shaves.",
+    talkTrack: "Barbershops run on high volume and short appointments. Chair count is everything &#8212; ask how many barbers they have, that&#8217;s their booking capacity.",
+    resources: [
+      { name: "Barber Chair", icon: "&#128186;", note: "1 per barber &#8212; hydraulic reclining", priority: "essential" },
+      { name: "Mirror Station", icon: "&#129694;", note: "Wall-mounted with tool shelf", priority: "essential" },
+      { name: "Hot Towel Cabinet", icon: "&#129526;", note: "For premium shave services", priority: "common" },
+      { name: "Clipper/Trimmer Set", icon: "&#128268;", note: "Per-barber kit", priority: "essential" },
+      { name: "Wash Basin", icon: "&#128703;", note: "Shared &#8212; fewer needed than salons", priority: "common" },
+      { name: "Waiting Bench", icon: "&#129681;", note: "Walk-in heavy &#8212; seating matters", priority: "common" },
+      { name: "Reception/POS", icon: "&#128421;&#65039;", note: "Often minimal &#8212; counter only", priority: "essential" }
+    ]
+  },
+  {
+    id: "nail-salon",
+    name: "Nail Salon",
+    icon: "&#128133;",
+    description: "Manicures, pedicures, gel nails, acrylics, and nail art.",
+    talkTrack: "Nail salons have two distinct resource types: mani tables and pedi chairs. Ask about both &#8212; they&#8217;re booked separately and have different turnaround times.",
+    resources: [
+      { name: "Manicure Table", icon: "&#9995;&#65039;", note: "1 per nail tech &#8212; main workstation", priority: "essential" },
+      { name: "Pedicure Chair", icon: "&#129662;", note: "Plumbed spa chairs &#8212; high value", priority: "essential" },
+      { name: "UV/LED Lamp", icon: "&#128161;", note: "1 per station for gel curing", priority: "essential" },
+      { name: "Nail Dust Collector", icon: "&#127744;", note: "Ventilation unit per table", priority: "common" },
+      { name: "Drying Station", icon: "&#128168;", note: "Fan dryers for regular polish", priority: "common" },
+      { name: "Sterilisation Unit", icon: "&#129532;", note: "Autoclave for tool hygiene", priority: "essential" },
+      { name: "Polish Display Wall", icon: "&#127912;", note: "Customer-facing colour selection", priority: "optional" },
+      { name: "Reception Desk", icon: "&#128421;&#65039;", note: "Check-in &amp; payment", priority: "essential" }
+    ]
+  },
+  {
+    id: "med-spa",
+    name: "Med Spa / Aesthetic Clinic",
+    icon: "&#128137;",
+    description: "Medical aesthetics &#8212; injectables, laser treatments, skin rejuvenation, body contouring.",
+    talkTrack: "Med spas have expensive equipment tied to rooms, not people. Ask about treatment rooms and device types &#8212; each room may serve different services and needs separate scheduling.",
+    resources: [
+      { name: "Treatment Room", icon: "&#127973;", note: "Private rooms &#8212; core bookable unit", priority: "essential" },
+      { name: "Treatment Bed/Chair", icon: "&#128719;&#65039;", note: "Adjustable medical-grade", priority: "essential" },
+      { name: "Laser Device", icon: "&#9889;", note: "Hair removal, skin resurfacing &#8212; high cost", priority: "essential" },
+      { name: "IPL Machine", icon: "&#128161;", note: "Intense pulsed light treatments", priority: "common" },
+      { name: "Consultation Room", icon: "&#128203;", note: "Pre-treatment assessments", priority: "essential" },
+      { name: "Cryo/Body Contouring Machine", icon: "&#10052;&#65039;", note: "CoolSculpting, EMSCULPT etc.", priority: "common" },
+      { name: "Medical Fridge", icon: "&#129482;", note: "Botox, filler storage", priority: "essential" },
+      { name: "Skin Analysis Device", icon: "&#128300;", note: "VISIA or similar diagnostic tool", priority: "optional" },
+      { name: "Recovery/Waiting Area", icon: "&#128715;&#65039;", note: "Post-treatment observation", priority: "common" },
+      { name: "Reception/POS", icon: "&#128421;&#65039;", note: "Scheduling &amp; payment hub", priority: "essential" }
+    ]
+  },
+  {
+    id: "day-spa",
+    name: "Day Spa",
+    icon: "&#129526;",
+    description: "Relaxation and wellness &#8212; massages, facials, body wraps, hydrotherapy.",
+    talkTrack: "Day spas sell time and ambience. Rooms are the bookable units, and many offer packages combining multiple services. Ask about treatment room count and whether they do couples&#8217; treatments.",
+    resources: [
+      { name: "Massage Room", icon: "&#128719;&#65039;", note: "Private room &#8212; 1 per therapist", priority: "essential" },
+      { name: "Massage Table", icon: "&#128719;&#65039;", note: "Heated, adjustable", priority: "essential" },
+      { name: "Facial Treatment Room", icon: "&#10024;", note: "May double as body treatment room", priority: "essential" },
+      { name: "Couples Suite", icon: "&#128145;", note: "Premium room &#8212; books as one unit", priority: "common" },
+      { name: "Steam Room/Sauna", icon: "&#9832;&#65039;", note: "Shared amenity &#8212; capacity limited", priority: "common" },
+      { name: "Hydrotherapy Tub", icon: "&#128705;", note: "Vichy shower or jetted tub", priority: "optional" },
+      { name: "Relaxation Lounge", icon: "&#128715;&#65039;", note: "Pre/post-treatment waiting", priority: "common" },
+      { name: "Changing Rooms/Lockers", icon: "&#128274;", note: "Essential for robe-based flow", priority: "essential" },
+      { name: "Reception &amp; Retail", icon: "&#128421;&#65039;", note: "Product sales built into checkout", priority: "essential" }
+    ]
+  },
+  {
+    id: "beauty-salon",
+    name: "Beauty Salon",
+    icon: "&#10024;",
+    description: "Multi-service &#8212; facials, waxing, threading, lash lifts, makeup.",
+    talkTrack: "Beauty salons are versatile &#8212; one room may host facials in the morning and waxing in the afternoon. Ask what services they offer and how rooms are allocated to understand scheduling complexity.",
+    resources: [
+      { name: "Facial Bed", icon: "&#128719;&#65039;", note: "Adjustable with magnifying lamp", priority: "essential" },
+      { name: "Waxing Table/Room", icon: "&#129696;", note: "Private &#8212; bookable by service type", priority: "essential" },
+      { name: "Magnifying Lamp", icon: "&#128269;", note: "For extractions, lash work", priority: "essential" },
+      { name: "Steamer", icon: "&#128168;", note: "Facial prep and pore opening", priority: "common" },
+      { name: "Threading Station", icon: "&#129525;", note: "Quick-turn service chair", priority: "common" },
+      { name: "Makeup Station", icon: "&#128132;", note: "Mirror + lighting setup", priority: "optional" },
+      { name: "Sterilisation Unit", icon: "&#129532;", note: "Tool hygiene compliance", priority: "essential" },
+      { name: "Reception Desk", icon: "&#128421;&#65039;", note: "Booking &amp; payment", priority: "essential" }
+    ]
+  },
+  {
+    id: "brow-lash",
+    name: "Brow &amp; Lash Studio",
+    icon: "&#128065;&#65039;",
+    description: "Specialised brow and lash services &#8212; extensions, lifts, tints, microblading.",
+    talkTrack: "Lash extensions take 1.5-2+ hours per appointment. These studios need precise scheduling because one bed being occupied blocks revenue for a long time. Ask about bed count and average service duration.",
+    resources: [
+      { name: "Lash Bed/Recliner", icon: "&#128719;&#65039;", note: "Flat bed for extensions &#8212; long sessions", priority: "essential" },
+      { name: "Magnifying Lamp", icon: "&#128269;", note: "Ring light + magnifier combo", priority: "essential" },
+      { name: "Brow Station/Chair", icon: "&#128186;", note: "Quick-turn for shaping/tinting", priority: "essential" },
+      { name: "Microblading Station", icon: "&#9999;&#65039;", note: "PMU setup with sterile field", priority: "common" },
+      { name: "Adhesive/Supply Cart", icon: "&#128722;", note: "Organised per-technician", priority: "common" },
+      { name: "Sterilisation Unit", icon: "&#129532;", note: "Essential for PMU compliance", priority: "essential" },
+      { name: "Reception/POS", icon: "&#128421;&#65039;", note: "Booking management", priority: "essential" }
+    ]
+  },
+  {
+    id: "massage-therapy",
+    name: "Massage Therapy",
+    icon: "&#128134;",
+    description: "Therapeutic and relaxation massage &#8212; deep tissue, sports, Swedish, remedial.",
+    talkTrack: "Massage therapists have a hard physical limit on daily appointments. Room count matters less than therapist availability. Ask about practitioner count and whether they sublet rooms.",
+    resources: [
+      { name: "Massage Table", icon: "&#128719;&#65039;", note: "Heated, adjustable height", priority: "essential" },
+      { name: "Treatment Room", icon: "&#128682;", note: "Private, soundproofed ideal", priority: "essential" },
+      { name: "Hot Stone Warmer", icon: "&#129704;", note: "For hot stone massage add-on", priority: "common" },
+      { name: "Oil/Lotion Supply", icon: "&#129524;", note: "Per-room dispensers", priority: "essential" },
+      { name: "Towel Warmer", icon: "&#129526;", note: "Client comfort essential", priority: "common" },
+      { name: "Bolster/Cushion Set", icon: "&#128715;&#65039;", note: "Positioning aids", priority: "common" },
+      { name: "Reception/Booking", icon: "&#128421;&#65039;", note: "Online booking critical for solo practitioners", priority: "essential" }
+    ]
+  },
+  {
+    id: "tattoo-piercing",
+    name: "Tattoo &amp; Piercing Studio",
+    icon: "&#127912;",
+    description: "Tattoo artistry, body piercing, and PMU services.",
+    talkTrack: "Tattoo studios book long sessions (2-8 hours). Artists are the resource, each with their own station. Ask about artist count and whether they do walk-ins for piercings &#8212; that&#8217;s the scheduling complexity.",
+    resources: [
+      { name: "Tattoo Chair/Bed", icon: "&#128186;", note: "Adjustable for long sessions", priority: "essential" },
+      { name: "Tattoo Machine/Power Supply", icon: "&#9889;", note: "Per-artist equipment", priority: "essential" },
+      { name: "Autoclave", icon: "&#129532;", note: "Sterilisation &#8212; health compliance", priority: "essential" },
+      { name: "Workstation/Desk", icon: "&#128394;&#65039;", note: "Design prep area per artist", priority: "essential" },
+      { name: "Piercing Station", icon: "&#128142;", note: "Separate sterile area", priority: "common" },
+      { name: "Lighting Rig", icon: "&#128161;", note: "Task lighting per station", priority: "common" },
+      { name: "Waiting/Gallery Area", icon: "&#128444;&#65039;", note: "Portfolio display + seating", priority: "common" },
+      { name: "Reception/POS", icon: "&#128421;&#65039;", note: "Deposits &amp; booking management", priority: "essential" }
+    ]
+  },
+  {
+    id: "tanning",
+    name: "Tanning Salon",
+    icon: "&#9728;&#65039;",
+    description: "UV tanning beds, spray tanning booths, and self-tan services.",
+    talkTrack: "Tanning salons run on short, high-frequency appointments. Beds and booths are the units &#8212; ask about equipment count and whether they offer memberships (recurring revenue is a Fresha strength).",
+    resources: [
+      { name: "Tanning Bed", icon: "&#128719;&#65039;", note: "UV bed &#8212; timed sessions", priority: "essential" },
+      { name: "Spray Tan Booth", icon: "&#128703;", note: "Automated or manual application", priority: "essential" },
+      { name: "Stand-Up Tanning Unit", icon: "&#129485;", note: "High-pressure vertical unit", priority: "common" },
+      { name: "Changing Cubicle", icon: "&#128682;", note: "1 per bed/booth minimum", priority: "essential" },
+      { name: "Eye Protection Dispenser", icon: "&#128083;", note: "Compliance requirement", priority: "essential" },
+      { name: "Timer/Control System", icon: "&#9201;&#65039;", note: "Integrated session management", priority: "common" },
+      { name: "Reception/POS", icon: "&#128421;&#65039;", note: "Membership &amp; booking", priority: "essential" }
+    ]
+  },
+  {
+    id: "wellness-centre",
+    name: "Wellness &amp; Holistic Centre",
+    icon: "&#129496;",
+    description: "Acupuncture, naturopathy, reiki, yoga, meditation, and integrative health.",
+    talkTrack: "Wellness centres often have multiple practitioners sharing rooms on different days. Room scheduling and practitioner calendars are the key pain points &#8212; ask about shared spaces.",
+    resources: [
+      { name: "Treatment Room", icon: "&#128682;", note: "Multi-use &#8212; acupuncture, reiki, etc.", priority: "essential" },
+      { name: "Treatment Table/Mat", icon: "&#128719;&#65039;", note: "Varies by modality", priority: "essential" },
+      { name: "Yoga/Group Room", icon: "&#129496;", note: "Class-based &#8212; capacity booking", priority: "common" },
+      { name: "Meditation Space", icon: "&#128367;&#65039;", note: "Quiet room for guided sessions", priority: "optional" },
+      { name: "Consultation Room", icon: "&#128203;", note: "Intake and assessment", priority: "common" },
+      { name: "Infrared Sauna", icon: "&#9832;&#65039;", note: "Growing premium add-on", priority: "optional" },
+      { name: "Retail/Supplement Area", icon: "&#127978;", note: "Product sales at checkout", priority: "optional" },
+      { name: "Reception/Booking", icon: "&#128421;&#65039;", note: "Multi-practitioner scheduling", priority: "essential" }
+    ]
+  },
+  {
+    id: "cosmetic-clinic",
+    name: "Cosmetic Surgery / Clinic",
+    icon: "&#127973;",
+    description: "Surgical and non-surgical cosmetic procedures &#8212; rhinoplasty, liposuction, facelifts.",
+    talkTrack: "Cosmetic clinics have high-value, low-volume bookings. Consultation-to-procedure conversion is everything. Ask about their consultation room setup and follow-up process.",
+    resources: [
+      { name: "Operating/Procedure Room", icon: "&#127973;", note: "Sterile surgical suite", priority: "essential" },
+      { name: "Consultation Room", icon: "&#128203;", note: "Sales + medical assessment", priority: "essential" },
+      { name: "Recovery Room", icon: "&#128719;&#65039;", note: "Post-procedure observation", priority: "essential" },
+      { name: "Imaging/Photography Suite", icon: "&#128248;", note: "Before/after documentation", priority: "common" },
+      { name: "Medical Equipment (varied)", icon: "&#9889;", note: "Procedure-specific devices", priority: "essential" },
+      { name: "Waiting/Reception", icon: "&#128715;&#65039;", note: "Premium feel &#8212; privacy-focused", priority: "essential" },
+      { name: "Sterilisation Room", icon: "&#129532;", note: "Instrument processing", priority: "essential" }
+    ]
+  },
+  {
+    id: "fitness-gym",
+    name: "Fitness &amp; Personal Training",
+    icon: "&#127947;&#65039;",
+    description: "Gyms, PT studios, CrossFit boxes, and personal training spaces.",
+    talkTrack: "Fitness businesses sell time slots, classes, and 1-on-1 sessions. Ask about trainer count and whether they run group classes &#8212; Fresha handles both appointment and class-based booking.",
+    resources: [
+      { name: "Training Bay/Zone", icon: "&#127947;&#65039;", note: "Bookable PT session area", priority: "essential" },
+      { name: "Group Class Studio", icon: "&#129496;", note: "Capacity-limited room booking", priority: "common" },
+      { name: "Cardio Equipment", icon: "&#127939;", note: "Treadmills, bikes &#8212; may need slot booking", priority: "common" },
+      { name: "Weight/Resistance Area", icon: "&#128170;", note: "Open floor or rack-based", priority: "common" },
+      { name: "Changing Rooms", icon: "&#128703;", note: "Lockers + showers", priority: "essential" },
+      { name: "Assessment Room", icon: "&#128203;", note: "Body comp, consultations", priority: "optional" },
+      { name: "Reception/Check-in", icon: "&#128421;&#65039;", note: "Membership &amp; class booking", priority: "essential" }
+    ]
+  },
+  {
+    id: "pet-grooming",
+    name: "Pet Grooming",
+    icon: "&#128021;",
+    description: "Dog and pet grooming &#8212; washing, clipping, styling, nail trimming.",
+    talkTrack: "Pet groomers deal with variable appointment lengths based on breed and size. Ask about grooming stations and bathing areas &#8212; they&#8217;re separate resources booked sequentially for the same appointment.",
+    resources: [
+      { name: "Grooming Table", icon: "&#128021;", note: "Adjustable with restraint arm", priority: "essential" },
+      { name: "Bathing Station", icon: "&#128705;", note: "Elevated tub with sprayer", priority: "essential" },
+      { name: "Drying Station/Cage Dryer", icon: "&#128168;", note: "Post-wash drying area", priority: "essential" },
+      { name: "Clipper/Blade Set", icon: "&#9986;&#65039;", note: "Per-groomer kit", priority: "essential" },
+      { name: "Holding Kennels", icon: "&#127968;", note: "Pre/post-groom waiting", priority: "common" },
+      { name: "Nail Grinding Station", icon: "&#128133;", note: "Quick add-on service area", priority: "common" },
+      { name: "Reception/POS", icon: "&#128421;&#65039;", note: "Pet profile + booking", priority: "essential" }
+    ]
+  },
+  {
+    id: "dental",
+    name: "Dental &amp; Orthodontic",
+    icon: "&#129463;",
+    description: "Dental practices, teeth whitening clinics, and orthodontic services.",
+    talkTrack: "Dental practices have chairs as their core bookable unit, each needing specific equipment. Ask about chair count and hygienist vs dentist scheduling &#8212; they often share chairs on rotation.",
+    resources: [
+      { name: "Dental Chair", icon: "&#128186;", note: "Core unit &#8212; 1 per operatory", priority: "essential" },
+      { name: "X-Ray Machine", icon: "&#128248;", note: "Panoramic or intraoral", priority: "essential" },
+      { name: "Sterilisation Room", icon: "&#129532;", note: "Instrument processing hub", priority: "essential" },
+      { name: "Whitening Equipment", icon: "&#10024;", note: "LED/laser whitening device", priority: "common" },
+      { name: "Consultation Room", icon: "&#128203;", note: "Treatment planning", priority: "common" },
+      { name: "Waiting Area", icon: "&#128715;&#65039;", note: "Family-friendly seating", priority: "essential" },
+      { name: "Reception/POS", icon: "&#128421;&#65039;", note: "Insurance &amp; payment processing", priority: "essential" }
+    ]
+  },
+  {
+    id: "physiotherapy",
+    name: "Physiotherapy &amp; Chiropractic",
+    icon: "&#129460;",
+    description: "Physical therapy, chiropractic adjustments, sports rehab, and rehabilitation.",
+    talkTrack: "Physio clinics often have a mix of private treatment rooms and an open gym floor. Ask about practitioner count and whether they run group rehab classes alongside 1-on-1 sessions.",
+    resources: [
+      { name: "Treatment Room", icon: "&#128682;", note: "Private assessment &amp; manual therapy", priority: "essential" },
+      { name: "Treatment Table", icon: "&#128719;&#65039;", note: "Height-adjustable plinth", priority: "essential" },
+      { name: "Rehab/Exercise Area", icon: "&#127947;&#65039;", note: "Open floor with equipment", priority: "common" },
+      { name: "Ultrasound/TENS Machine", icon: "&#9889;", note: "Electrotherapy devices", priority: "common" },
+      { name: "Chiropractic Table", icon: "&#129460;", note: "Drop-piece or flexion table", priority: "common" },
+      { name: "Waiting Area", icon: "&#128715;&#65039;", note: "Referral-heavy &#8212; needs comfort", priority: "essential" },
+      { name: "Reception/Booking", icon: "&#128421;&#65039;", note: "Insurance integration critical", priority: "essential" }
+    ]
+  }
+];
+
+let activeIndustry = null;
+
+function getTotalResources() {
+  return DATA.reduce((sum, ind) => sum + ind.resources.length, 0);
+}
+
+function renderGrid(filter = "") {
+  const grid = document.getElementById("industryGrid");
+  const lowerFilter = filter.toLowerCase();
+
+  const filtered = DATA.filter(ind => {
+    if (!lowerFilter) return true;
+    if (ind.name.toLowerCase().includes(lowerFilter)) return true;
+    if (ind.description.toLowerCase().includes(lowerFilter)) return true;
+    return ind.resources.some(r => r.name.toLowerCase().includes(lowerFilter));
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column: 1/-1;">
+        <div class="big-icon">&#128269;</div>
+        <h3>No matching industries</h3>
+        <p>Try a different search term</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(ind => `
+    <div class="industry-card ${activeIndustry === ind.id ? 'active' : ''}" onclick="selectIndustry('${ind.id}')">
+      <div class="card-top">
+        <div class="card-icon">${ind.icon}</div>
+        <div class="card-title">${ind.name}</div>
+      </div>
+      <div class="card-meta">
+        <span>&#128295; ${ind.resources.length} resources</span>
+        <span>&#11088; ${ind.resources.filter(r => r.priority === 'essential').length} essential</span>
+      </div>
+    </div>
+  `).join("");
+
+  document.getElementById("industryCount").textContent = filtered.length;
+}
+
+function selectIndustry(id) {
+  const panel = document.getElementById("detailPanel");
+
+  if (activeIndustry === id) {
+    activeIndustry = null;
+    panel.classList.remove("visible");
+    renderGrid(document.getElementById("searchInput").value);
+    return;
+  }
+
+  activeIndustry = id;
+  const ind = DATA.find(d => d.id === id);
+  renderGrid(document.getElementById("searchInput").value);
+
+  const priorityOrder = { essential: 0, common: 1, optional: 2 };
+  const sorted = [...ind.resources].sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+
+  panel.innerHTML = `
+    <div class="detail-header">
+      <button class="close-btn" onclick="selectIndustry('${id}')">&times;</button>
+      <h2>${ind.icon} ${ind.name}</h2>
+      <p>${ind.description}</p>
+    </div>
+    <div class="detail-body">
+      <div class="section-label">Resources &amp; Equipment</div>
+      <div class="legend">
+        <div class="legend-item"><span class="resource-tag tag-essential">Essential</span> Must-have for operations</div>
+        <div class="legend-item"><span class="resource-tag tag-common">Common</span> Most businesses have</div>
+        <div class="legend-item"><span class="resource-tag tag-optional">Optional</span> Premium add-on</div>
+      </div>
+      <div class="resource-grid">
+        ${sorted.map(r => `
+          <div class="resource-item">
+            <div class="resource-icon">${r.icon}</div>
+            <div>
+              <div class="resource-name">${r.name}</div>
+              <div class="resource-note">${r.note}</div>
+              <span class="resource-tag tag-${r.priority}">${r.priority.charAt(0).toUpperCase() + r.priority.slice(1)}</span>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+      <div class="talk-track">
+        <h4>&#128172; Sales Talk Track</h4>
+        <p>"${ind.talkTrack}"</p>
+      </div>
+    </div>
+  `;
+
+  panel.classList.add("visible");
+  panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+// Search
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  activeIndustry = null;
+  document.getElementById("detailPanel").classList.remove("visible");
+  renderGrid(e.target.value);
+});
+
+// Init
+document.getElementById("resourceCount").textContent = getTotalResources();
+renderGrid();
+</script>
+
+</body>
+</html>
