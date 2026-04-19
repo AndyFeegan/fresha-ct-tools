@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresha Capital Card Game</title>
+<style>
+  :root {
+    --fresha-dark: #1a1a2e;
+    --fresha-accent: #6c5ce7;
+    --fresha-accent-light: #a29bfe;
+    --fresha-bg: #f4f3f8;
+    --fresha-white: #ffffff;
+    --fresha-text: #2d3436;
+    --fresha-muted: #636e72;
+    --fresha-border: #dfe6e9;
+    --fresha-success: #00b894;
+    --fresha-danger: #d63031;
+    --fresha-warning: #fdcb6e;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #e8856c 0%, #d964a7 18%, #c86dd1 35%, #a678e0 50%, #8b7ae8 65%, #7b8eef 80%, #5cc0c8 100%);
+    background-attachment: fixed;
+    color: var(--fresha-text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .header {
+    background: #0a0a0f;
+    background-image: radial-gradient(ellipse at 50% 100%, rgba(108, 92, 231, 0.35) 0%, transparent 60%);
+    color: white;
+    padding: 28px 24px 24px;
+    text-align: center;
+  }
+  .header-logo {
+    display: block;
+    margin: 0 auto 16px;
+    height: 24px;
+    opacity: 0.9;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #3b2d8b;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(59, 45, 139, 0.4);
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--fresha-accent-light); }
+  .header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    height: 6px;
+    background: var(--fresha-border);
+    border-radius: 3px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--fresha-accent);
+    transition: width 0.3s ease;
+    border-radius: 3px;
+  }
+  .counter {
+    text-align: center;
+    font-size: 13px;
+    color: var(--fresha-muted);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+  .difficulty {
+    text-align: center;
+    font-size: 12px;
+    color: #e17055;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  /* Card */
+  .card-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .card {
+    background: var(--fresha-white);
+    border: 1px solid var(--fresha-border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    font-size: 17px;
+    color: var(--fresha-text);
+    line-height: 1.7;
+    font-weight: 500;
+  }
+
+  /* Decision buttons */
+  .decision-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto 1.5rem;
+  }
+  .decision-btn {
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--fresha-border);
+    border-radius: var(--radius);
+    background: var(--fresha-white);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: inherit;
+  }
+  .decision-btn:hover { border-color: var(--fresha-accent); }
+  .decision-btn.should-say {
+    border-color: var(--fresha-success);
+    color: var(--fresha-success);
+  }
+  .decision-btn.should-say:hover {
+    background: rgba(0, 184, 148, 0.06);
+  }
+  .decision-btn.avoid-say {
+    border-color: var(--fresha-danger);
+    color: var(--fresha-danger);
+  }
+  .decision-btn.avoid-say:hover {
+    background: rgba(214, 48, 49, 0.06);
+  }
+  .decision-btn:disabled {
+    cursor: not-allowed;
+  }
+  .decision-btn.selected {
+    opacity: 1 !important;
+    transform: scale(1.02);
+  }
+  .decision-btn.not-selected {
+    opacity: 0.35;
+  }
+  .decision-btn.should-say.selected {
+    background: var(--fresha-success);
+    color: white;
+    border-color: var(--fresha-success);
+  }
+  .decision-btn.avoid-say.selected {
+    background: var(--fresha-danger);
+    color: white;
+    border-color: var(--fresha-danger);
+  }
+
+  /* Explanation */
+  .explanation {
+    background: var(--fresha-white);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto 1.5rem;
+    display: none;
+    border-left: 4px solid var(--fresha-accent);
+    box-shadow: var(--shadow-sm);
+  }
+  .explanation.show { display: block; }
+  .explanation-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--fresha-text);
+  }
+  .explanation-text {
+    font-size: 14px;
+    color: var(--fresha-muted);
+    line-height: 1.7;
+  }
+  .explanation.correct {
+    border-left-color: var(--fresha-success);
+    background: rgba(0, 184, 148, 0.04);
+  }
+  .explanation.correct .explanation-title { color: var(--fresha-success); }
+  .explanation.incorrect {
+    border-left-color: var(--fresha-danger);
+    background: rgba(214, 48, 49, 0.04);
+  }
+  .explanation.incorrect .explanation-title { color: var(--fresha-danger); }
+
+  /* Next button */
+  .next-button {
+    background: var(--fresha-accent);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: none;
+    margin: 0 auto;
+    font-family: inherit;
+    transition: opacity 0.2s;
+  }
+  .next-button.show { display: block; }
+  .next-button:hover { opacity: 0.9; }
+
+  /* Summary */
+  .summary {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+  }
+  .summary.show { display: block; }
+  .summary-icon { font-size: 64px; margin-bottom: 1rem; }
+  .summary-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--fresha-text);
+    margin-bottom: 0.5rem;
+  }
+  .summary-subtitle {
+    font-size: 15px;
+    color: var(--fresha-muted);
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .score-breakdown {
+    background: var(--fresha-white);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--fresha-border);
+    box-shadow: var(--shadow-sm);
+  }
+  .score-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 0.75rem;
+  }
+  .score-line:last-child { margin-bottom: 0; }
+  .score-label { color: var(--fresha-muted); }
+  .score-value { font-weight: 700; color: var(--fresha-text); }
+  .summary-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .summary-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--fresha-accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: inherit;
+    transition: opacity 0.2s;
+  }
+  .summary-btn:hover { opacity: 0.9; }
+  .summary-btn.secondary {
+    background: var(--fresha-white);
+    color: var(--fresha-text);
+    border: 1px solid var(--fresha-border);
+  }
+  .summary-btn.secondary:hover { border-color: var(--fresha-accent); }
+
+  @media (max-width: 480px) {
+    .header h1 { font-size: 22px; }
+    .card { padding: 1.5rem; font-size: 15px; }
+    .decision-buttons { gap: 0.75rem; }
+    .decision-btn { padding: 0.75rem 1rem; font-size: 13px; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="header">
+  <img class="header-logo" src="data:image/png;base64,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" alt="fresha">
+  <div class="header-badge">PT010 — Fresha Capital</div>
+  <h1><span>Capital</span> Card Game</h1>
+  <p>Should you say it, or avoid it? Test your knowledge of neutral product communication.</p>
+</div>
+
+<div class="container">
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="counter" id="counter">Card 1 of 14</div>
+  <div class="difficulty" id="difficulty"></div>
+
+  <div id="gameView">
+    <div class="card-container">
+      <div class="card" id="cardText">Loading...</div>
+    </div>
+
+    <div class="decision-buttons" id="decisionButtons"></div>
+
+    <div class="explanation" id="explanation">
+      <div class="explanation-title" id="explanationTitle"></div>
+      <div class="explanation-text" id="explanationText"></div>
+    </div>
+
+    <div style="text-align: center;">
+      <button class="next-button" id="nextBtn">Next card &#8594;</button>
+    </div>
+  </div>
+
+  <div class="summary" id="summaryView">
+    <div class="summary-icon" id="summaryIcon"></div>
+    <div class="summary-title" id="summaryTitle"></div>
+    <div class="summary-subtitle" id="summarySubtitle"></div>
+    <div class="score-breakdown">
+      <div class="score-line">
+        <span class="score-label">Total cards:</span>
+        <span class="score-value">14</span>
+      </div>
+      <div class="score-line">
+        <span class="score-label">Correct decisions:</span>
+        <span class="score-value" id="scoreCorrect">0</span>
+      </div>
+      <div class="score-line">
+        <span class="score-label">Accuracy:</span>
+        <span class="score-value" id="scorePercent">0%</span>
+      </div>
+    </div>
+    <div class="summary-buttons">
+      <button class="summary-btn" id="downloadPdfBtn">Download Score as PDF</button>
+      <button class="summary-btn secondary" onclick="location.reload()">Play again</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+    const originalCards = [
+        {
+            text: "Just to flag, Fresha also offers a capital product for eligible businesses. I\u2019m happy to explain how it works if that\u2019s useful.",
+            correct: true,
+            difficulty: 'easy',
+            why: "Awareness-led, permission-based. You\u2019re introducing the product without pressure \u2014 the customer controls whether they want to hear more."
+        },
+        {
+            text: "If you\u2019re eligible, the system will show you the amounts you can choose from, along with the total amount you\u2019d repay before you accept.",
+            correct: true,
+            difficulty: 'easy',
+            why: "Factual, transparent, no influence. You\u2019re providing information that helps them make an informed decision \u2014 no recommendation implied."
+        },
+        {
+            text: "Repayments are taken automatically as a percentage of your daily sales, so on busier days you repay more, and on quieter days you repay less.",
+            correct: true,
+            difficulty: 'easy',
+            why: "Clear explanation only. You\u2019re describing how the mechanics work without suggesting it\u2019s good or bad \u2014 just informative."
+        },
+        {
+            text: "The total repayment amount is fixed upfront \u2014 there\u2019s no compounding interest or surprise charges.",
+            correct: true,
+            difficulty: 'easy',
+            why: "Consumer understanding, no opinion. You\u2019re clarifying a key concern without implying this makes the product a good choice for them specifically."
+        },
+        {
+            text: "I can explain how the product works, but the decision to take it is completely up to you.",
+            correct: true,
+            difficulty: 'easy',
+            why: "Explicitly removes pressure. This is a powerful statement that keeps decision-making power with the customer."
+        },
+        {
+            text: "Approval and eligibility are managed by our financial partner, not by me.",
+            correct: true,
+            difficulty: 'easy',
+            why: "Sets boundaries clearly. You\u2019re being transparent about your role and theirs \u2014 removes any appearance of hidden gatekeeping."
+        },
+        {
+            text: "This could really help with your cashflow.",
+            correct: false,
+            difficulty: 'easy',
+            why: "Implies suitability and benefit. You don\u2019t know their situation well enough to make this claim \u2014 it sounds like a recommendation disguised as sympathy."
+        },
+        {
+            text: "Most salons like yours use this to grow their business.",
+            correct: false,
+            difficulty: 'easy',
+            why: "Social proof + nudging. This is trying to influence through comparison (\u2018most people do it\u2019) rather than letting them decide on facts."
+        },
+        {
+            text: "Based on what you\u2019ve told me, this sounds like a good option for you.",
+            correct: false,
+            difficulty: 'easy',
+            why: "Direct recommendation. This crosses the line from explaining to recommending \u2014 you\u2019re deciding for them, not helping them decide."
+        },
+        {
+            text: "I\u2019d suggest taking the higher amount while it\u2019s available.",
+            correct: false,
+            difficulty: 'easy',
+            why: "Instruction + urgency. Double offense: you\u2019re telling them what to do AND creating artificial scarcity/pressure."
+        },
+        {
+            text: "If I were you, I\u2019d take this now rather than waiting.",
+            correct: false,
+            difficulty: 'easy',
+            why: "Personal advice. You\u2019re giving your personal opinion instead of neutral information \u2014 puts words in their mouth."
+        },
+        {
+            text: "This is much better than a traditional loan.",
+            correct: false,
+            difficulty: 'easy',
+            why: "Comparison + value judgement. You\u2019re positioning Fresha Capital as superior, which is a recommendation in disguise."
+        },
+        {
+            text: "Some customers use capital to manage short-term cashflow gaps.",
+            correct: false,
+            difficulty: 'hard',
+            why: "Tricky one. While factual, this frames the product as a solution to cashflow \u2014 it implies suitability depending on tone. Better to let them identify their own use case rather than suggest one."
+        },
+        {
+            text: "It\u2019s designed to be flexible because repayments adjust with sales.",
+            correct: true,
+            difficulty: 'hard',
+            why: "This one is harder to spot. It describes a feature (flexibility through adjustment) not a benefit (better for you). The key: you\u2019re explaining design, not recommending it \u2014 the customer decides if flexibility matters to them."
+        }
+    ];
+
+    let cards = [];
+    let currentIndex = 0;
+    let correctCount = 0;
+
+    function shuffleCards(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    function initGame() {
+        cards = shuffleCards(originalCards);
+        currentIndex = 0;
+        correctCount = 0;
+        renderCard();
+        document.getElementById('nextBtn').addEventListener('click', nextCard);
+    }
+
+    function renderCard() {
+        const card = cards[currentIndex];
+        document.getElementById('cardText').textContent = card.text;
+        document.getElementById('counter').textContent = 'Card ' + (currentIndex + 1) + ' of ' + cards.length;
+
+        const difficultyText = card.difficulty === 'hard' ? '\u26A0\uFE0F Trickier choice' : '';
+        document.getElementById('difficulty').textContent = difficultyText;
+
+        const percentage = ((currentIndex + 1) / cards.length) * 100;
+        document.getElementById('progressFill').style.width = percentage + '%';
+
+        const buttonsDiv = document.getElementById('decisionButtons');
+        buttonsDiv.innerHTML =
+            '<button class="decision-btn should-say" onclick="makeDecision(true)">\u2713 Should say</button>' +
+            '<button class="decision-btn avoid-say" onclick="makeDecision(false)">\u2717 Avoid saying</button>';
+
+        const explanation = document.getElementById('explanation');
+        explanation.classList.remove('show', 'correct', 'incorrect');
+        document.getElementById('nextBtn').classList.remove('show');
+    }
+
+    function makeDecision(shouldSay) {
+        const card = cards[currentIndex];
+        const explanation = document.getElementById('explanation');
+        const explanationTitle = document.getElementById('explanationTitle');
+        const explanationText = document.getElementById('explanationText');
+
+        const isCorrect = card.correct === shouldSay;
+
+        if (isCorrect) {
+            correctCount++;
+            explanationTitle.textContent = '\u2713 Correct!';
+            explanation.classList.add('correct');
+        } else {
+            explanationTitle.textContent = '\u2717 Not quite';
+            explanation.classList.add('incorrect');
+        }
+
+        explanationText.textContent = card.why;
+        explanation.classList.add('show');
+        document.getElementById('nextBtn').classList.add('show');
+
+        const buttons = document.querySelectorAll('.decision-btn');
+        buttons.forEach(function(btn) {
+            btn.disabled = true;
+            if ((shouldSay && btn.classList.contains('should-say')) ||
+                (!shouldSay && btn.classList.contains('avoid-say'))) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.add('not-selected');
+            }
+        });
+    }
+
+    function nextCard() {
+        currentIndex++;
+        if (currentIndex >= cards.length) {
+            showSummary();
+        } else {
+            renderCard();
+        }
+    }
+
+    function downloadPDF() {
+        var percentage = Math.round((correctCount / cards.length) * 100);
+        var date = new Date().toLocaleDateString();
+        var time = new Date().toLocaleTimeString();
+
+        var element = document.createElement('div');
+        element.style.padding = '40px';
+        element.style.fontFamily = "'DM Sans', Arial, sans-serif";
+        element.style.backgroundColor = '#ffffff';
+        element.innerHTML =
+            '<div style="text-align: center; margin-bottom: 40px;">' +
+                '<div style="display: inline-block; background: #3b2d8b; color: white; padding: 6px 16px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px;">PT010 — Fresha Capital</div>' +
+                '<h1 style="font-size: 28px; margin: 0 0 8px 0; color: #2d3436;">Capital Card Game</h1>' +
+                '<h2 style="font-size: 18px; margin: 0 0 30px 0; color: #636e72; font-weight: 400;">Score Report</h2>' +
+            '</div>' +
+            '<div style="border: 2px solid #6c5ce7; border-radius: 12px; padding: 30px; margin-bottom: 30px; background-color: #f4f3f8;">' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">' +
+                    '<div>' +
+                        '<p style="margin: 0 0 10px 0; color: #636e72; font-size: 14px;">Total Cards</p>' +
+                        '<p style="margin: 0; font-size: 28px; font-weight: bold; color: #2d3436;">14</p>' +
+                    '</div>' +
+                    '<div>' +
+                        '<p style="margin: 0 0 10px 0; color: #636e72; font-size: 14px;">Correct Answers</p>' +
+                        '<p style="margin: 0; font-size: 28px; font-weight: bold; color: #00b894;">' + correctCount + '</p>' +
+                    '</div>' +
+                '</div>' +
+                '<div style="text-align: center; border-top: 1px solid #dfe6e9; padding-top: 20px;">' +
+                    '<p style="margin: 0 0 5px 0; color: #636e72; font-size: 14px;">Accuracy</p>' +
+                    '<p style="margin: 0; font-size: 36px; font-weight: bold; color: #6c5ce7;">' + percentage + '%</p>' +
+                '</div>' +
+            '</div>' +
+            '<div style="background-color: #f4f3f8; padding: 20px; border-radius: 12px; margin-bottom: 30px;">' +
+                '<h3 style="margin: 0 0 15px 0; color: #2d3436; font-size: 16px;">Performance Summary</h3>' +
+                '<p style="margin: 0; color: #636e72; font-size: 14px; line-height: 1.6;">' +
+                    (percentage === 100
+                        ? 'Perfect score! You have mastered neutral product communication and understand when to inform versus recommend.'
+                        : percentage >= 86
+                        ? 'Excellent performance. You demonstrate a strong understanding of the principles. Focus on the trickier decisions for improvement.'
+                        : percentage >= 71
+                        ? 'Good progress. You understand the core difference between information and recommendation. Continue practising to refine your approach.'
+                        : 'Keep learning. Review the feedback to strengthen your understanding of neutral communication principles.') +
+                '</p>' +
+            '</div>' +
+            '<div style="border-top: 2px solid #dfe6e9; padding-top: 20px; text-align: center; color: #636e72; font-size: 12px;">' +
+                '<p style="margin: 5px 0;">Generated: ' + date + ' at ' + time + '</p>' +
+                '<p style="margin: 5px 0;">Fresha Capital Sales Training</p>' +
+            '</div>';
+
+        var opt = {
+            margin: 10,
+            filename: 'Fresha-Capital-Score-' + new Date().toISOString().split('T')[0] + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+    }
+
+    function showSummary() {
+        document.getElementById('gameView').style.display = 'none';
+        document.getElementById('summaryView').classList.add('show');
+
+        var percentage = Math.round((correctCount / cards.length) * 100);
+        document.getElementById('scoreCorrect').textContent = correctCount;
+        document.getElementById('scorePercent').textContent = percentage + '%';
+
+        if (percentage === 100) {
+            document.getElementById('summaryIcon').textContent = '\uD83C\uDFAF';
+            document.getElementById('summaryTitle').textContent = 'Perfect!';
+            document.getElementById('summarySubtitle').textContent = 'You\u2019ve mastered neutral product communication. You know exactly when to inform and when to step back \u2014 including the tricky grey area calls.';
+        } else if (percentage >= 86) {
+            document.getElementById('summaryIcon').textContent = '\uD83C\uDF1F';
+            document.getElementById('summaryTitle').textContent = 'Excellent!';
+            document.getElementById('summarySubtitle').textContent = 'Outstanding grasp of the principles. The few you missed are the trickiest ones \u2014 review those to perfect your approach.';
+        } else if (percentage >= 71) {
+            document.getElementById('summaryIcon').textContent = '\uD83D\uDCAA';
+            document.getElementById('summaryTitle').textContent = 'Good progress!';
+            document.getElementById('summarySubtitle').textContent = 'You\u2019re clearly getting the difference between information and recommendation. Those trickier cards are meant to be hard \u2014 keep practising.';
+        } else {
+            document.getElementById('summaryIcon').textContent = '\uD83D\uDCDA';
+            document.getElementById('summaryTitle').textContent = 'Keep learning!';
+            document.getElementById('summarySubtitle').textContent = 'The core principle: explain features and mechanics, avoid implying suitability. Play again to reinforce the distinction.';
+        }
+
+        document.getElementById('downloadPdfBtn').addEventListener('click', downloadPDF);
+    }
+
+    // Start game immediately (no password)
+    initGame();
+</script>
+</body>
+</html>
